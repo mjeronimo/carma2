@@ -1,0 +1,278 @@
+[0.157s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'list', '-p', '--base-paths', '/home/michael/src/carma2/carma_platform']
+[0.157s] DEBUG:colcon:Parsed command line arguments: Namespace(base_paths=['/home/michael/src/carma2/carma_platform'], build_base='build', ignore_user_meta=False, log_base=None, log_level=None, main=<bound method ListVerb.main of <colcon_package_information.verb.list.ListVerb object at 0x7f1543f25040>>, metas=['./colcon.meta'], names_only=False, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_end=None, packages_ignore=None, packages_ignore_regex=None, packages_select=None, packages_select_build_failed=False, packages_select_by_dep=None, packages_select_regex=None, packages_select_test_failures=False, packages_skip=None, packages_skip_build_finished=False, packages_skip_by_dep=None, packages_skip_regex=None, packages_skip_test_passed=False, packages_skip_up_to=None, packages_start=None, packages_up_to=None, packages_up_to_regex=None, paths=None, paths_only=True, topological_graph=False, topological_graph_density=False, topological_graph_dot=False, topological_graph_dot_cluster=False, topological_graph_dot_include_skipped=False, topological_graph_legend=False, topological_order=False, verb_extension=<colcon_package_information.verb.list.ListVerb object at 0x7f1543f25040>, verb_name='list', verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7f1543d93790>)
+[0.188s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.188s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.188s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.188s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.188s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.188s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/michael/src/carma2/carma_platform'
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform) by extensions ['ignore', 'ignore_ament_install']
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform) by extension 'ignore'
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform) by extension 'ignore_ament_install'
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform) by extensions ['colcon_pkg']
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform) by extension 'colcon_pkg'
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform) by extensions ['colcon_meta']
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform) by extension 'colcon_meta'
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform) by extensions ['ros']
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform) by extension 'ros'
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform) by extensions ['cmake', 'python']
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform) by extension 'cmake'
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform) by extension 'python'
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform) by extensions ['python_setup_py']
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform) by extension 'python_setup_py'
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup) by extensions ['ignore', 'ignore_ament_install']
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup) by extension 'ignore'
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup) by extension 'ignore_ament_install'
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup) by extensions ['colcon_pkg']
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup) by extension 'colcon_pkg'
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup) by extensions ['colcon_meta']
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup) by extension 'colcon_meta'
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup) by extensions ['ros']
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup) by extension 'ros'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup) by extensions ['cmake', 'python']
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup) by extension 'cmake'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup) by extension 'python'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup) by extensions ['python_setup_py']
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup) by extension 'python_setup_py'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/include) by extensions ['ignore', 'ignore_ament_install']
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/include) by extension 'ignore'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/include) by extension 'ignore_ament_install'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/include) by extensions ['colcon_pkg']
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/include) by extension 'colcon_pkg'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/include) by extensions ['colcon_meta']
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/include) by extension 'colcon_meta'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/include) by extensions ['ros']
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/include) by extension 'ros'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/include) by extensions ['cmake', 'python']
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/include) by extension 'cmake'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/include) by extension 'python'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/include) by extensions ['python_setup_py']
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/include) by extension 'python_setup_py'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/launch) by extensions ['ignore', 'ignore_ament_install']
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/launch) by extension 'ignore'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/launch) by extension 'ignore_ament_install'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/launch) by extensions ['colcon_pkg']
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/launch) by extension 'colcon_pkg'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/launch) by extensions ['colcon_meta']
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/launch) by extension 'colcon_meta'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/launch) by extensions ['ros']
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/launch) by extension 'ros'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/launch) by extensions ['cmake', 'python']
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/launch) by extension 'cmake'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/launch) by extension 'python'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/launch) by extensions ['python_setup_py']
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/launch) by extension 'python_setup_py'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/src) by extensions ['ignore', 'ignore_ament_install']
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/src) by extension 'ignore'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/src) by extension 'ignore_ament_install'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/src) by extensions ['colcon_pkg']
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/src) by extension 'colcon_pkg'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/src) by extensions ['colcon_meta']
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/src) by extension 'colcon_meta'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/src) by extensions ['ros']
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/src) by extension 'ros'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/src) by extensions ['cmake', 'python']
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/src) by extension 'cmake'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/src) by extension 'python'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/src) by extensions ['python_setup_py']
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/bringup/src) by extension 'python_setup_py'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/health_monitor) by extensions ['ignore', 'ignore_ament_install']
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/health_monitor) by extension 'ignore'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/health_monitor) by extension 'ignore_ament_install'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/health_monitor) by extensions ['colcon_pkg']
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/health_monitor) by extension 'colcon_pkg'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/health_monitor) by extensions ['colcon_meta']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/health_monitor) by extension 'colcon_meta'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/health_monitor) by extensions ['ros']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/health_monitor) by extension 'ros'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/health_monitor) by extensions ['cmake', 'python']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/health_monitor) by extension 'cmake'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/health_monitor) by extension 'python'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/health_monitor) by extensions ['python_setup_py']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/health_monitor) by extension 'python_setup_py'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/log) by extensions ['ignore', 'ignore_ament_install']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/log) by extension 'ignore'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/log) ignored
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems) by extensions ['ignore', 'ignore_ament_install']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems) by extension 'ignore'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems) by extension 'ignore_ament_install'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems) by extensions ['colcon_pkg']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems) by extension 'colcon_pkg'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems) by extensions ['colcon_meta']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems) by extension 'colcon_meta'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems) by extensions ['ros']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems) by extension 'ros'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems) by extensions ['cmake', 'python']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems) by extension 'cmake'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems) by extension 'python'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems) by extensions ['python_setup_py']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems) by extension 'python_setup_py'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/localization) by extensions ['ignore', 'ignore_ament_install']
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/localization) by extension 'ignore'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/localization) by extension 'ignore_ament_install'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/localization) by extensions ['colcon_pkg']
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/localization) by extension 'colcon_pkg'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/localization) by extensions ['colcon_meta']
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/localization) by extension 'colcon_meta'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/localization) by extensions ['ros']
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/localization) by extension 'ros'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/localization) by extensions ['cmake', 'python']
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/localization) by extension 'cmake'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/localization) by extension 'python'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/localization) by extensions ['python_setup_py']
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/localization) by extension 'python_setup_py'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception) by extensions ['ignore', 'ignore_ament_install']
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception) by extension 'ignore'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception) by extension 'ignore_ament_install'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception) by extensions ['colcon_pkg']
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception) by extension 'colcon_pkg'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception) by extensions ['colcon_meta']
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception) by extension 'colcon_meta'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception) by extensions ['ros']
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception) by extension 'ros'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception) by extensions ['cmake', 'python']
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception) by extension 'cmake'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception) by extension 'python'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception) by extensions ['python_setup_py']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception) by extension 'python_setup_py'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver) by extensions ['ignore', 'ignore_ament_install']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver) by extension 'ignore'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver) by extension 'ignore_ament_install'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver) by extensions ['colcon_pkg']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver) by extension 'colcon_pkg'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver) by extensions ['colcon_meta']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver) by extension 'colcon_meta'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver) by extensions ['ros']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver) by extension 'ros'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver) by extensions ['cmake', 'python']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver) by extension 'cmake'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver) by extension 'python'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver) by extensions ['python_setup_py']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver) by extension 'python_setup_py'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include) by extensions ['ignore', 'ignore_ament_install']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include) by extension 'ignore'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include) by extension 'ignore_ament_install'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include) by extensions ['colcon_pkg']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include) by extension 'colcon_pkg'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include) by extensions ['colcon_meta']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include) by extension 'colcon_meta'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include) by extensions ['ros']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include) by extension 'ros'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include) by extensions ['cmake', 'python']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include) by extension 'cmake'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include) by extension 'python'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include) by extensions ['python_setup_py']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include) by extension 'python_setup_py'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include/carma_delphi_srr2_driver) by extensions ['ignore', 'ignore_ament_install']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include/carma_delphi_srr2_driver) by extension 'ignore'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include/carma_delphi_srr2_driver) by extension 'ignore_ament_install'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include/carma_delphi_srr2_driver) by extensions ['colcon_pkg']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include/carma_delphi_srr2_driver) by extension 'colcon_pkg'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include/carma_delphi_srr2_driver) by extensions ['colcon_meta']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include/carma_delphi_srr2_driver) by extension 'colcon_meta'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include/carma_delphi_srr2_driver) by extensions ['ros']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include/carma_delphi_srr2_driver) by extension 'ros'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include/carma_delphi_srr2_driver) by extensions ['cmake', 'python']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include/carma_delphi_srr2_driver) by extension 'cmake'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include/carma_delphi_srr2_driver) by extension 'python'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include/carma_delphi_srr2_driver) by extensions ['python_setup_py']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/include/carma_delphi_srr2_driver) by extension 'python_setup_py'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/src) by extensions ['ignore', 'ignore_ament_install']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/src) by extension 'ignore'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/src) by extension 'ignore_ament_install'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/src) by extensions ['colcon_pkg']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/src) by extension 'colcon_pkg'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/src) by extensions ['colcon_meta']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/src) by extension 'colcon_meta'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/src) by extensions ['ros']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/src) by extension 'ros'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/src) by extensions ['cmake', 'python']
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/src) by extension 'cmake'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/src) by extension 'python'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/src) by extensions ['python_setup_py']
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_delphi_srr2_driver/src) by extension 'python_setup_py'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver) by extensions ['ignore', 'ignore_ament_install']
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver) by extension 'ignore'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver) by extension 'ignore_ament_install'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver) by extensions ['colcon_pkg']
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver) by extension 'colcon_pkg'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver) by extensions ['colcon_meta']
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver) by extension 'colcon_meta'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver) by extensions ['ros']
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver) by extension 'ros'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver) by extensions ['cmake', 'python']
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver) by extension 'cmake'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver) by extension 'python'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver) by extensions ['python_setup_py']
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver) by extension 'python_setup_py'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include) by extensions ['ignore', 'ignore_ament_install']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include) by extension 'ignore'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include) by extension 'ignore_ament_install'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include) by extensions ['colcon_pkg']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include) by extension 'colcon_pkg'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include) by extensions ['colcon_meta']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include) by extension 'colcon_meta'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include) by extensions ['ros']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include) by extension 'ros'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include) by extensions ['cmake', 'python']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include) by extension 'cmake'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include) by extension 'python'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include) by extensions ['python_setup_py']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include) by extension 'python_setup_py'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include/carma_velodyne_lidar_driver) by extensions ['ignore', 'ignore_ament_install']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include/carma_velodyne_lidar_driver) by extension 'ignore'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include/carma_velodyne_lidar_driver) by extension 'ignore_ament_install'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include/carma_velodyne_lidar_driver) by extensions ['colcon_pkg']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include/carma_velodyne_lidar_driver) by extension 'colcon_pkg'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include/carma_velodyne_lidar_driver) by extensions ['colcon_meta']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include/carma_velodyne_lidar_driver) by extension 'colcon_meta'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include/carma_velodyne_lidar_driver) by extensions ['ros']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include/carma_velodyne_lidar_driver) by extension 'ros'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include/carma_velodyne_lidar_driver) by extensions ['cmake', 'python']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include/carma_velodyne_lidar_driver) by extension 'cmake'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include/carma_velodyne_lidar_driver) by extension 'python'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include/carma_velodyne_lidar_driver) by extensions ['python_setup_py']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/include/carma_velodyne_lidar_driver) by extension 'python_setup_py'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/src) by extensions ['ignore', 'ignore_ament_install']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/src) by extension 'ignore'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/src) by extension 'ignore_ament_install'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/src) by extensions ['colcon_pkg']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/src) by extension 'colcon_pkg'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/src) by extensions ['colcon_meta']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/src) by extension 'colcon_meta'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/src) by extensions ['ros']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/src) by extension 'ros'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/src) by extensions ['cmake', 'python']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/src) by extension 'cmake'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/src) by extension 'python'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/src) by extensions ['python_setup_py']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/perception/carma_velodyne_lidar_driver/src) by extension 'python_setup_py'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/world_model) by extensions ['ignore', 'ignore_ament_install']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/world_model) by extension 'ignore'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/world_model) by extension 'ignore_ament_install'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/world_model) by extensions ['colcon_pkg']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/world_model) by extension 'colcon_pkg'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/world_model) by extensions ['colcon_meta']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/world_model) by extension 'colcon_meta'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/world_model) by extensions ['ros']
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/world_model) by extension 'ros'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/world_model) by extensions ['cmake', 'python']
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/world_model) by extension 'cmake'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/world_model) by extension 'python'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/world_model) by extensions ['python_setup_py']
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/subsystems/world_model) by extension 'python_setup_py'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/system_controller) by extensions ['ignore', 'ignore_ament_install']
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/system_controller) by extension 'ignore'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/system_controller) by extension 'ignore_ament_install'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/system_controller) by extensions ['colcon_pkg']
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/system_controller) by extension 'colcon_pkg'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/system_controller) by extensions ['colcon_meta']
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/system_controller) by extension 'colcon_meta'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/system_controller) by extensions ['ros']
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/system_controller) by extension 'ros'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/system_controller) by extensions ['cmake', 'python']
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/system_controller) by extension 'cmake'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/system_controller) by extension 'python'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/system_controller) by extensions ['python_setup_py']
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(/home/michael/src/carma2/carma_platform/system_controller) by extension 'python_setup_py'
+[0.207s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
