@@ -12,8 +12,6 @@
   <depend>carma_common</depend>
 
   <depend>action_msgs</depend>
-  <depend>bondcpp</depend>
-  <depend>bond</depend>
   <depend>lifecycle_msgs</depend>
   <depend>nav_msgs</depend>
   <depend>rclcpp_action</depend>

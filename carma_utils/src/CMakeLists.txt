@@ -3,6 +3,8 @@ add_library(${library_name} SHARED
 )
 
 ament_target_dependencies(${library_name}
+  bond
+  bondcpp
   rclcpp
   rclcpp_lifecycle
   ros2_lifecycle_manager_msgs
