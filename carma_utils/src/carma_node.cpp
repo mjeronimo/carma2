@@ -64,7 +64,7 @@ CarmaNode::~CarmaNode()
 
 void CarmaNode::createBond()
 {
-  RCLCPP_INFO(get_logger(), "Creating bond (%s) to lifecycle manager.", this->get_name());
+  RCLCPP_INFO(get_logger(), "Creating bond to lifecycle manager");
 
   bond_ = std::make_unique<bond::Bond>(
     std::string("bond"),
@@ -87,11 +87,7 @@ void CarmaNode::destroyBond()
 
 void CarmaNode::print_lifecycle_node_notification()
 {
-  RCLCPP_INFO(
-    get_logger(),
-    "\n\t%s lifecycle node launched. \n"
-    "\tWaiting on external lifecycle transitions to activate\n"
-    "\tSee https://design.ros2.org/articles/node_lifecycle.html for more information.", get_name());
+  RCLCPP_INFO(get_logger(), "Lifecycle node launched, waiting on external lifecycle transitions to activate");
 }
 
 }  // namespace carma_utils

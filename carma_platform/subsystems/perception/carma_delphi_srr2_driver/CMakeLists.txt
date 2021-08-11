@@ -1,51 +1,32 @@
 cmake_minimum_required(VERSION 3.5)
-project(nav2_planner)
+project(carma_delphi_srr2_driver)
 
 find_package(ament_cmake REQUIRED)
-find_package(nav2_common REQUIRED)
+find_package(carma_common REQUIRED)
+find_package(carma_utils REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(rclcpp_action REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
-find_package(std_msgs REQUIRED)
-find_package(visualization_msgs REQUIRED)
-find_package(nav2_util REQUIRED)
-find_package(nav2_msgs REQUIRED)
-find_package(nav_msgs REQUIRED)
-find_package(geometry_msgs REQUIRED)
-find_package(builtin_interfaces REQUIRED)
-find_package(tf2_ros REQUIRED)
-find_package(nav2_costmap_2d REQUIRED)
-find_package(pluginlib REQUIRED)
-find_package(nav2_core REQUIRED)
+find_package(ros2_lifecycle_manager_msgs REQUIRED)
 
-nav2_package()
+carma_package()
 
 include_directories(
   include
 )
 
-set(executable_name planner_server)
+set(executable_name ${PROJECT_NAME})
 set(library_name ${executable_name}_core)
 
 set(dependencies
+  carma_common
+  carma_utils
   rclcpp
-  rclcpp_action
   rclcpp_lifecycle
-  std_msgs
-  visualization_msgs
-  nav2_util
-  nav2_msgs
-  nav_msgs
-  geometry_msgs
-  builtin_interfaces
-  tf2_ros
-  nav2_costmap_2d
-  pluginlib
-  nav2_core
+  ros2_lifecycle_manager_msgs
 )
 
 add_library(${library_name} SHARED
-  src/planner_server.cpp
+  src/carma_delphi_srr2_driver.cpp
 )
 
 ament_target_dependencies(${library_name}

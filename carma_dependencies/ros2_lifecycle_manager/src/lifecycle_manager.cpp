@@ -34,8 +34,6 @@ namespace ros2_lifecycle_manager
 LifecycleManager::LifecycleManager()
 : Node("lifecycle_manager")
 {
-  RCLCPP_INFO(get_logger(), "Creating");
-
   // The list of names is parameterized, allowing this module to be used with a different set
   // of nodes
   declare_parameter("node_names", rclcpp::PARAMETER_STRING_ARRAY);
@@ -93,7 +91,6 @@ LifecycleManager::LifecycleManager()
 
 LifecycleManager::~LifecycleManager()
 {
-  RCLCPP_INFO(get_logger(), "Destroying %s", get_name());
   service_thread_.reset();
 }
 
@@ -174,7 +171,7 @@ LifecycleManager::createBondConnection(const std::string & node_name)
         node_name.c_str(), timeout_s);
       return false;
     }
-    RCLCPP_INFO(get_logger(), "Server %s connected with bond.", node_name.c_str());
+    RCLCPP_INFO(get_logger(), "Server %s connected with bond", node_name.c_str());
   }
 
   return true;
@@ -235,7 +232,7 @@ LifecycleManager::shutdownAllNodes()
 bool
 LifecycleManager::startup()
 {
-  message("Starting managed nodes bringup...");
+  message("Starting managed nodes bringup");
   if (!changeStateForAllNodes(Transition::TRANSITION_CONFIGURE) ||
     !changeStateForAllNodes(Transition::TRANSITION_ACTIVATE))
   {
@@ -318,7 +315,7 @@ LifecycleManager::createBondTimer()
     return;
   }
 
-  message("Creating bond timer...");
+  message("Creating bond timer");
 
   bond_timer_ = this->create_wall_timer(
     200ms,
@@ -330,7 +327,7 @@ void
 LifecycleManager::destroyBondTimer()
 {
   if (bond_timer_) {
-    message("Terminating bond timer...");
+    message("Terminating bond timer");
     bond_timer_->cancel();
     bond_timer_.reset();
   }
@@ -349,9 +346,7 @@ LifecycleManager::checkBondConnections()
     }
 
     if (bond_map_[node_name]->isBroken()) {
-      message(
-        std::string(
-          "Have not received a heartbeat from " + node_name + "."));
+      message(std::string("Have not received a heartbeat from " + node_name + "."));
 
       // if one is down, bring them all down
       RCLCPP_ERROR(
@@ -359,6 +354,7 @@ LifecycleManager::checkBondConnections()
         "CRITICAL FAILURE: SERVER %s IS DOWN after not receiving a heartbeat for %i ms."
         " Shutting down related nodes.",
         node_name.c_str(), static_cast<int>(bond_timeout_.count()));
+
       reset();
       return;
     }
