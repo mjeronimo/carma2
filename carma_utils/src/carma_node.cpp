@@ -44,7 +44,7 @@ CarmaNode::CarmaNode(
     new_args.push_back("--");
     rclcpp_node_ = std::make_shared<rclcpp::Node>(
       "_", ns, rclcpp::NodeOptions(options).arguments(new_args));
-    rclcpp_thread_ = std::make_unique<NodeThread>(rclcpp_node_);
+    rclcpp_thread_ = std::make_unique<ros2_utils::NodeThread>(rclcpp_node_);
   }
 
   print_lifecycle_node_notification();

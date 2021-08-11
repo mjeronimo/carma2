@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(carma_utils)
+project(ros2_utils)
 
 find_package(ament_cmake REQUIRED)
 find_package(carma_common REQUIRED)
@@ -20,20 +20,20 @@ find_package(bond REQUIRED)
 find_package(action_msgs REQUIRED)
 
 set(dependencies
-    ros2_lifecycle_manager_msgs
-    tf2_ros
-    tf2
-    tf2_geometry_msgs
+    action_msgs
+    bond
+    bondcpp
     geometry_msgs
+    lifecycle_msgs
     nav_msgs
     rclcpp
-    lifecycle_msgs
     rclcpp_action
-    test_msgs
     rclcpp_lifecycle
-    bondcpp
-    bond
-    action_msgs
+    ros2_lifecycle_manager_msgs
+    test_msgs
+    tf2
+    tf2_geometry_msgs
+    tf2_ros
 )
 
 carma_package()

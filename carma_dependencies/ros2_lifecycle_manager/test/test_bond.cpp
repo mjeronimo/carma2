@@ -17,19 +17,19 @@
 #include <chrono>
 #include <string>
 #include "rclcpp/rclcpp.hpp"
-#include "carma_utils/carma_node.hpp"
-#include "carma_utils/node_thread.hpp"
+#include "ros2_utils/carma_node.hpp"
+#include "ros2_utils/node_thread.hpp"
 #include "ros2_lifecycle_manager/lifecycle_manager.hpp"
 #include "ros2_lifecycle_manager/lifecycle_manager_client.hpp"
 
 using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
 // minimal lifecycle node implementing bond as in rest of navigation servers
-class TestCarmaNode : public carma_utils::CarmaNode
+class TestCarmaNode : public ros2_utils::CarmaNode
 {
 public:
   TestCarmaNode(bool bond, std::string name)
-  : carma_utils::CarmaNode(name)
+  : ros2_utils::CarmaNode(name)
   {
     state = "";
     enable_bond = bond;
@@ -118,11 +118,11 @@ public:
   TestFixture(bool bond, std::string node_name)
   {
     lf_node_ = std::make_shared<TestCarmaNode>(bond, node_name);
-    lf_thread_ = std::make_unique<carma_utils::NodeThread>(lf_node_->get_node_base_interface());
+    lf_thread_ = std::make_unique<ros2_utils::NodeThread>(lf_node_->get_node_base_interface());
   }
 
   std::shared_ptr<TestCarmaNode> lf_node_;
-  std::unique_ptr<carma_utils::NodeThread> lf_thread_;
+  std::unique_ptr<ros2_utils::NodeThread> lf_thread_;
 };
 
 TEST(LifecycleBondTest, POSITIVE)

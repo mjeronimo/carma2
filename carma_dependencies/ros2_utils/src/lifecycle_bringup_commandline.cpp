@@ -18,8 +18,8 @@
 #include <cstdlib>
 #include <chrono>
 #include "rclcpp/rclcpp.hpp"
-#include "carma_utils/lifecycle_utils.hpp"
-#include "carma_utils/string_utils.hpp"
+#include "ros2_utils/lifecycle_utils.hpp"
+#include "ros2_utils/string_utils.hpp"
 
 using std::cerr;
 using namespace std::chrono_literals;
@@ -41,7 +41,7 @@ int main(int argc, char * argv[])
     std::exit(1);
   }
   rclcpp::init(0, nullptr);
-  carma_utils::startup_lifecycle_nodes(
+  ros2_utils::startup_lifecycle_nodes(
     std::vector<std::string>(argv + 1, argv + argc),
     10s);
   rclcpp::shutdown();

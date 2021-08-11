@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "carma_utils/lifecycle_service_client.hpp"
+#include "ros2_utils/lifecycle_service_client.hpp"
 
 #include <chrono>
 #include <string>
@@ -27,7 +27,7 @@ using std::string;
 using std::chrono::high_resolution_clock;
 using std::to_string;
 
-namespace carma_utils
+namespace ros2_utils
 {
 
 std::string
@@ -127,4 +127,4 @@ uint8_t LifecycleServiceClient::get_state(
   return result->current_state.id;
 }
 
-}  // namespace carma_utils
+}  // namespace ros2_utils

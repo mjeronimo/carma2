@@ -33,9 +33,9 @@ LifecycleManagerClient::LifecycleManagerClient(
   node_ = parent_node;
 
   // Create the service clients
-  manager_client_ = std::make_shared<carma_utils::ServiceClient<ManageLifecycleNodes>>(
+  manager_client_ = std::make_shared<ros2_utils::ServiceClient<ManageLifecycleNodes>>(
     manage_service_name_, node_);
-  is_active_client_ = std::make_shared<carma_utils::ServiceClient<std_srvs::srv::Trigger>>(
+  is_active_client_ = std::make_shared<ros2_utils::ServiceClient<std_srvs::srv::Trigger>>(
     active_service_name_, node_);
 }
 

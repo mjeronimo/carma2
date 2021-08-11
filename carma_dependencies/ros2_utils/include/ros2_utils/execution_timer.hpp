@@ -17,7 +17,7 @@
 
 #include <chrono>
 
-namespace carma_utils
+namespace ros2_utils
 {
 
 /// @brief Measures execution time of code between calls to start and end
@@ -47,6 +47,6 @@ protected:
   Clock::time_point end_;
 };
 
-}  // namespace carma_utils
+}  // namespace ros2_utils
 
 #endif  // CARMA_UTILS__EXECUTION_TIMER_HPP_

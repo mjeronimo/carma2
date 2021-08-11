@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "carma_utils/string_utils.hpp"
+#include "ros2_utils/string_utils.hpp"
 #include <string>
 
-namespace carma_utils
+namespace ros2_utils
 {
 
 std::string
@@ -45,4 +45,4 @@ split(const std::string & tokenstring, char delimiter)
   return tokens;
 }
 
-}  // namespace carma_utils
+}  // namespace ros2_utils

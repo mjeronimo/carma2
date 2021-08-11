@@ -19,7 +19,7 @@
 #include <string>
 #include <thread>
 
-#include "carma_utils/node_thread.hpp"
+#include "ros2_utils/node_thread.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "bondcpp/bond.hpp"
@@ -198,7 +198,7 @@ protected:
   rclcpp::Node::SharedPtr rclcpp_node_;
 
   // When creating a local node, this class will launch a separate thread created to spin the node
-  std::unique_ptr<NodeThread> rclcpp_thread_;
+  std::unique_ptr<ros2_utils::NodeThread> rclcpp_thread_;
 
   // Connection to tell that server is still up
   std::unique_ptr<bond::Bond> bond_{nullptr};

@@ -26,7 +26,7 @@ using namespace std::placeholders;
 
 using lifecycle_msgs::msg::Transition;
 using lifecycle_msgs::msg::State;
-using carma_utils::LifecycleServiceClient;
+using ros2_utils::LifecycleServiceClient;
 
 namespace ros2_lifecycle_manager
 {
@@ -86,7 +86,7 @@ LifecycleManager::LifecycleManager()
     callback_group_);
   auto executor = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
   executor->add_callback_group(callback_group_, get_node_base_interface());
-  service_thread_ = std::make_unique<carma_utils::NodeThread>(executor);
+  service_thread_ = std::make_unique<ros2_utils::NodeThread>(executor);
 }
 
 LifecycleManager::~LifecycleManager()

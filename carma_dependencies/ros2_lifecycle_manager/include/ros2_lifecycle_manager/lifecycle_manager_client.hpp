@@ -25,7 +25,7 @@
 #include "std_srvs/srv/empty.hpp"
 #include "ros2_lifecycle_manager_msgs/srv/manage_lifecycle_nodes.hpp"
 #include "std_srvs/srv/trigger.hpp"
-#include "carma_utils/service_client.hpp"
+#include "ros2_utils/service_client.hpp"
 
 namespace ros2_lifecycle_manager
 {
@@ -78,8 +78,8 @@ protected:
   // The node to use for the service call
   rclcpp::Node::SharedPtr node_;
 
-  std::shared_ptr<carma_utils::ServiceClient<ManageLifecycleNodes>> manager_client_;
-  std::shared_ptr<carma_utils::ServiceClient<std_srvs::srv::Trigger>> is_active_client_;
+  std::shared_ptr<ros2_utils::ServiceClient<ManageLifecycleNodes>> manager_client_;
+  std::shared_ptr<ros2_utils::ServiceClient<std_srvs::srv::Trigger>> is_active_client_;
   std::string manage_service_name_;
   std::string active_service_name_;
 };

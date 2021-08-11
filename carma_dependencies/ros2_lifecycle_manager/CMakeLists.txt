@@ -5,7 +5,7 @@ find_package(ament_cmake REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(lifecycle_msgs REQUIRED)
 find_package(ros2_lifecycle_manager_msgs REQUIRED)
-find_package(carma_utils REQUIRED)
+find_package(ros2_utils REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(rclcpp REQUIRED)
@@ -39,7 +39,7 @@ set(dependencies
   geometry_msgs
   lifecycle_msgs
   ros2_lifecycle_manager_msgs
-  carma_utils
+  ros2_utils
   rclcpp
   rclcpp_action
   rclcpp_lifecycle
@@ -86,7 +86,7 @@ if(BUILD_TESTING)
   find_package(ament_cmake_gtest REQUIRED)
   find_package(ament_cmake_pytest REQUIRED)
 
-  add_subdirectory(test)
+  #add_subdirectory(test)
 endif()
 
 ament_export_include_directories(include)

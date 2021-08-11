@@ -1,6 +1,9 @@
 
-# Capabilities
+# Features/Capabilities
 
+* Lifecycle Management
+* System Alerts
+* Composable Nodes
 
 # Architecture Questions
 

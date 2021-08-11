@@ -24,13 +24,13 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
-#include "carma_utils/node_thread.hpp"
+#include "ros2_utils/node_thread.hpp"
 
-namespace carma_utils
+namespace ros2_utils
 {
 
 /**
- * @class carma_utils::SimpleActionServer
+ * @class ros2_utils::SimpleActionServer
  * @brief An action server wrapper to make applications simpler using Actions
  */
 template<typename ActionT>
@@ -124,7 +124,7 @@ public:
     if (spin_thread_) {
       executor_ = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
       executor_->add_callback_group(callback_group_, node_base_interface_);
-      executor_thread_ = std::make_unique<carma_utils::NodeThread>(executor_);
+      executor_thread_ = std::make_unique<ros2_utils::NodeThread>(executor_);
     }
   }
 
@@ -510,7 +510,7 @@ protected:
   bool spin_thread_;
   rclcpp::CallbackGroup::SharedPtr callback_group_{nullptr};
   rclcpp::executors::SingleThreadedExecutor::SharedPtr executor_;
-  std::unique_ptr<carma_utils::NodeThread> executor_thread_;
+  std::unique_ptr<ros2_utils::NodeThread> executor_thread_;
 
   /**
    * @brief Generate an empty result object for an action type
@@ -596,6 +596,6 @@ protected:
   }
 };
 
-}  // namespace carma_utils
+}  // namespace ros2_utils
 
 #endif   // CARMA_UTILS__SIMPLE_ACTION_SERVER_HPP_

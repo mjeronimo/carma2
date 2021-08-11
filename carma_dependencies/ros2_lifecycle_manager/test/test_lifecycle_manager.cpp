@@ -17,7 +17,7 @@
 #include <chrono>
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
-#include "carma_utils/node_thread.hpp"
+#include "ros2_utils/node_thread.hpp"
 #include "ros2_lifecycle_manager/lifecycle_manager_client.hpp"
 
 using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
@@ -71,12 +71,12 @@ public:
   LifecycleClientTestFixture()
   {
     lf_node_ = std::make_shared<LifecycleNodeTest>();
-    lf_thread_ = std::make_unique<carma_utils::NodeThread>(lf_node_->get_node_base_interface());
+    lf_thread_ = std::make_unique<ros2_utils::NodeThread>(lf_node_->get_node_base_interface());
   }
 
 private:
   std::shared_ptr<LifecycleNodeTest> lf_node_;
-  std::unique_ptr<carma_utils::NodeThread> lf_thread_;
+  std::unique_ptr<ros2_utils::NodeThread> lf_thread_;
 };
 
 TEST(LifecycleClientTest, BasicTest)

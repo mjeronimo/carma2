@@ -19,10 +19,10 @@
 
 #include "rclcpp/rclcpp.hpp"
 
-namespace carma_utils
+namespace ros2_utils
 {
 /**
- * @class carma_utils::NodeThread
+ * @class ros2_utils::NodeThread
  * @brief A background thread to process node/executor callbacks
  */
 class NodeThread
@@ -60,6 +60,6 @@ protected:
   rclcpp::Executor::SharedPtr executor_;
 };
 
-}  // namespace carma_utils
+}  // namespace ros2_utils
 
 #endif  // CARMA_UTILS__NODE_THREAD_HPP_

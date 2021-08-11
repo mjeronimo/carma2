@@ -18,9 +18,9 @@
 #include <vector>
 #include <string>
 #include <chrono>
-#include "carma_utils/string_utils.hpp"
+#include "ros2_utils/string_utils.hpp"
 
-namespace carma_utils
+namespace ros2_utils
 {
 
 /// Transition the given lifecycle nodes to the ACTIVATED state in order
@@ -77,6 +77,6 @@ void reset_lifecycle_nodes(
   reset_lifecycle_nodes(split(nodes, ':'), service_call_timeout, retries);
 }
 
-}  // namespace carma_utils
+}  // namespace ros2_utils
 
 #endif  // CARMA_UTILS__LIFECYCLE_UTILS_HPP_

@@ -18,7 +18,7 @@
 #include <string>
 #include <vector>
 
-namespace carma_utils
+namespace ros2_utils
 {
 
 typedef std::vector<std::string> Tokens;
@@ -39,6 +39,6 @@ std::string strip_leading_slash(const std::string & in);
 */
 Tokens split(const std::string & tokenstring, char delimiter);
 
-}  // namespace carma_utils
+}  // namespace ros2_utils
 
 #endif  // CARMA_UTILS__STRING_UTILS_HPP_

@@ -23,8 +23,8 @@
 #include <vector>
 
 #include "bondcpp/bond.hpp"
-#include "carma_utils/lifecycle_service_client.hpp"
-#include "carma_utils/node_thread.hpp"
+#include "ros2_utils/lifecycle_service_client.hpp"
+#include "ros2_utils/node_thread.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "ros2_lifecycle_manager_msgs/srv/manage_lifecycle_nodes.hpp"
 #include "std_srvs/srv/trigger.hpp"
@@ -48,7 +48,7 @@ public:
 protected:
   // Callback group used by services and timers
   rclcpp::CallbackGroup::SharedPtr callback_group_;
-  std::unique_ptr<carma_utils::NodeThread> service_thread_;
+  std::unique_ptr<ros2_utils::NodeThread> service_thread_;
 
   // The services provided by this node
   rclcpp::Service<ManageLifecycleNodes>::SharedPtr manager_srv_;
@@ -169,7 +169,7 @@ protected:
   std::map<std::string, std::shared_ptr<bond::Bond>> bond_map_;
 
   // A map of all nodes to be controlled
-  std::map<std::string, std::shared_ptr<carma_utils::LifecycleServiceClient>> node_map_;
+  std::map<std::string, std::shared_ptr<ros2_utils::LifecycleServiceClient>> node_map_;
 
   std::map<std::uint8_t, std::string> transition_label_map_;
 

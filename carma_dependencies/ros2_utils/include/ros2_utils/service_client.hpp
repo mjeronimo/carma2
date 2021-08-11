@@ -19,11 +19,11 @@
 
 #include "rclcpp/rclcpp.hpp"
 
-namespace carma_utils
+namespace ros2_utils
 {
 
 /**
- * @class carma_utils::ServiceClient
+ * @class ros2_utils::ServiceClient
  * @brief A simple wrapper on ROS2 services for invoke() and block-style calling
  */
 template<class ServiceT>
@@ -140,6 +140,6 @@ protected:
   typename rclcpp::Client<ServiceT>::SharedPtr client_;
 };
 
-}  // namespace carma_utils
+}  // namespace ros2_utils
 
 #endif  // CARMA_UTILS__SERVICE_CLIENT_HPP_

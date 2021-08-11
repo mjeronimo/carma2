@@ -14,9 +14,9 @@
 
 #include <memory>
 
-#include "carma_utils/node_thread.hpp"
+#include "ros2_utils/node_thread.hpp"
 
-namespace carma_utils
+namespace ros2_utils
 {
 
 NodeThread::NodeThread(rclcpp::node_interfaces::NodeBaseInterface::SharedPtr node_base)
@@ -44,4 +44,4 @@ NodeThread::~NodeThread()
   thread_->join();
 }
 
-}  // namespace carma_utils
+}  // namespace ros2_utils

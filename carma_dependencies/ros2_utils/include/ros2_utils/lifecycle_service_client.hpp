@@ -21,9 +21,9 @@
 
 #include "lifecycle_msgs/srv/change_state.hpp"
 #include "lifecycle_msgs/srv/get_state.hpp"
-#include "carma_utils/service_client.hpp"
+#include "ros2_utils/service_client.hpp"
 
-namespace carma_utils
+namespace ros2_utils
 {
 
 /// Helper functions to interact with a lifecycle node.
@@ -58,6 +58,6 @@ protected:
   ServiceClient<lifecycle_msgs::srv::GetState> get_state_;
 };
 
-}  // namespace carma_utils
+}  // namespace ros2_utils
 
 #endif  // CARMA_UTILS__LIFECYCLE_SERVICE_CLIENT_HPP_
