@@ -48,11 +48,19 @@ def generate_launch_description():
         'autostart', default_value='true',
         description='Automatically startup the nav2 stack')
 
-    lifecycle_nodes = ['carma_delphi_srr2_driver']
+    lifecycle_nodes = ['carma_delphi_srr2_driver', 'carma_velodyne_lidar_driver']
 
     carma_delphi_srr2_driver = Node(
             package='carma_delphi_srr2_driver',
             executable='carma_delphi_srr2_driver',
+            output='screen',
+            #parameters=[configured_params],
+            #remappings=remappings),
+            )
+
+    carma_velodyne_lidar_driver = Node(
+            package='carma_velodyne_lidar_driver',
+            executable='carma_velodyne_lidar_driver',
             output='screen',
             #parameters=[configured_params],
             #remappings=remappings),
@@ -82,6 +90,7 @@ def generate_launch_description():
 
     # Add the actions to launch all of the navigation nodes
     ld.add_action(carma_delphi_srr2_driver)
+    ld.add_action(carma_velodyne_lidar_driver)
     ld.add_action(lifecycle_manager)
 
     return ld
