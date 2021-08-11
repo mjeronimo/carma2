@@ -2,40 +2,30 @@ cmake_minimum_required(VERSION 3.5)
 project(ros2_utils)
 
 find_package(ament_cmake REQUIRED)
-find_package(carma_common REQUIRED)
-find_package(ros2_lifecycle_manager_msgs REQUIRED)
-find_package(tf2_ros REQUIRED)
-find_package(tf2 REQUIRED)
-find_package(tf2_geometry_msgs REQUIRED)
-find_package(geometry_msgs REQUIRED)
-find_package(nav_msgs REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(lifecycle_msgs REQUIRED)
-find_package(rclcpp_action REQUIRED)
-find_package(test_msgs REQUIRED)
-find_package(rclcpp_lifecycle REQUIRED)
-find_package(tf2_geometry_msgs REQUIRED)
+find_package(action_msgs REQUIRED)
 find_package(bondcpp REQUIRED)
 find_package(bond REQUIRED)
-find_package(action_msgs REQUIRED)
+find_package(carma_common REQUIRED)
+find_package(lifecycle_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(rclcpp_action REQUIRED)
+find_package(rclcpp_lifecycle REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(ros2_lifecycle_manager_msgs REQUIRED)
 
 set(dependencies
     action_msgs
     bond
     bondcpp
-    geometry_msgs
     lifecycle_msgs
     nav_msgs
     rclcpp
     rclcpp_action
     rclcpp_lifecycle
     ros2_lifecycle_manager_msgs
-    test_msgs
-    tf2
-    tf2_geometry_msgs
-    tf2_ros
 )
 
+#TODO
 carma_package()
 
 include_directories(include)

@@ -7,15 +7,11 @@ add_library(${library_name} SHARED
 
 ament_target_dependencies(${library_name}
   bondcpp
-  geometry_msgs
   lifecycle_msgs
   nav_msgs
   rclcpp
   rclcpp_lifecycle
   ros2_lifecycle_manager_msgs
-  tf2
-  tf2_geometry_msgs
-  tf2_ros
 )
 
 add_executable(lifecycle_bringup
