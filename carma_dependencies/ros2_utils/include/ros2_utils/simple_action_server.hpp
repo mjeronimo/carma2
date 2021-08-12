@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef CARMA_UTILS__SIMPLE_ACTION_SERVER_HPP_
-#define CARMA_UTILS__SIMPLE_ACTION_SERVER_HPP_
+#ifndef ROS2_UTILS__SIMPLE_ACTION_SERVER_HPP_
+#define ROS2_UTILS__SIMPLE_ACTION_SERVER_HPP_
 
 #include <memory>
 #include <mutex>
@@ -598,4 +598,4 @@ protected:
 
 }  // namespace ros2_utils
 
-#endif   // CARMA_UTILS__SIMPLE_ACTION_SERVER_HPP_
+#endif   // ROS2_UTILS__SIMPLE_ACTION_SERVER_HPP_

@@ -2,21 +2,12 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>carma_common</name>
-  <version>1.0.0</version>
-  <description>Common support functionality used throughout the navigation 2 stack</description>
-  <maintainer email="carl.r.delsey@intel.com">Carl Delsey</maintainer>
+  <version>0.1.0</version>
+  <description>Common support functionality</description>
+  <maintainer email="michael.jeronimo@openrobotics.org">Michael Jeronimo</maintainer>
   <license>Apache-2.0</license>
 
-  <depend>launch</depend>
-  <depend>launch_ros</depend>
-  <depend>osrf_pycommon</depend>
-  <depend>rclpy</depend>
-  <depend>python3-yaml</depend>
-
   <buildtool_depend>ament_cmake_core</buildtool_depend>
-
-  <build_depend>ament_cmake_python</build_depend>
-
   <buildtool_export_depend>ament_cmake_core</buildtool_export_depend>
 
   <export>

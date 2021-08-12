@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef CARMA_UTILS__STRING_UTILS_HPP_
-#define CARMA_UTILS__STRING_UTILS_HPP_
+#ifndef ROS2_UTILS__STRING_UTILS_HPP_
+#define ROS2_UTILS__STRING_UTILS_HPP_
 
 #include <string>
 #include <vector>
@@ -41,4 +41,4 @@ Tokens split(const std::string & tokenstring, char delimiter);
 
 }  // namespace ros2_utils
 
-#endif  // CARMA_UTILS__STRING_UTILS_HPP_
+#endif  // ROS2_UTILS__STRING_UTILS_HPP_

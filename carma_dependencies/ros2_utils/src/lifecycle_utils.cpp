@@ -42,7 +42,8 @@ namespace ros2_utils
     } \
   }
 
-static void startupLifecycleNode(
+static void 
+startupLifecycleNode(
   const std::string & node_name,
   const std::chrono::seconds service_call_timeout,
   const int retries)
@@ -60,7 +61,8 @@ static void startupLifecycleNode(
     retries);
 }
 
-void startup_lifecycle_nodes(
+void
+startup_lifecycle_nodes(
   const std::vector<std::string> & node_names,
   const std::chrono::seconds service_call_timeout,
   const int retries)
@@ -70,7 +72,8 @@ void startup_lifecycle_nodes(
   }
 }
 
-static void resetLifecycleNode(
+static void
+resetLifecycleNode(
   const std::string & node_name,
   const std::chrono::seconds service_call_timeout,
   const int retries)
@@ -88,7 +91,8 @@ static void resetLifecycleNode(
     retries);
 }
 
-void reset_lifecycle_nodes(
+void
+reset_lifecycle_nodes(
   const std::vector<std::string> & node_names,
   const std::chrono::seconds service_call_timeout,
   const int retries)

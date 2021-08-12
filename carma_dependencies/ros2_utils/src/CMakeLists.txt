@@ -6,7 +6,6 @@ add_library(${library_name} SHARED
 )
 
 ament_target_dependencies(${library_name}
-  bondcpp
   lifecycle_msgs
   nav_msgs
   rclcpp

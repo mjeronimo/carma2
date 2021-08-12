@@ -2,19 +2,15 @@ cmake_minimum_required(VERSION 3.5)
 project(ros2_lifecycle_manager)
 
 find_package(ament_cmake REQUIRED)
-find_package(geometry_msgs REQUIRED)
+find_package(bondcpp REQUIRED)
 find_package(lifecycle_msgs REQUIRED)
-find_package(ros2_lifecycle_manager_msgs REQUIRED)
-find_package(ros2_utils REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(std_msgs REQUIRED)
+find_package(ros2_lifecycle_manager_msgs REQUIRED)
+find_package(ros2_utils REQUIRED)
 find_package(std_srvs REQUIRED)
-find_package(tf2_geometry_msgs REQUIRED)
-find_package(bondcpp REQUIRED)
 
-#carma_package()
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
@@ -36,17 +32,14 @@ add_library(${library_name} SHARED
 )
 
 set(dependencies
-  geometry_msgs
+  bondcpp
   lifecycle_msgs
-  ros2_lifecycle_manager_msgs
-  ros2_utils
-  rclcpp
   rclcpp_action
   rclcpp_lifecycle
-  std_msgs
+  rclcpp
+  ros2_lifecycle_manager_msgs
+  ros2_utils
   std_srvs
-  tf2_geometry_msgs
-  bondcpp
 )
 
 ament_target_dependencies(${library_name}

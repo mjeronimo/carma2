@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef CARMA_UTILS__NODE_THREAD_HPP_
-#define CARMA_UTILS__NODE_THREAD_HPP_
+#ifndef ROS2_UTILS__NODE_THREAD_HPP_
+#define ROS2_UTILS__NODE_THREAD_HPP_
 
 #include <memory>
 
@@ -62,4 +62,4 @@ protected:
 
 }  // namespace ros2_utils
 
-#endif  // CARMA_UTILS__NODE_THREAD_HPP_
+#endif  // ROS2_UTILS__NODE_THREAD_HPP_

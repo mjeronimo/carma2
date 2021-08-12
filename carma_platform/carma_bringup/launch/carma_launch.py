@@ -69,7 +69,7 @@ def generate_launch_description():
     lifecycle_manager = Node(
             package='ros2_lifecycle_manager',
             executable='lifecycle_manager',
-            name='carma_lifecycle_manager',
+            name='carma_system_controller',
             output='screen',
             parameters=[{'use_sim_time': use_sim_time},
                         {'autostart': autostart},

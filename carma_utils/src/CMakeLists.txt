@@ -8,6 +8,8 @@ add_executable(event_pub
 ament_target_dependencies(event_pub ${dependencies})
 
 ament_target_dependencies(${library_name}
+  bond
+  bondcpp
   rclcpp
   cav_msgs
   rclcpp_lifecycle
