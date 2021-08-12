@@ -51,6 +51,8 @@ protected:
   bool pause();
   bool resume();
 
+  cav_msgs::msg::SystemAlert  alert_msg;
+
   void createLifecycleServiceClients();
   void destroyLifecycleServiceClients();
 

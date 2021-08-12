@@ -141,7 +141,8 @@ LifecycleManager::publishSystemAlert(const cav_msgs::msg::SystemAlert::SharedPtr
 void 
 LifecycleManager::systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg) 
 {
-    RCLCPP_INFO(this->get_logger(),"Received SystemAlert message of type: %u",msg->type);
+    RCLCPP_INFO(this->get_logger(),"Received SystemAlert message of type: %u, msg: %s",msg->type,msg->description.c_str());
+
 }
 
 void
@@ -269,6 +270,12 @@ LifecycleManager::startup()
     return false;
   }
   RCLCPP_INFO(get_logger(), "Managed nodes are active");
+
+  // example alert message
+  alert_msg.type = cav_msgs::msg::SystemAlert::DRIVERS_READY;
+  alert_msg.description = "Drivers are Ready";
+  system_alert_pub_->publish(alert_msg);
+
   system_active_ = true;
   createBondTimer();
   return true;

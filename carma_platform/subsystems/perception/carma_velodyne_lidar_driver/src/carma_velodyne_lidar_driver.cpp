@@ -39,7 +39,7 @@ carma_utils::CallbackReturn
 CarmaVelodyneLidarDriver::on_activate(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Activating");
-
+ 
   // Create bond with the lifecycle manager
   createBond();
 
