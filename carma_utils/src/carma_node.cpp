@@ -23,6 +23,9 @@
 namespace carma_utils
 {
 
+// taken from ROS1 CARMANodeHandle.h
+std::string CarmaNode::system_alert_topic_ = "/system_alert";
+
 CarmaNode::CarmaNode(
   const std::string & node_name,
   const std::string & ns, bool use_rclcpp_node,
@@ -47,7 +50,15 @@ CarmaNode::CarmaNode(
     rclcpp_thread_ = std::make_unique<ros2_utils::NodeThread>(rclcpp_node_);
   }
 
+  // create system alert subscriber and publisher
+  system_alert_sub_ = this->create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1, 
+        std::bind(&CarmaNode::systemAlertHandler, this, std::placeholders::_1));
+
+  system_alert_pub_ = this->create_publisher<cav_msgs::msg::SystemAlert> (system_alert_topic_, 0);
+
   print_lifecycle_node_notification();
+
+
 }
 
 CarmaNode::~CarmaNode()
@@ -60,6 +71,19 @@ CarmaNode::~CarmaNode()
     on_deactivate(get_current_state());
     on_cleanup(get_current_state());
   }
+}
+
+
+// Carma Alert Publisher
+void CarmaNode::publishSystemAlert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
+{
+  system_alert_pub_->publish(*msg);
+}
+
+// Carma Alert Handler
+void CarmaNode::systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg) 
+{
+    RCLCPP_INFO(this->get_logger(),"Received SystemAlert message of type: %u",msg->type);
 }
 
 void CarmaNode::createBond()

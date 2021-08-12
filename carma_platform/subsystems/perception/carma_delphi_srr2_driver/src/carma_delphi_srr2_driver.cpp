@@ -71,4 +71,10 @@ CarmaDelphiSrr2Driver::on_shutdown(const rclcpp_lifecycle::State & /*state*/)
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
+void CarmaDelphiSrr2Driver::systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg)
+{
+  RCLCPP_INFO(this->get_logger(),"Received SystemAlert message of type: %u",msg->type);
+  RCLCPP_INFO(this->get_logger(),"Perform Delphi Specific System Event Handling");
+}
+
 }  // namespace carma_delphi_srr2_driver

@@ -71,4 +71,10 @@ CarmaVelodyneLidarDriver::on_shutdown(const rclcpp_lifecycle::State & /*state*/)
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
+void CarmaVelodyneLidarDriver::systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg)
+{
+  RCLCPP_INFO(this->get_logger(),"Received SystemAlert message of type: %u",msg->type);
+  RCLCPP_INFO(this->get_logger(),"Perform Velodyne Specific System Event Handling");
+}
+
 }  // namespace carma_velodyne_lidar_driver
