@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef CARMA_UTILS__LIFECYCLE_UTILS_HPP_
-#define CARMA_UTILS__LIFECYCLE_UTILS_HPP_
+#ifndef ROS2_UTILS__LIFECYCLE_UTILS_HPP_
+#define ROS2_UTILS__LIFECYCLE_UTILS_HPP_
 
 #include <vector>
 #include <string>
@@ -79,4 +79,4 @@ void reset_lifecycle_nodes(
 
 }  // namespace ros2_utils
 
-#endif  // CARMA_UTILS__LIFECYCLE_UTILS_HPP_
+#endif  // ROS2_UTILS__LIFECYCLE_UTILS_HPP_

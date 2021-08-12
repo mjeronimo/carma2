@@ -13,6 +13,7 @@
   <depend>lifecycle_msgs</depend>
   <depend>rclcpp_action</depend>
   <depend>rclcpp_lifecycle</depend>
+  <depend>rclcpp</depend>
   <depend>ros2_lifecycle_manager_msgs</depend>
   <depend>ros2_utils</depend>
   <depend>std_srvs</depend>

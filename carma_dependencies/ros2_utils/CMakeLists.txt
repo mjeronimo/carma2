@@ -3,7 +3,6 @@ project(ros2_utils)
 
 find_package(ament_cmake REQUIRED)
 find_package(action_msgs REQUIRED)
-find_package(carma_common REQUIRED)
 find_package(lifecycle_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(rclcpp_action REQUIRED)
@@ -21,8 +20,14 @@ set(dependencies
     ros2_lifecycle_manager_msgs
 )
 
-#TODO
-carma_package()
+# Default to C++14
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 17)
+endif()
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic -Werror -Wdeprecated -fPIC)
+endif()
 
 include_directories(include)
 

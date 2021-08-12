@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef CARMA_UTILS__LIFECYCLE_SERVICE_CLIENT_HPP_
-#define CARMA_UTILS__LIFECYCLE_SERVICE_CLIENT_HPP_
+#ifndef ROS2_UTILS__LIFECYCLE_SERVICE_CLIENT_HPP_
+#define ROS2_UTILS__LIFECYCLE_SERVICE_CLIENT_HPP_
 
 #include <chrono>
 #include <memory>
@@ -60,4 +60,4 @@ protected:
 
 }  // namespace ros2_utils
 
-#endif  // CARMA_UTILS__LIFECYCLE_SERVICE_CLIENT_HPP_
+#endif  // ROS2_UTILS__LIFECYCLE_SERVICE_CLIENT_HPP_

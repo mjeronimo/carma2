@@ -33,12 +33,10 @@ namespace ros2_lifecycle_manager
 {
 
 using ros2_lifecycle_manager_msgs::srv::ManageLifecycleNodes;
-/**
- * @class ros2_lifecycle_manager::LifecycleManager
- * @brief Implements service interface to transition managed nodes.
- * It receives transition request and then uses the node's lifecycle 
- * interface to change its state.
- */
+
+// The LifecycleManager implements the service interface to transition managed nodes.
+// It receives a transition request and then uses the managed node's lifecycle 
+// interface to change its state.
 class LifecycleManager : public rclcpp::Node
 {
 public:
@@ -46,6 +44,24 @@ public:
   ~LifecycleManager();
 
 protected:
+  bool startup();
+  bool shutdown();
+  bool reset();
+  bool pause();
+  bool resume();
+
+  void createLifecycleServiceClients();
+  void destroyLifecycleServiceClients();
+
+  void createBondTimer();
+  void destroyBondTimer();
+  bool createBondConnection(const std::string & node_name);
+  void checkBondConnections();
+
+  bool changeStateForNode(const std::string & node_name, std::uint8_t transition);
+  bool changeStateForAllNodes(std::uint8_t transition);
+  void shutdownAllNodes();
+
   // Callback group used by services and timers
   rclcpp::CallbackGroup::SharedPtr callback_group_;
   std::unique_ptr<ros2_utils::NodeThread> service_thread_;
@@ -54,111 +70,15 @@ protected:
   rclcpp::Service<ManageLifecycleNodes>::SharedPtr manager_srv_;
   rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr is_active_srv_;
 
-  /**
-   * @brief Lifecycle node manager callback function
-   * @param request_header Header of the service request
-   * @param request Service request
-   * @param reponse Service response
-   */
   void managerCallback(
     const std::shared_ptr<rmw_request_id_t> request_header,
     const std::shared_ptr<ManageLifecycleNodes::Request> request,
     std::shared_ptr<ManageLifecycleNodes::Response> response);
-  /**
-   * @brief Trigger callback function checks if the managed nodes are in active
-   * state.
-   * @param request_header Header of the request
-   * @param request Service request
-   * @param reponse Service response
-   */
+
   void isActiveCallback(
     const std::shared_ptr<rmw_request_id_t> request_header,
     const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
     std::shared_ptr<std_srvs::srv::Trigger::Response> response);
-
-  // Support functions for the service calls
-  /**
-   * @brief Start up managed nodes.
-   * @return true or false
-   */
-  bool startup();
-
-  /**
-   * @brief Deactivate, clean up and shut down all the managed nodes.
-   * @return true or false
-   */
-  bool shutdown();
-
-  /**
-   * @brief Reset all the managed nodes.
-   * @return true or false
-   */
-  bool reset();
-
-  /**
-   * @brief Pause all the managed nodes.
-   * @return true or false
-   */
-  bool pause();
-
-  /**
-   * @brief Resume all the managed nodes.
-   * @return true or false
-   */
-  bool resume();
-
-  /**
-   * @brief Support function for creating service clients
-   */
-  void createLifecycleServiceClients();
-
-  /**
-   * @brief Support function for shutdown
-   */
-  void shutdownAllNodes();
-
-  /**
-   * @brief Destroy all the lifecycle service clients.
-   */
-  void destroyLifecycleServiceClients();
-
-  /**
-   * @brief Support function for creating bond timer
-   */
-  void createBondTimer();
-
-  /**
-   * @brief Support function for creating bond connections
-   */
-  bool createBondConnection(const std::string & node_name);
-
-  /**
-   * @brief Support function for killing bond connections
-   */
-  void destroyBondTimer();
-
-  /**
-   * @ brief Support function for checking on bond connections
-   * will take down system if there's something non-responsive
-   */
-  void checkBondConnections();
-
-  /**
-   * @brief For a node, transition to the new target state
-   */
-  bool changeStateForNode(
-    const std::string & node_name,
-    std::uint8_t transition);
-
-  /**
-   * @brief For each node in the map, transition to the new target state
-   */
-  bool changeStateForAllNodes(std::uint8_t transition);
-
-  /**
-   * @brief Helper function to highlight the output on the console
-   */
-  void message(const std::string & msg);
 
   // Timer thread to look at bond connections
   rclcpp::TimerBase::SharedPtr init_timer_;

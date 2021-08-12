@@ -35,10 +35,10 @@ LifecycleManager::LifecycleManager()
 : Node("lifecycle_manager")
 {
   // The list of names is parameterized, allowing this module to be used with a different set
-  // of nodes
+  // of managed nodes
   declare_parameter("node_names", rclcpp::PARAMETER_STRING_ARRAY);
   declare_parameter("autostart", rclcpp::ParameterValue(false));
-  declare_parameter("bond_timeout", 4.0);
+  declare_parameter("bond_timeout", 2.0);
 
   node_names_ = get_parameter("node_names").as_string_array();
   get_parameter("autostart", autostart_);
@@ -131,7 +131,8 @@ LifecycleManager::isActiveCallback(
 void
 LifecycleManager::createLifecycleServiceClients()
 {
-  message("Creating and initializing lifecycle service clients");
+  RCLCPP_INFO(get_logger(), "Creating and initializing lifecycle service clients");
+
   for (auto & node_name : node_names_) {
     node_map_[node_name] =
       std::make_shared<LifecycleServiceClient>(node_name, shared_from_this());
@@ -141,7 +142,7 @@ LifecycleManager::createLifecycleServiceClients()
 void
 LifecycleManager::destroyLifecycleServiceClients()
 {
-  message("Destroying lifecycle service clients");
+  RCLCPP_INFO(get_logger(), "Destroying lifecycle service clients");
   for (auto & kv : node_map_) {
     kv.second.reset();
   }
@@ -180,7 +181,8 @@ LifecycleManager::createBondConnection(const std::string & node_name)
 bool
 LifecycleManager::changeStateForNode(const std::string & node_name, std::uint8_t transition)
 {
-  message(transition_label_map_[transition] + node_name);
+  std::string msg = transition_label_map_[transition] + node_name;
+  RCLCPP_INFO(get_logger(), msg.c_str());
 
   if (!node_map_[node_name]->change_state(transition) ||
     !(node_map_[node_name]->get_state() == transition_state_map_[transition]))
@@ -223,7 +225,8 @@ LifecycleManager::changeStateForAllNodes(std::uint8_t transition)
 void
 LifecycleManager::shutdownAllNodes()
 {
-  message("Deactivate, cleanup, and shutdown nodes");
+  RCLCPP_INFO(get_logger(), "Deactivate, cleanup, and shutdown nodes");
+
   changeStateForAllNodes(Transition::TRANSITION_DEACTIVATE);
   changeStateForAllNodes(Transition::TRANSITION_CLEANUP);
   changeStateForAllNodes(Transition::TRANSITION_UNCONFIGURED_SHUTDOWN);
@@ -232,14 +235,15 @@ LifecycleManager::shutdownAllNodes()
 bool
 LifecycleManager::startup()
 {
-  message("Starting managed nodes bringup");
+  RCLCPP_INFO(get_logger(), "Starting managed nodes bringup");
+
   if (!changeStateForAllNodes(Transition::TRANSITION_CONFIGURE) ||
     !changeStateForAllNodes(Transition::TRANSITION_ACTIVATE))
   {
     RCLCPP_ERROR(get_logger(), "Failed to bring up all requested nodes. Aborting bringup.");
     return false;
   }
-  message("Managed nodes are active");
+  RCLCPP_INFO(get_logger(), "Managed nodes are active");
   system_active_ = true;
   createBondTimer();
   return true;
@@ -251,10 +255,11 @@ LifecycleManager::shutdown()
   system_active_ = false;
   destroyBondTimer();
 
-  message("Shutting down managed nodes...");
+  RCLCPP_INFO(get_logger(), "Shutting down managed nodes...");
   shutdownAllNodes();
   destroyLifecycleServiceClients();
-  message("Managed nodes have been shut down");
+  RCLCPP_INFO(get_logger(), "Managed nodes have been shut down");
+
   return true;
 }
 
@@ -264,8 +269,8 @@ LifecycleManager::reset()
   system_active_ = false;
   destroyBondTimer();
 
-  message("Resetting managed nodes...");
   // Should transition in reverse order
+  RCLCPP_INFO(get_logger(), "Resetting managed nodes...");
   if (!changeStateForAllNodes(Transition::TRANSITION_DEACTIVATE) ||
     !changeStateForAllNodes(Transition::TRANSITION_CLEANUP))
   {
@@ -273,8 +278,7 @@ LifecycleManager::reset()
     return false;
   }
 
-  message("Managed nodes have been reset");
-
+  RCLCPP_INFO(get_logger(), "Managed nodes have been reset");
   return true;
 }
 
@@ -284,12 +288,12 @@ LifecycleManager::pause()
   system_active_ = false;
   destroyBondTimer();
 
-  message("Pausing managed nodes...");
+  RCLCPP_INFO(get_logger(), "Pausing managed nodes...");
   if (!changeStateForAllNodes(Transition::TRANSITION_DEACTIVATE)) {
     RCLCPP_ERROR(get_logger(), "Failed to pause nodes: aborting pause");
     return false;
   }
-  message("Managed nodes have been paused");
+  RCLCPP_INFO(get_logger(), "Managed nodes have been paused");
 
   return true;
 }
@@ -297,12 +301,13 @@ LifecycleManager::pause()
 bool
 LifecycleManager::resume()
 {
-  message("Resuming managed nodes...");
+  RCLCPP_INFO(get_logger(), "Resuming managed nodes...");
   if (!changeStateForAllNodes(Transition::TRANSITION_ACTIVATE)) {
     RCLCPP_ERROR(get_logger(), "Failed to resume nodes: aborting resume");
     return false;
   }
-  message("Managed nodes are active");
+  RCLCPP_INFO(get_logger(), "Managed nodes are active");
+
   system_active_ = true;
   createBondTimer();
   return true;
@@ -315,8 +320,7 @@ LifecycleManager::createBondTimer()
     return;
   }
 
-  message("Creating bond timer");
-
+  RCLCPP_INFO(get_logger(), "Creating bond timer");
   bond_timer_ = this->create_wall_timer(
     200ms,
     std::bind(&LifecycleManager::checkBondConnections, this),
@@ -327,7 +331,7 @@ void
 LifecycleManager::destroyBondTimer()
 {
   if (bond_timer_) {
-    message("Terminating bond timer");
+    RCLCPP_INFO(get_logger(), "Terminating bond timer");
     bond_timer_->cancel();
     bond_timer_.reset();
   }
@@ -346,7 +350,8 @@ LifecycleManager::checkBondConnections()
     }
 
     if (bond_map_[node_name]->isBroken()) {
-      message(std::string("Have not received a heartbeat from " + node_name + "."));
+      std::string msg = std::string("Have not received a heartbeat from " + node_name + ".");
+      RCLCPP_INFO(get_logger(), msg.c_str());
 
       // if one is down, bring them all down
       RCLCPP_ERROR(
@@ -359,15 +364,6 @@ LifecycleManager::checkBondConnections()
       return;
     }
   }
-}
-
-#define ANSI_COLOR_RESET    "\x1b[0m"
-#define ANSI_COLOR_BLUE     "\x1b[34m"
-
-void
-LifecycleManager::message(const std::string & msg)
-{
-  RCLCPP_INFO(get_logger(), ANSI_COLOR_BLUE "\33[1m%s\33[0m" ANSI_COLOR_RESET, msg.c_str());
 }
 
 }  // namespace ros2_lifecycle_manager
