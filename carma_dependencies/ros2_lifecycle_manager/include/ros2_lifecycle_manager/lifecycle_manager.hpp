@@ -28,6 +28,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "ros2_lifecycle_manager_msgs/srv/manage_lifecycle_nodes.hpp"
 #include "std_srvs/srv/trigger.hpp"
+#include "cav_msgs/msg/system_alert.hpp"
 
 namespace ros2_lifecycle_manager
 {
@@ -62,6 +63,16 @@ protected:
   bool changeStateForAllNodes(std::uint8_t transition);
   void shutdownAllNodes();
 
+  /**
+   * @brief publish the system alert message 
+   */
+  void publishSystemAlert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
+
+  /**
+   * @brief handle the system alert message 
+   */
+  void systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg);
+
   // Callback group used by services and timers
   rclcpp::CallbackGroup::SharedPtr callback_group_;
   std::unique_ptr<ros2_utils::NodeThread> service_thread_;
@@ -95,6 +106,15 @@ protected:
 
   // A map of the expected transitions to primary states
   std::unordered_map<std::uint8_t, std::uint8_t> transition_state_map_;
+
+  // Subscribe to other system alerts
+  rclcpp::Subscription<cav_msgs::msg::SystemAlert>::SharedPtr  system_alert_sub_;
+
+  // System Alert Topic
+  static std::string system_alert_topic_;
+
+  // System Alerts Publisher
+  rclcpp::Publisher<cav_msgs::msg::SystemAlert>::SharedPtr  system_alert_pub_;
 
   // The names of the nodes to be managed, in the order of desired bring-up
   std::vector<std::string> node_names_;
