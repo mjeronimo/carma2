@@ -109,6 +109,19 @@ void CarmaNode::destroyBond()
   }
 }
 
+void CarmaNode::spin()
+{
+  try
+  {
+    rclcpp::spin(this->get_node_base_interface());
+  }
+  catch(const std::exception& e)
+  {
+     RCLCPP_ERROR(this->get_logger(),"handle exception");
+  }
+
+}
+
 void CarmaNode::print_lifecycle_node_notification()
 {
   RCLCPP_INFO(get_logger(), "Lifecycle node launched, waiting on external lifecycle transitions to activate");

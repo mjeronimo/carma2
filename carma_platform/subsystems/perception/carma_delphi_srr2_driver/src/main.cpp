@@ -24,8 +24,8 @@ int main(int argc, char ** argv)
   rclcpp::init(argc, argv);
 
   auto node = std::make_shared<carma_delphi_srr2_driver::CarmaDelphiSrr2Driver>();
-  rclcpp::spin(node->get_node_base_interface());
-
+  //rclcpp::spin(node->get_node_base_interface());
+  node->spin();
   rclcpp::shutdown();
   return 0;
 }
