@@ -118,7 +118,7 @@ void CarmaNode::spin()
   }
   catch(const std::exception& e)
   {
-     RCLCPP_ERROR(this->get_logger(),"handle exception %s",e.what());
+     RCLCPP_ERROR(this->get_logger(),"handle exception %s, and issue system alert as you wish",e.what());
   }
 
 }

@@ -89,7 +89,7 @@ void CarmaEventPub::keyLoop()
 
   puts("Reading from keyboard");
   puts("---------------------------");
-  puts("Use arrow keys to send a system alert");
+  puts("Use 1,2,3,4,5,6 keys to issue system alerts");
 
 
   for(;;)
