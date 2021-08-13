@@ -125,6 +125,9 @@ protected:
   bool autostart_{false};
 
   bool system_active_{false};
+  
+  // whether or not this is a driver manager (ideally this would be more sophisticated)
+  bool driver_manager_{false};
 };
 
 }  // namespace ros2_lifecycle_manager
