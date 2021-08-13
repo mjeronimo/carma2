@@ -36,6 +36,13 @@ std::string LifecycleManager::system_alert_topic_ = "/system_alert";
 LifecycleManager::LifecycleManager()
 : Node("lifecycle_manager")
 {
+
+  // create system alert subscriber and publisher for lifcycle manager
+  system_alert_sub_ = this->create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1, 
+        std::bind(&LifecycleManager::systemAlertHandler, this, std::placeholders::_1));
+  system_alert_pub_ = this->create_publisher<cav_msgs::msg::SystemAlert> (system_alert_topic_, 0);
+
+
   // The list of names is parameterized, allowing this module to be used with a different set
   // of managed nodes
   declare_parameter("node_names", rclcpp::PARAMETER_STRING_ARRAY);
@@ -90,12 +97,6 @@ LifecycleManager::LifecycleManager()
   executor->add_callback_group(callback_group_, get_node_base_interface());
   service_thread_ = std::make_unique<ros2_utils::NodeThread>(executor);
 
-
-   // create system alert subscriber and publisher
-  system_alert_sub_ = this->create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1, 
-        std::bind(&LifecycleManager::systemAlertHandler, this, std::placeholders::_1));
-
-  system_alert_pub_ = this->create_publisher<cav_msgs::msg::SystemAlert> (system_alert_topic_, 0);
 }
 
 LifecycleManager::~LifecycleManager()
@@ -141,7 +142,18 @@ LifecycleManager::publishSystemAlert(const cav_msgs::msg::SystemAlert::SharedPtr
 void 
 LifecycleManager::systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg) 
 {
-    RCLCPP_INFO(this->get_logger(),"Received SystemAlert message of type: %u, msg: %s",msg->type,msg->description.c_str());
+    RCLCPP_INFO(this->get_logger(),"Received SystemAlert message of type: %u, msg: %s",
+                msg->type,msg->description.c_str());
+
+    if(msg->type ==  cav_msgs::msg::SystemAlert::CAUTION)
+    {
+      pause();
+    }
+    else if ((msg->type ==  cav_msgs::msg::SystemAlert::SHUTDOWN) | (msg->type ==  cav_msgs::msg::SystemAlert::FATAL))
+    {
+      shutdown();
+    }
+    
 
 }
 

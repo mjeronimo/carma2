@@ -33,6 +33,11 @@ CarmaNode::CarmaNode(
 : rclcpp_lifecycle::LifecycleNode(node_name, ns, options),
   use_rclcpp_node_(use_rclcpp_node)
 {
+
+
+   // create system alert publisher subscriber will be made by child class
+   system_alert_pub_ = this->create_publisher<cav_msgs::msg::SystemAlert> (system_alert_topic_, 0);
+
   // The server side never times out from lifecycle manager
   this->declare_parameter(bond::msg::Constants::DISABLE_HEARTBEAT_TIMEOUT_PARAM, true);
   this->set_parameter(
@@ -50,11 +55,7 @@ CarmaNode::CarmaNode(
     rclcpp_thread_ = std::make_unique<ros2_utils::NodeThread>(rclcpp_node_);
   }
 
-  // create system alert subscriber and publisher
-  system_alert_sub_ = this->create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1, 
-        std::bind(&CarmaNode::systemAlertHandler, this, std::placeholders::_1));
-
-  system_alert_pub_ = this->create_publisher<cav_msgs::msg::SystemAlert> (system_alert_topic_, 0);
+ 
 
   print_lifecycle_node_notification();
 
