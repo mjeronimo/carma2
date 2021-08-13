@@ -24,6 +24,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "bondcpp/bond.hpp"
 #include "bond/msg/constants.hpp"
+#include "cav_msgs/msg/system_alert.hpp"
 
 namespace carma_utils
 {
@@ -180,9 +181,24 @@ public:
   void createBond();
 
   /**
+   * @brief publish the system alert message 
+   */
+  void publishSystemAlert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
+
+  /**
+   * @brief handle the system alert message 
+   */
+  void systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg);
+
+  /**
    * @brief Destroy bond connection to lifecycle manager
    */
   void destroyBond();
+
+   /**
+   * @brief spin with try catch block
+   */
+  void spin();
 
 protected:
   /**
@@ -190,9 +206,21 @@ protected:
    */
   void print_lifecycle_node_notification();
 
+ 
+  
+
   // Whether or not to create a local rclcpp::Node which can be used for ROS2 classes that don't
   // yet support lifecycle nodes
   bool use_rclcpp_node_;
+
+  // System Alerts Subscriber
+  rclcpp::Subscription<cav_msgs::msg::SystemAlert>::SharedPtr  system_alert_sub_;
+
+  // System Alert Topic
+  static std::string system_alert_topic_;
+
+  // System Alerts Publisher
+  rclcpp::Publisher<cav_msgs::msg::SystemAlert>::SharedPtr  system_alert_pub_;
 
   // The local node
   rclcpp::Node::SharedPtr rclcpp_node_;

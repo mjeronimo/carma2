@@ -24,7 +24,7 @@ int main(int argc, char ** argv)
   rclcpp::init(argc, argv);
 
   auto node = std::make_shared<carma_velodyne_lidar_driver::CarmaVelodyneLidarDriver>();
-  rclcpp::spin(node->get_node_base_interface());
+  node->spin();
 
   rclcpp::shutdown();
   return 0;

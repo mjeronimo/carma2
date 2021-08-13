@@ -13,9 +13,11 @@ find_package(rclcpp_lifecycle REQUIRED)
 find_package(bondcpp REQUIRED)
 find_package(bond REQUIRED)
 find_package(action_msgs REQUIRED)
+find_package(cav_msgs REQUIRED)
 
 set(dependencies
     action_msgs
+    cav_msgs
     bond
     bondcpp
     lifecycle_msgs

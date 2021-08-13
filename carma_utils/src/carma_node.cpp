@@ -23,6 +23,9 @@
 namespace carma_utils
 {
 
+// taken from ROS1 CARMANodeHandle.h
+std::string CarmaNode::system_alert_topic_ = "/system_alert";
+
 CarmaNode::CarmaNode(
   const std::string & node_name,
   const std::string & ns, bool use_rclcpp_node,
@@ -30,6 +33,11 @@ CarmaNode::CarmaNode(
 : rclcpp_lifecycle::LifecycleNode(node_name, ns, options),
   use_rclcpp_node_(use_rclcpp_node)
 {
+
+
+   // create system alert publisher subscriber will be made by child class
+   system_alert_pub_ = this->create_publisher<cav_msgs::msg::SystemAlert> (system_alert_topic_, 0);
+
   // The server side never times out from lifecycle manager
   this->declare_parameter(bond::msg::Constants::DISABLE_HEARTBEAT_TIMEOUT_PARAM, true);
   this->set_parameter(
@@ -47,7 +55,11 @@ CarmaNode::CarmaNode(
     rclcpp_thread_ = std::make_unique<ros2_utils::NodeThread>(rclcpp_node_);
   }
 
+ 
+
   print_lifecycle_node_notification();
+
+
 }
 
 CarmaNode::~CarmaNode()
@@ -60,6 +72,19 @@ CarmaNode::~CarmaNode()
     on_deactivate(get_current_state());
     on_cleanup(get_current_state());
   }
+}
+
+
+// Carma Alert Publisher
+void CarmaNode::publishSystemAlert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
+{
+  system_alert_pub_->publish(*msg);
+}
+
+// Carma Alert Handler
+void CarmaNode::systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg) 
+{
+    RCLCPP_INFO(this->get_logger(),"Received SystemAlert message of type: %u",msg->type);
 }
 
 void CarmaNode::createBond()
@@ -83,6 +108,19 @@ void CarmaNode::destroyBond()
   if (bond_) {
     bond_.reset();
   }
+}
+
+void CarmaNode::spin()
+{
+  try
+  {
+    rclcpp::spin(this->get_node_base_interface());
+  }
+  catch(const std::exception& e)
+  {
+     RCLCPP_ERROR(this->get_logger(),"handle exception %s, and issue system alert as you wish",e.what());
+  }
+
 }
 
 void CarmaNode::print_lifecycle_node_notification()
