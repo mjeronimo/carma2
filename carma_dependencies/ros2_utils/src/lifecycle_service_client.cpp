@@ -84,8 +84,8 @@ generate_internal_node(const std::string & prefix)
 
 LifecycleServiceClient::LifecycleServiceClient(const string & lifecycle_node_name)
 : node_(generate_internal_node(lifecycle_node_name + "_lifecycle_client")),
-  change_state_(lifecycle_node_name + "/change_state", node_),
-  get_state_(lifecycle_node_name + "/get_state", node_)
+  change_state_client_(lifecycle_node_name + "/change_state", node_),
+  get_state_client_(lifecycle_node_name + "/get_state", node_)
 {
 }
 
@@ -93,38 +93,48 @@ LifecycleServiceClient::LifecycleServiceClient(
   const string & lifecycle_node_name,
   rclcpp::Node::SharedPtr parent_node)
 : node_(parent_node),
-  change_state_(lifecycle_node_name + "/change_state", node_),
-  get_state_(lifecycle_node_name + "/get_state", node_)
+  change_state_client_(lifecycle_node_name + "/change_state", node_),
+  get_state_client_(lifecycle_node_name + "/get_state", node_)
 {
 }
 
-void LifecycleServiceClient::change_state(
-  const uint8_t transition,
-  const seconds timeout)
+bool
+LifecycleServiceClient::change_state(const uint8_t transition, const seconds timeout)
 {
-  change_state_.wait_for_service(timeout);
-  auto request = std::make_shared<lifecycle_msgs::srv::ChangeState::Request>();
-  request->transition.id = transition;
-  change_state_.invoke(request, timeout);
+  if (change_state_client_.wait_for_service(timeout)) {
+    auto request = std::make_shared<lifecycle_msgs::srv::ChangeState::Request>();
+    request->transition.id = transition;
+    change_state_client_.invoke(request, timeout);
+    return true; // TODO: check the return code from invoke()
+  }
+
+  return true;
 }
 
-bool LifecycleServiceClient::change_state(
-  std::uint8_t transition)
+bool
+LifecycleServiceClient::change_state(std::uint8_t transition)
 {
-  change_state_.wait_for_service();
-  auto request = std::make_shared<lifecycle_msgs::srv::ChangeState::Request>();
-  auto response = std::make_shared<lifecycle_msgs::srv::ChangeState::Response>();
-  request->transition.id = transition;
-  return change_state_.invoke(request, response);
+  if (change_state_client_.wait_for_service()) {
+    auto request = std::make_shared<lifecycle_msgs::srv::ChangeState::Request>();
+    auto response = std::make_shared<lifecycle_msgs::srv::ChangeState::Response>();
+    request->transition.id = transition;
+    return change_state_client_.invoke(request, response);
+  }
+
+  return false;
 }
 
-uint8_t LifecycleServiceClient::get_state(
-  const seconds timeout)
+uint8_t
+LifecycleServiceClient::get_state(const seconds timeout)
 {
-  get_state_.wait_for_service(timeout);
-  auto request = std::make_shared<lifecycle_msgs::srv::GetState::Request>();
-  auto result = get_state_.invoke(request, timeout);
-  return result->current_state.id;
+  if (get_state_client_.wait_for_service(timeout)) {
+    auto request = std::make_shared<lifecycle_msgs::srv::GetState::Request>();
+    auto result = get_state_client_.invoke(request, timeout);
+    return result->current_state.id;
+  }
+
+  // TODO
+  throw 0;
 }
 
 }  // namespace ros2_utils

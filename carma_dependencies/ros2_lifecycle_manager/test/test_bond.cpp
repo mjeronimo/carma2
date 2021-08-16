@@ -47,7 +47,7 @@ public:
     RCLCPP_INFO(get_logger(), "Lifecycle Test node is Activated!");
     state = "activated";
     if (enable_bond) {
-      createBond();
+      create_bond();
     }
     return CallbackReturn::SUCCESS;
   }
@@ -57,7 +57,7 @@ public:
     RCLCPP_INFO(get_logger(), "Lifecycle Test node is Deactivated!");
     state = "deactivated";
     if (enable_bond) {
-      destroyBond();
+      destroy_bond();
     }
     return CallbackReturn::SUCCESS;
   }

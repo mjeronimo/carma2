@@ -23,12 +23,12 @@
 #include <vector>
 
 #include "bondcpp/bond.hpp"
-#include "ros2_utils/lifecycle_service_client.hpp"
-#include "ros2_utils/node_thread.hpp"
+#include "cav_msgs/msg/system_alert.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "ros2_lifecycle_manager_msgs/srv/manage_lifecycle_nodes.hpp"
+#include "ros2_utils/lifecycle_service_client.hpp"
+#include "ros2_utils/node_thread.hpp"
 #include "std_srvs/srv/trigger.hpp"
-#include "cav_msgs/msg/system_alert.hpp"
 
 namespace ros2_lifecycle_manager
 {
@@ -38,7 +38,7 @@ using ros2_lifecycle_manager_msgs::srv::ManageLifecycleNodes;
 // The LifecycleManager implements the service interface to transition managed nodes.
 // It receives a transition request and then uses the managed node's lifecycle 
 // interface to change its state.
-class LifecycleManager : public rclcpp::Node
+class LifecycleManager : public rclcpp::Node        // TODO: should be a CarmaNode to pick up the system alert (and other) stuff
 {
 public:
   LifecycleManager();
@@ -50,8 +50,6 @@ protected:
   bool reset();
   bool pause();
   bool resume();
-
-  cav_msgs::msg::SystemAlert  alert_msg;
 
   void createLifecycleServiceClients();
   void destroyLifecycleServiceClients();
@@ -65,15 +63,8 @@ protected:
   bool changeStateForAllNodes(std::uint8_t transition);
   void shutdownAllNodes();
 
-  /**
-   * @brief publish the system alert message 
-   */
-  void publishSystemAlert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
-
-  /**
-   * @brief handle the system alert message 
-   */
-  void systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg);
+  void publish_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
+  void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
 
   // Callback group used by services and timers
   rclcpp::CallbackGroup::SharedPtr callback_group_;
@@ -81,17 +72,11 @@ protected:
 
   // The services provided by this node
   rclcpp::Service<ManageLifecycleNodes>::SharedPtr manager_srv_;
-  rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr is_active_srv_;
 
   void managerCallback(
     const std::shared_ptr<rmw_request_id_t> request_header,
     const std::shared_ptr<ManageLifecycleNodes::Request> request,
     std::shared_ptr<ManageLifecycleNodes::Response> response);
-
-  void isActiveCallback(
-    const std::shared_ptr<rmw_request_id_t> request_header,
-    const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
-    std::shared_ptr<std_srvs::srv::Trigger::Response> response);
 
   // Timer thread to look at bond connections
   rclcpp::TimerBase::SharedPtr init_timer_;
@@ -109,14 +94,10 @@ protected:
   // A map of the expected transitions to primary states
   std::unordered_map<std::uint8_t, std::uint8_t> transition_state_map_;
 
-  // Subscribe to other system alerts
-  rclcpp::Subscription<cav_msgs::msg::SystemAlert>::SharedPtr  system_alert_sub_;
-
-  // System Alert Topic
+  // System alerts
   static std::string system_alert_topic_;
-
-  // System Alerts Publisher
-  rclcpp::Publisher<cav_msgs::msg::SystemAlert>::SharedPtr  system_alert_pub_;
+  rclcpp::Subscription<cav_msgs::msg::SystemAlert>::SharedPtr system_alert_sub_;
+  rclcpp::Publisher<cav_msgs::msg::SystemAlert>::SharedPtr system_alert_pub_;
 
   // The names of the nodes to be managed, in the order of desired bring-up
   std::vector<std::string> node_names_;

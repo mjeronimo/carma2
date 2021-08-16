@@ -15,6 +15,7 @@
 #ifndef ROS2_UTILS__SERVICE_CLIENT_HPP_
 #define ROS2_UTILS__SERVICE_CLIENT_HPP_
 
+#include <chrono>
 #include <string>
 
 #include "rclcpp/rclcpp.hpp"
@@ -22,19 +23,11 @@
 namespace ros2_utils
 {
 
-/**
- * @class ros2_utils::ServiceClient
- * @brief A simple wrapper on ROS2 services for invoke() and block-style calling
- */
+// A simple wrapper for a service client
 template<class ServiceT>
 class ServiceClient
 {
 public:
-  /**
-  * @brief A constructor
-  * @param service_name name of the service to call
-  * @param provided_node Node to create the service client off of
-  */
   explicit ServiceClient(
     const std::string & service_name,
     const rclcpp::Node::SharedPtr & provided_node)
@@ -63,7 +56,7 @@ public:
     typename RequestType::SharedPtr & request,
     const std::chrono::nanoseconds timeout = std::chrono::nanoseconds(-1))
   {
-    while (!client_->wait_for_service(std::chrono::seconds(1))) {
+    while (!client_->wait_for_service(std::chrono::seconds(1))) {     // TODO: overall timeout?
       if (!rclcpp::ok()) {
         throw std::runtime_error(
                 service_name_ + " service client: interrupted while waiting for service");
@@ -122,13 +115,9 @@ public:
     return response.get();
   }
 
-  /**
-  * @brief Block until a service is available or timeout
-  * @param timeout Maximum timeout to wait for, default infinite
-  * @return bool true if service is available
-  */
   bool wait_for_service(const std::chrono::nanoseconds timeout = std::chrono::nanoseconds::max())
   {
+    // Returns true if the service is available, false otherwise.
     return client_->wait_for_service(timeout);
   }
 

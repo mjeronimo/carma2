@@ -47,9 +47,9 @@ def generate_launch_description():
 
     
     driver_nodes = ['carma_delphi_srr2_driver', 'carma_velodyne_lidar_driver']
-    world_model_nodes = ['','']
+    world_model_nodes = ['roadway_objects', 'world_model_controller']
 
-    # Subsystem 1 Drivers
+    # Subsystem 1: Drivers
     carma_delphi_srr2_driver = Node(
             package='carma_delphi_srr2_driver',
             executable='carma_delphi_srr2_driver',
@@ -72,7 +72,7 @@ def generate_launch_description():
                         {'autostart': autostart},
                         {'node_names': driver_nodes}])
 
-    # Subsystem 2 World Models
+    # Subsystem 2: World Models
     roadway_objects = Node(
             package='roadway_objects',
             executable='roadway_objects',
@@ -93,7 +93,7 @@ def generate_launch_description():
             namespace='world_model_subsystem',
             parameters=[{'use_sim_time': use_sim_time},
                         {'autostart': autostart},
-                        {'node_names': driver_nodes}])
+                        {'node_names': world_model_nodes}])
 
     # Create the launch description
     ld = LaunchDescription()
@@ -108,11 +108,12 @@ def generate_launch_description():
     ld.add_action(declare_params_file_cmd)
     ld.add_action(declare_autostart_cmd)
 
-    # Add the actions to launch all of the navigation nodes
+    # Add the actions to launch the perception subsystem
     ld.add_action(carma_delphi_srr2_driver)
     ld.add_action(carma_velodyne_lidar_driver)
     ld.add_action(drivers_lifecycle_manager)
 
+    # Add the actions to launch the world model subsystem
     ld.add_action(roadway_objects)
     ld.add_action(world_model_controller)
     ld.add_action(world_model_lifecycle_manager)

@@ -16,6 +16,7 @@
 
 #include <chrono>
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -36,12 +37,10 @@ std::string LifecycleManager::system_alert_topic_ = "/system_alert";
 LifecycleManager::LifecycleManager()
 : Node("lifecycle_manager")
 {
-
-  // create system alert subscriber and publisher for lifcycle manager
-  system_alert_sub_ = this->create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1, 
-        std::bind(&LifecycleManager::systemAlertHandler, this, std::placeholders::_1));
-  system_alert_pub_ = this->create_publisher<cav_msgs::msg::SystemAlert> (system_alert_topic_, 0);
-
+  // Create system alert subscriber and publisher for lifcycle manager
+  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1, 
+        std::bind(&LifecycleManager::handle_system_alert, this, std::placeholders::_1));
+  system_alert_pub_ = create_publisher<cav_msgs::msg::SystemAlert> (system_alert_topic_, 0);
 
   // The list of names is parameterized, allowing this module to be used with a different set
   // of managed nodes
@@ -63,12 +62,6 @@ LifecycleManager::LifecycleManager()
     rmw_qos_profile_services_default,
     callback_group_);
 
-  is_active_srv_ = create_service<std_srvs::srv::Trigger>(
-    get_name() + std::string("/is_active"),
-    std::bind(&LifecycleManager::isActiveCallback, this, _1, _2, _3),
-    rmw_qos_profile_services_default,
-    callback_group_);
-
   transition_state_map_[Transition::TRANSITION_CONFIGURE] = State::PRIMARY_STATE_INACTIVE;
   transition_state_map_[Transition::TRANSITION_CLEANUP] = State::PRIMARY_STATE_UNCONFIGURED;
   transition_state_map_[Transition::TRANSITION_ACTIVATE] = State::PRIMARY_STATE_ACTIVE;
@@ -83,7 +76,7 @@ LifecycleManager::LifecycleManager()
   transition_label_map_[Transition::TRANSITION_UNCONFIGURED_SHUTDOWN] =
     std::string("Shutting down ");
 
-  init_timer_ = this->create_wall_timer(
+  init_timer_ = create_wall_timer(
     std::chrono::nanoseconds(10),
     [this]() -> void {
       init_timer_->cancel();
@@ -93,10 +86,10 @@ LifecycleManager::LifecycleManager()
       }
     },
     callback_group_);
+
   auto executor = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
   executor->add_callback_group(callback_group_, get_node_base_interface());
   service_thread_ = std::make_unique<ros2_utils::NodeThread>(executor);
-
 }
 
 LifecycleManager::~LifecycleManager()
@@ -129,41 +122,25 @@ LifecycleManager::managerCallback(
   }
 }
 
-
-
-// Carma Alert Publisher
+// Carma alert publisher
 void 
-LifecycleManager::publishSystemAlert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
+LifecycleManager::publish_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
   system_alert_pub_->publish(*msg);
 }
 
-// Carma Alert Handler
+// Carma alert handler
 void 
-LifecycleManager::systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg) 
+LifecycleManager::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg) 
 {
-    RCLCPP_INFO(this->get_logger(),"Received SystemAlert message of type: %u, msg: %s",
+    RCLCPP_INFO(get_logger(),"Received SystemAlert message of type: %u, msg: %s",
                 msg->type,msg->description.c_str());
 
-    if(msg->type ==  cav_msgs::msg::SystemAlert::CAUTION)
-    {
+    if (msg->type ==  cav_msgs::msg::SystemAlert::CAUTION) {
       pause();
-    }
-    else if ((msg->type ==  cav_msgs::msg::SystemAlert::SHUTDOWN) | (msg->type ==  cav_msgs::msg::SystemAlert::FATAL))
-    {
+    } else if ((msg->type ==  cav_msgs::msg::SystemAlert::SHUTDOWN) | (msg->type ==  cav_msgs::msg::SystemAlert::FATAL)) {
       shutdown();
     }
-    
-
-}
-
-void
-LifecycleManager::isActiveCallback(
-  const std::shared_ptr<rmw_request_id_t>/*request_header*/,
-  const std::shared_ptr<std_srvs::srv::Trigger::Request>/*request*/,
-  std::shared_ptr<std_srvs::srv::Trigger::Response> response)
-{
-  response->success = system_active_;
 }
 
 void
@@ -228,9 +205,14 @@ LifecycleManager::changeStateForNode(const std::string & node_name, std::uint8_t
   std::string msg = transition_label_map_[transition] + node_name;
   RCLCPP_INFO(get_logger(), msg.c_str());
 
-  if (!node_map_[node_name]->change_state(transition) ||
-    !(node_map_[node_name]->get_state() == transition_state_map_[transition]))
-  {
+  try {
+    if (!node_map_[node_name]->change_state(transition, 1s) ||
+      !(node_map_[node_name]->get_state() == transition_state_map_[transition]))      // TODO
+    {
+      RCLCPP_ERROR(get_logger(), "Failed to change state for node: %s", node_name.c_str());
+      return false;
+    }
+  } catch (std::runtime_error & e) {
     RCLCPP_ERROR(get_logger(), "Failed to change state for node: %s", node_name.c_str());
     return false;
   }
@@ -289,15 +271,14 @@ LifecycleManager::startup()
   }
   RCLCPP_INFO(get_logger(), "Managed nodes are active");
 
-  if(driver_manager_)
-  {
-  // example alert message
-  alert_msg.type = cav_msgs::msg::SystemAlert::DRIVERS_READY;
-  alert_msg.description = "Drivers are Ready";
-  system_alert_pub_->publish(alert_msg);
+  if (driver_manager_) {
+    // Example alert message
+    cav_msgs::msg::SystemAlert alert_msg;
+    alert_msg.type = cav_msgs::msg::SystemAlert::DRIVERS_READY;
+    alert_msg.description = "Drivers are ready";
+    system_alert_pub_->publish(alert_msg);
   }
 
-  system_active_ = true;
   createBondTimer();
   return true;
 }
@@ -305,7 +286,6 @@ LifecycleManager::startup()
 bool
 LifecycleManager::shutdown()
 {
-  system_active_ = false;
   destroyBondTimer();
 
   RCLCPP_INFO(get_logger(), "Shutting down managed nodes...");
@@ -319,7 +299,6 @@ LifecycleManager::shutdown()
 bool
 LifecycleManager::reset()
 {
-  system_active_ = false;
   destroyBondTimer();
 
   // Should transition in reverse order
@@ -338,7 +317,6 @@ LifecycleManager::reset()
 bool
 LifecycleManager::pause()
 {
-  system_active_ = false;
   destroyBondTimer();
 
   RCLCPP_INFO(get_logger(), "Pausing managed nodes...");
@@ -361,7 +339,6 @@ LifecycleManager::resume()
   }
   RCLCPP_INFO(get_logger(), "Managed nodes are active");
 
-  system_active_ = true;
   createBondTimer();
   return true;
 }
@@ -374,7 +351,7 @@ LifecycleManager::createBondTimer()
   }
 
   RCLCPP_INFO(get_logger(), "Creating bond timer");
-  bond_timer_ = this->create_wall_timer(
+  bond_timer_ = create_wall_timer(
     200ms,
     std::bind(&LifecycleManager::checkBondConnections, this),
     callback_group_);
@@ -393,7 +370,7 @@ LifecycleManager::destroyBondTimer()
 void
 LifecycleManager::checkBondConnections()
 {
-  if (!system_active_ || !rclcpp::ok() || bond_map_.empty()) {
+  if (!rclcpp::ok() || bond_map_.empty()) {
     return;
   }
 
@@ -406,7 +383,8 @@ LifecycleManager::checkBondConnections()
       std::string msg = std::string("Have not received a heartbeat from " + node_name + ".");
       RCLCPP_INFO(get_logger(), msg.c_str());
 
-      // if one is down, bring them all down
+      // TODO: What is the policy here?
+      // If one is down, bring them all down
       RCLCPP_ERROR(
         get_logger(),
         "CRITICAL FAILURE: SERVER %s IS DOWN after not receiving a heartbeat for %i ms."

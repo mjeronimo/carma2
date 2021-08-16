@@ -39,7 +39,7 @@ public:
   /**
    * Throws std::runtime_error on failure
    */
-  void change_state(
+  bool change_state(
     const uint8_t transition,  // takes a lifecycle_msgs::msg::Transition id
     const std::chrono::seconds timeout);
 
@@ -54,8 +54,8 @@ public:
 
 protected:
   rclcpp::Node::SharedPtr node_;
-  ServiceClient<lifecycle_msgs::srv::ChangeState> change_state_;
-  ServiceClient<lifecycle_msgs::srv::GetState> get_state_;
+  ServiceClient<lifecycle_msgs::srv::ChangeState> change_state_client_;
+  ServiceClient<lifecycle_msgs::srv::GetState> get_state_client_;
 };
 
 }  // namespace ros2_utils

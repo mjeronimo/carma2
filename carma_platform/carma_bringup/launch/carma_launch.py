@@ -10,7 +10,6 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    # Get the launch directory
     bringup_dir = get_package_share_directory('carma_bringup')
     #launch_dir = os.path.join(bringup_dir, 'launch')
 
@@ -48,32 +47,27 @@ def generate_launch_description():
         'autostart', default_value='true',
         description='Automatically startup the nav2 stack')
 
-    lifecycle_nodes = ['carma_delphi_srr2_driver', 'carma_velodyne_lidar_driver']
-
     carma_delphi_srr2_driver = Node(
-            package='carma_delphi_srr2_driver',
-            executable='carma_delphi_srr2_driver',
-            output='screen',
-            #parameters=[configured_params],
-            #remappings=remappings),
-            )
+        package='carma_delphi_srr2_driver',
+        executable='carma_delphi_srr2_driver',
+        output='screen',
+        )
 
     carma_velodyne_lidar_driver = Node(
-            package='carma_velodyne_lidar_driver',
-            executable='carma_velodyne_lidar_driver',
-            output='screen',
-            #parameters=[configured_params],
-            #remappings=remappings),
-            )
+        package='carma_velodyne_lidar_driver',
+        executable='carma_velodyne_lidar_driver',
+        output='screen',
+        )
 
+    lifecycle_nodes = ['carma_delphi_srr2_driver', 'carma_velodyne_lidar_driver']
     lifecycle_manager = Node(
-            package='ros2_lifecycle_manager',
-            executable='lifecycle_manager',
-            name='carma_system_controller',
-            output='screen',
-            parameters=[{'use_sim_time': use_sim_time},
-                        {'autostart': autostart},
-                        {'node_names': lifecycle_nodes}])
+        package='ros2_lifecycle_manager',
+        executable='lifecycle_manager',
+        name='carma_system_controller',
+        output='screen',
+        parameters=[{'use_sim_time': use_sim_time},
+                    {'autostart': autostart},
+                    {'node_names': lifecycle_nodes}])
 
     # Create the launch description
     ld = LaunchDescription()

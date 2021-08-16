@@ -35,7 +35,10 @@ protected:
   carma_utils::CallbackReturn on_deactivate(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_cleanup(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_shutdown(const rclcpp_lifecycle::State & state) override;
-  void systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg);
+  carma_utils::CallbackReturn on_error(const rclcpp_lifecycle::State & state) override;
+
+
+  void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
 };
 
 }  // namespace carma_velodyne_lidar_driver
