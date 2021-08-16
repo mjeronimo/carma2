@@ -172,6 +172,12 @@ LifecycleManager::createLifecycleServiceClients()
   RCLCPP_INFO(get_logger(), "Creating and initializing lifecycle service clients");
 
   for (auto & node_name : node_names_) {
+
+  // distinguish drivers
+  if (node_name.find("driver") != std::string::npos) {
+      driver_manager_=true;
+  }
+
     node_map_[node_name] =
       std::make_shared<LifecycleServiceClient>(node_name, shared_from_this());
   }
@@ -283,10 +289,13 @@ LifecycleManager::startup()
   }
   RCLCPP_INFO(get_logger(), "Managed nodes are active");
 
+  if(driver_manager_)
+  {
   // example alert message
   alert_msg.type = cav_msgs::msg::SystemAlert::DRIVERS_READY;
   alert_msg.description = "Drivers are Ready";
   system_alert_pub_->publish(alert_msg);
+  }
 
   system_active_ = true;
   createBondTimer();
