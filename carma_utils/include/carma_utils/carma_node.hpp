@@ -50,7 +50,7 @@ public:
   void create_bond();
   void destroy_bond();
 
-  // TODO: SytemEvent
+  // TODO: SystemEvent
   void publish_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
   void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
 
