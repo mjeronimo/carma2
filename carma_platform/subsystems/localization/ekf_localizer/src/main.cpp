@@ -16,14 +16,14 @@
 
 #include <memory>
 
-#include "roadway_objects/roadway_objects.hpp"
+#include "ekf_localizer/ekf_localizer.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
 
-  auto node = std::make_shared<roadway_objects::RoadwayObjects>();
+  auto node = std::make_shared<ekf_localizer::EkfLocalizer>();
   node->spin();
 
   rclcpp::shutdown();

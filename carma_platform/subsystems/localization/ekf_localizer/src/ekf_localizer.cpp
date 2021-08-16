@@ -14,34 +14,34 @@
 // the License.
 //
 
-#include "world_model_controller/world_model_controller.hpp"
+#include "ekf_localizer/ekf_localizer.hpp"
 
-namespace world_model_controller
+namespace ekf_localizer
 {
 
-WorldModelController::WorldModelController()
-: CarmaNode("world_model_controller")
+EkfLocalizer::EkfLocalizer()
+: CarmaNode("ekf_localizer")
 {
-   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1, 
-        std::bind(&WorldModelController::systemAlertHandler, this, std::placeholders::_1));
+   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1,
+        std::bind(&EkfLocalizer::systemAlertHandler, this, std::placeholders::_1));
 }
 
-WorldModelController::~WorldModelController()
+EkfLocalizer::~EkfLocalizer()
 {
 }
 
 carma_utils::CallbackReturn
-WorldModelController::on_configure(const rclcpp_lifecycle::State & /*state*/)
+EkfLocalizer::on_configure(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 carma_utils::CallbackReturn
-WorldModelController::on_activate(const rclcpp_lifecycle::State & /*state*/)
+EkfLocalizer::on_activate(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Activating");
- 
+
   // Create bond with the lifecycle manager
   create_bond();
 
@@ -49,7 +49,7 @@ WorldModelController::on_activate(const rclcpp_lifecycle::State & /*state*/)
 }
 
 carma_utils::CallbackReturn
-WorldModelController::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
+EkfLocalizer::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
 
@@ -59,33 +59,34 @@ WorldModelController::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
-carma_utils::CallbackReturn 
-WorldModelController::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
+carma_utils::CallbackReturn
+EkfLocalizer::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
-carma_utils::CallbackReturn 
-WorldModelController::on_shutdown(const rclcpp_lifecycle::State & /*state*/)
+carma_utils::CallbackReturn
+EkfLocalizer::on_shutdown(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Shutting down");
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 carma_utils::CallbackReturn
-WorldModelController::on_error(const rclcpp_lifecycle::State & /*state*/)
+EkfLocalizer::on_error(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_FATAL(get_logger(), "Lifecycle node error");
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
+
 void
-WorldModelController::systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg)
+EkfLocalizer::systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
   RCLCPP_INFO(get_logger(),"Received SystemAlert message of type: %u, msg: %s",
               msg->type,msg->description.c_str());
-  RCLCPP_INFO(get_logger(),"Perform WorldModelController-specific system event handling");
+  RCLCPP_INFO(get_logger(),"Perform EkfLocalizer-specific system event handling");
 }
 
-}  // namespace world_model_controller
+}  // namespace ekf_localizer

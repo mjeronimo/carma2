@@ -14,34 +14,34 @@
 // the License.
 //
 
-#include "roadway_objects/roadway_objects.hpp"
+#include "dead_reckoner/dead_reckoner.hpp"
 
-namespace roadway_objects
+namespace dead_reckoner
 {
 
-RoadwayObjects::RoadwayObjects()
-: CarmaNode("roadway_objects")
+DeadReckoner::DeadReckoner()
+: CarmaNode("dead_reckoner")
 {
-   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1,
-        std::bind(&RoadwayObjects::systemAlertHandler, this, std::placeholders::_1));
+   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1, 
+        std::bind(&DeadReckoner::systemAlertHandler, this, std::placeholders::_1));
 }
 
-RoadwayObjects::~RoadwayObjects()
+DeadReckoner::~DeadReckoner()
 {
 }
 
 carma_utils::CallbackReturn
-RoadwayObjects::on_configure(const rclcpp_lifecycle::State & /*state*/)
+DeadReckoner::on_configure(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 carma_utils::CallbackReturn
-RoadwayObjects::on_activate(const rclcpp_lifecycle::State & /*state*/)
+DeadReckoner::on_activate(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Activating");
-
+ 
   // Create bond with the lifecycle manager
   create_bond();
 
@@ -49,7 +49,7 @@ RoadwayObjects::on_activate(const rclcpp_lifecycle::State & /*state*/)
 }
 
 carma_utils::CallbackReturn
-RoadwayObjects::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
+DeadReckoner::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
 
@@ -59,34 +59,33 @@ RoadwayObjects::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
-carma_utils::CallbackReturn
-RoadwayObjects::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
+carma_utils::CallbackReturn 
+DeadReckoner::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
-carma_utils::CallbackReturn
-RoadwayObjects::on_shutdown(const rclcpp_lifecycle::State & /*state*/)
+carma_utils::CallbackReturn 
+DeadReckoner::on_shutdown(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Shutting down");
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 carma_utils::CallbackReturn
-RoadwayObjects::on_error(const rclcpp_lifecycle::State & /*state*/)
+DeadReckoner::on_error(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_FATAL(get_logger(), "Lifecycle node error");
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
-
 void
-RoadwayObjects::systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg)
+DeadReckoner::systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
   RCLCPP_INFO(get_logger(),"Received SystemAlert message of type: %u, msg: %s",
               msg->type,msg->description.c_str());
-  RCLCPP_INFO(get_logger(),"Perform RoadwayObjects-specific system event handling");
+  RCLCPP_INFO(get_logger(),"Perform DeadReckoner-specific system event handling");
 }
 
-}  // namespace roadway_objects
+}  // namespace dead_reckoner

@@ -14,20 +14,20 @@
 // the License.
 //
 
-#ifndef ROADWAY_OBJECTS__ROADWAY_OBJECTS_HPP_
-#define ROADWAY_OBJECTS__ROADWAY_OBJECTS_HPP_
+#ifndef EKF_LOCALIZER__EKF_LOCALIZER_HPP_
+#define EKF_LOCALIZER__EKF_LOCALIZER_HPP_
 
 #include "carma_utils/carma_node.hpp"
 #include "rclcpp/rclcpp.hpp"
 
-namespace roadway_objects
+namespace ekf_localizer
 {
 
-class RoadwayObjects : public carma_utils::CarmaNode
+class EkfLocalizer : public carma_utils::CarmaNode
 {
 public:
-  RoadwayObjects();
-  ~RoadwayObjects();
+  EkfLocalizer();
+  ~EkfLocalizer();
 
 protected:
   carma_utils::CallbackReturn on_configure(const rclcpp_lifecycle::State & state) override;
@@ -40,6 +40,6 @@ protected:
   void systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg);
 };
 
-}  // namespace roadway_objects
+}  // namespace ekf_localizer
 
-#endif  //  ROADWAY_OBJECTS__ROADWAY_OBJECTS_HPP_
+#endif  //  EKF_LOCALIZER__EKF_LOCALIZER_HPP_

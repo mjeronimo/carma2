@@ -44,60 +44,50 @@ def generate_launch_description():
         'autostart', default_value='true',
         description='Automatically startup the nav2 stack')
 
-    driver_nodes = ['carma_delphi_srr2_driver', 'carma_velodyne_lidar_driver']
-    world_model_nodes = ['roadway_objects', 'world_model_controller']
+    carma_nodes = ['carma_delphi_srr2_driver', 'carma_velodyne_lidar_driver','dead_reckoner', 'ekf_localizer']
 
     # Drivers Subsystem
     carma_delphi_srr2_driver = Node(
             package='carma_delphi_srr2_driver',
             executable='carma_delphi_srr2_driver',
             output='screen',
-            prefix='xterm -geometry 150x40 -hold -e',
+            #prefix='xterm -geometry 150x40 -hold -e',
             namespace='perception_subsystem',
             )
     carma_velodyne_lidar_driver = Node(
             package='carma_velodyne_lidar_driver',
             executable='carma_velodyne_lidar_driver',
             output='screen',
-            prefix='xterm -geometry 150x40 -hold -e',
+            #prefix='xterm -geometry 150x40 -hold -e',
             namespace='perception_subsystem',
             )
-    drivers_lifecycle_manager = Node(
-            package='ros2_lifecycle_manager',
-            executable='lifecycle_manager',
-            name='drivers_lifecycle_manager',
-            output='screen',
-            prefix='xterm -geometry 150x40 -hold -e',
-            namespace='perception_subsystem',
-            parameters=[{'use_sim_time': use_sim_time},
-                        {'autostart': autostart},
-                        {'node_names': driver_nodes}])
-
-    # World Model Subsystem
-    roadway_objects = Node(
-            package='roadway_objects',
-            executable='roadway_objects',
-            output='screen',
-            prefix='xterm -geometry 150x40 -hold -e',
-            namespace='world_model_subsystem',
-            )
-    world_model_controller = Node(
-            package='world_model_controller',
-            executable='world_model_controller',
-            output='screen',
-            prefix='xterm -geometry 150x40 -hold -e',
-            namespace='world_model_subsystem',
-            )
-    world_model_lifecycle_manager = Node(
-            package='ros2_lifecycle_manager',
-            executable='lifecycle_manager',
-            name='world_model_lifecycle_manager',
-            output='screen',
-            prefix='xterm -geometry 150x40 -hold -e',
-            namespace='world_model_subsystem',
-            parameters=[{'use_sim_time': use_sim_time},
-                        {'autostart': autostart},
-                        {'node_names': world_model_nodes}])
+    # Localization Subsystem
+    dead_reckoner = Node(
+        package='dead_reckoner',
+        executable='dead_reckoner',
+        output='screen',
+        #prefix='xterm -geometry 150x40 -hold -e',
+        namespace='localization_subsystem',
+        )
+        
+    ekf_localizer = Node(
+        package='ekf_localizer',
+        executable='ekf_localizer',
+        output='screen',
+        #prefix='xterm -geometry 150x40 -hold -e',
+        namespace='localization_subsystem',
+        )
+    
+    carma_system_controller = Node(
+        package='system_controller',
+        executable='system_controller',
+        name='carma_system_controller',
+        output='screen',
+        #prefix='xterm -geometry 150x40 -hold -e',
+        namespace='perception_subsystem',
+        parameters=[{'use_sim_time': use_sim_time},
+        {'autostart': autostart},{'node_names': carma_nodes}]
+        )
 
     # Create the launch description
     ld = LaunchDescription()
@@ -112,14 +102,11 @@ def generate_launch_description():
     ld.add_action(declare_params_file_cmd)
     ld.add_action(declare_autostart_cmd)
 
-    # Add the actions to launch the perception subsystem
+    # Add the actions to launch the carma subsystems
     ld.add_action(carma_delphi_srr2_driver)
     ld.add_action(carma_velodyne_lidar_driver)
-    ld.add_action(drivers_lifecycle_manager)
-
-    # Add the actions to launch the world model subsystem
-    ld.add_action(roadway_objects)
-    ld.add_action(world_model_controller)
-    ld.add_action(world_model_lifecycle_manager)
+    ld.add_action(dead_reckoner)
+    ld.add_action(ekf_localizer)
+    ld.add_action(carma_system_controller)
 
     return ld

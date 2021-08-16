@@ -14,20 +14,20 @@
 // the License.
 //
 
-#ifndef WORLD_MODEL_CONTROLLER__WORLD_MODEL_CONTROLLER_HPP_
-#define WORLD_MODEL_CONTROLLER__WORLD_MODEL_CONTROLLER_HPP_
+#ifndef DEAD_RECKONER__DEAD_RECKONER_HPP_
+#define DEAD_RECKONER__DEAD_RECKONER_HPP_
 
 #include "carma_utils/carma_node.hpp"
 #include "rclcpp/rclcpp.hpp"
 
-namespace world_model_controller
+namespace dead_reckoner
 {
 
-class WorldModelController : public carma_utils::CarmaNode
+class DeadReckoner : public carma_utils::CarmaNode
 {
 public:
-  WorldModelController();
-  ~WorldModelController();
+  DeadReckoner();
+  ~DeadReckoner();
 
 protected:
   carma_utils::CallbackReturn on_configure(const rclcpp_lifecycle::State & state) override;
@@ -40,6 +40,6 @@ protected:
   void systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg);
 };
 
-}  // namespace world_model_controller
+}  // namespace dead_reckoner
 
-#endif  //  WORLD_MODEL_CONTROLLER__WORLD_MODEL_CONTROLLER_HPP_
+#endif  //  DEAD_RECKONER__DEAD_RECKONER_HPP_

@@ -69,22 +69,22 @@ Localization system recovery
 [ ]     Launch with ComposableNode
 [ ]     Nice if there was some data passed that demonstrated this
 
-[ ] Localization Subsystem
-[ ]     Rename the WorldModel subsystem to be the Localization subsystem
-[ ]     Get rid of intermediate controller
+[x] Localization Subsystem
+[x]     Rename the WorldModel subsystem to be the Localization subsystem
+[x]     Get rid of intermediate controller
 [ ]     Keep the health monitor
 [ ]     Understand the current CARMA health monitor and bring in communication patterns (create a shell)
 
-[ ] Perception Subsystem
-[ ]     Get rid of intermediate controller
-[ ]     Get rid of the health monitor
+[x] Perception Subsystem
+[x]     Get rid of intermediate controller
+[x]     Get rid of the health monitor
 
-[ ] CARMA lifecycle manager
-[ ]     Remove CARMA-specifics from ros2_lifecycle_manager
-[ ]     Create a system_controller that derives from ros2_lifecycle_manager and adds CARMA-specifics
+[x] CARMA lifecycle manager
+[x]     Remove CARMA-specifics from ros2_lifecycle_manager
+[x]     Create a system_controller that derives from ros2_lifecycle_manager and adds CARMA-specifics
 
-[ ] Launch
-[ ]     Use only one central lifecycle manager (instead of per subsystem)
+[x] Launch
+[x]     Use only one central lifecycle manager (instead of per subsystem)
 
 ```
 
