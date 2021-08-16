@@ -85,7 +85,7 @@ CarmaDelphiSrr2Driver::handle_system_alert(const cav_msgs::msg::SystemAlert::Sha
 {
   RCLCPP_INFO(get_logger(),"Received SystemAlert message of type: %u, msg: %s",
               msg->type,msg->description.c_str());
-  RCLCPP_INFO(get_logger(),"Perform Delphi-specific system event handling");
+  RCLCPP_INFO(get_logger(),"Perform DelphiSrr2Driver-specific system event handling");
 }
 
 }  // namespace carma_delphi_srr2_driver

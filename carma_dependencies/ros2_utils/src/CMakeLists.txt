@@ -3,6 +3,7 @@ add_library(${library_name} SHARED
   string_utils.cpp
   lifecycle_utils.cpp
   node_thread.cpp
+  param_utils.cpp
 )
 
 ament_target_dependencies(${library_name}

@@ -44,22 +44,22 @@ def generate_launch_description():
         'autostart', default_value='true',
         description='Automatically startup the nav2 stack')
 
-
-    
     driver_nodes = ['carma_delphi_srr2_driver', 'carma_velodyne_lidar_driver']
     world_model_nodes = ['roadway_objects', 'world_model_controller']
 
-    # Subsystem 1: Drivers
+    # Drivers Subsystem
     carma_delphi_srr2_driver = Node(
             package='carma_delphi_srr2_driver',
             executable='carma_delphi_srr2_driver',
             output='screen',
+            prefix='xterm -geometry 150x40 -hold -e',
             namespace='perception_subsystem',
             )
     carma_velodyne_lidar_driver = Node(
             package='carma_velodyne_lidar_driver',
             executable='carma_velodyne_lidar_driver',
             output='screen',
+            prefix='xterm -geometry 150x40 -hold -e',
             namespace='perception_subsystem',
             )
     drivers_lifecycle_manager = Node(
@@ -67,22 +67,25 @@ def generate_launch_description():
             executable='lifecycle_manager',
             name='drivers_lifecycle_manager',
             output='screen',
+            prefix='xterm -geometry 150x40 -hold -e',
             namespace='perception_subsystem',
             parameters=[{'use_sim_time': use_sim_time},
                         {'autostart': autostart},
                         {'node_names': driver_nodes}])
 
-    # Subsystem 2: World Models
+    # World Model Subsystem
     roadway_objects = Node(
             package='roadway_objects',
             executable='roadway_objects',
             output='screen',
+            prefix='xterm -geometry 150x40 -hold -e',
             namespace='world_model_subsystem',
             )
     world_model_controller = Node(
             package='world_model_controller',
             executable='world_model_controller',
             output='screen',
+            prefix='xterm -geometry 150x40 -hold -e',
             namespace='world_model_subsystem',
             )
     world_model_lifecycle_manager = Node(
@@ -90,6 +93,7 @@ def generate_launch_description():
             executable='lifecycle_manager',
             name='world_model_lifecycle_manager',
             output='screen',
+            prefix='xterm -geometry 150x40 -hold -e',
             namespace='world_model_subsystem',
             parameters=[{'use_sim_time': use_sim_time},
                         {'autostart': autostart},

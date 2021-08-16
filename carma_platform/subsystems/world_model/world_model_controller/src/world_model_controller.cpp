@@ -85,7 +85,7 @@ WorldModelController::systemAlertHandler(const cav_msgs::msg::SystemAlert::Share
 {
   RCLCPP_INFO(get_logger(),"Received SystemAlert message of type: %u, msg: %s",
               msg->type,msg->description.c_str());
-  RCLCPP_INFO(get_logger(),"Perform World Model Controller Specific System Event Handling");
+  RCLCPP_INFO(get_logger(),"Perform WorldModelController-specific system event handling");
 }
 
 }  // namespace world_model_controller

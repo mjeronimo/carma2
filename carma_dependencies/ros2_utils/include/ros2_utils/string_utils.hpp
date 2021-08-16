@@ -23,20 +23,10 @@ namespace ros2_utils
 
 typedef std::vector<std::string> Tokens;
 
-/*
- * @brief Remove leading slash from a topic name
- * @param in String of topic in
- * @return String out without slash
-*/
+// Remove a leading slash from a topic name
 std::string strip_leading_slash(const std::string & in);
 
-///
-/*
- * @brief Split a string at the delimiters
- * @param in String to split
- * @param Delimiter criteria
- * @return Tokens
-*/
+// Split a string at the delimiters
 Tokens split(const std::string & tokenstring, char delimiter);
 
 }  // namespace ros2_utils

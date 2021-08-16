@@ -86,7 +86,7 @@ RoadwayObjects::systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr m
 {
   RCLCPP_INFO(get_logger(),"Received SystemAlert message of type: %u, msg: %s",
               msg->type,msg->description.c_str());
-  RCLCPP_INFO(get_logger(),"Perform Roadway Objects Specific System Event Handling");
+  RCLCPP_INFO(get_logger(),"Perform RoadwayObjects-specific system event handling");
 }
 
 }  // namespace roadway_objects

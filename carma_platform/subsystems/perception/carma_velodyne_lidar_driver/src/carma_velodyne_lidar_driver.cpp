@@ -85,7 +85,7 @@ CarmaVelodyneLidarDriver::handle_system_alert(const cav_msgs::msg::SystemAlert::
 {
   RCLCPP_INFO(get_logger(),"Received SystemAlert message of type: %u, msg: %s",
               msg->type,msg->description.c_str());
-  RCLCPP_INFO(get_logger(),"Perform velodyne-specific system event handling");
+  RCLCPP_INFO(get_logger(),"Perform CarmaVelodyneLidarDriver-specific system event handling");
 }
 
 }  // namespace carma_velodyne_lidar_driver

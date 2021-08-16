@@ -23,6 +23,10 @@
 
 # Architecture Questions
 
+* All CARMA nodes as lifecycle nodes?
+
+* All CARMA nodes as Composable nodes?
+
 * Is there a lifecycle manager for each subsystem?
     * With one central lifecycle manager that interacts with the subsystems?
 

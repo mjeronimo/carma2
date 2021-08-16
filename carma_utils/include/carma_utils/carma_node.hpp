@@ -31,58 +31,18 @@ namespace carma_utils
 
 using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
-typedef struct
-{
-  double from_value;
-  double to_value;
-  double step;
-} floating_point_range;
-
-typedef struct
-{
-  int from_value;
-  int to_value;
-  int step;
-} integer_range;
-
 // Common node functionality
-class CarmaNode : public rclcpp_lifecycle::LifecycleNode      // TODO: Make this a template that takes either Node or LifecycleNode
+// TODO: Make this a template that takes either Node or LifecycleNode
+class CarmaNode : public rclcpp_lifecycle::LifecycleNode 
 {
 public:
+  // TODO: Make this capable of being used as a ComposableNode
   CarmaNode(
     const std::string & node_name,
     const std::string & ns = "",
     bool use_rclcpp_node = false,
     const rclcpp::NodeOptions & options = rclcpp::NodeOptions());
   virtual ~CarmaNode();
-
-// TODO: Move the parameters-related functions out to a ros2_param_utils.hpp
-
-  // Declare a parameter that has no integer or floating point range constraints
-  void add_parameter(
-    const std::string & name,
-    const rclcpp::ParameterValue & default_value,
-    const std::string & description = "",
-    const std::string & additional_constraints = "",
-    bool read_only = false);
-
-  // Declare a parameter that has a floating point range constraint
-  void add_parameter(
-    const std::string & name,
-    const rclcpp::ParameterValue & default_value,
-    const floating_point_range fp_range,
-    const std::string & description = "",
-    const std::string & additional_constraints = "",
-    bool read_only = false);
-
-  // Declare a parameter that has an integer range constraint
-  void add_parameter(
-    const std::string & name,
-    const rclcpp::ParameterValue & default_value,
-    const integer_range int_range,
-    const std::string & description = "",
-    const std::string & additional_constraints = "",
-    bool read_only = false);
 
   std::shared_ptr<carma_utils::CarmaNode> shared_from_this();
 
