@@ -54,6 +54,7 @@ def generate_launch_description():
             output='screen',
             prefix='xterm -geometry 150x40 -hold -e',
             namespace='perception_subsystem',
+            respawn=True
             )
     carma_velodyne_lidar_driver = Node(
             package='carma_velodyne_lidar_driver',
@@ -61,6 +62,7 @@ def generate_launch_description():
             output='screen',
             prefix='xterm -geometry 150x40 -hold -e',
             namespace='perception_subsystem',
+            respawn=True
             )
     drivers_lifecycle_manager = Node(
             package='ros2_lifecycle_manager',
@@ -80,6 +82,7 @@ def generate_launch_description():
             output='screen',
             prefix='xterm -geometry 150x40 -hold -e',
             namespace='world_model_subsystem',
+            respawn=True
             )
     world_model_controller = Node(
             package='world_model_controller',
@@ -87,6 +90,7 @@ def generate_launch_description():
             output='screen',
             prefix='xterm -geometry 150x40 -hold -e',
             namespace='world_model_subsystem',
+            respawn=True
             )
     world_model_lifecycle_manager = Node(
             package='ros2_lifecycle_manager',
