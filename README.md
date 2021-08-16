@@ -72,7 +72,7 @@ Localization system recovery
 [x] Localization Subsystem
 [x]     Rename the WorldModel subsystem to be the Localization subsystem
 [x]     Get rid of intermediate controller
-[ ]     Keep the health monitor
+[x]     Keep the health monitor
 [ ]     Understand the current CARMA health monitor and bring in communication patterns (create a shell)
 
 [x] Perception Subsystem
