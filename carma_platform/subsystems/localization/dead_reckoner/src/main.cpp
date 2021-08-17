@@ -16,14 +16,14 @@
 
 #include <memory>
 
-#include "world_model_controller/world_model_controller.hpp"
+#include "dead_reckoner/dead_reckoner.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
 
-  auto node = std::make_shared<world_model_controller::WorldModelController>();
+  auto node = std::make_shared<dead_reckoner::DeadReckoner>();
   node->spin();
 
   rclcpp::shutdown();

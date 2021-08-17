@@ -32,15 +32,9 @@ using ros2_utils::LifecycleServiceClient;
 namespace ros2_lifecycle_manager
 {
 
-std::string LifecycleManager::system_alert_topic_ = "/system_alert";
-
 LifecycleManager::LifecycleManager()
 : Node("lifecycle_manager")
 {
-  // Create system alert subscriber and publisher for lifcycle manager
-  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1, 
-        std::bind(&LifecycleManager::handle_system_alert, this, std::placeholders::_1));
-  system_alert_pub_ = create_publisher<cav_msgs::msg::SystemAlert> (system_alert_topic_, 0);
 
   // The list of names is parameterized, allowing this module to be used with a different set
   // of managed nodes
@@ -122,38 +116,12 @@ LifecycleManager::managerCallback(
   }
 }
 
-// Carma alert publisher
-void 
-LifecycleManager::publish_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
-{
-  system_alert_pub_->publish(*msg);
-}
-
-// Carma alert handler
-void 
-LifecycleManager::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg) 
-{
-    RCLCPP_INFO(get_logger(),"Received SystemAlert message of type: %u, msg: %s",
-                msg->type,msg->description.c_str());
-
-    if (msg->type ==  cav_msgs::msg::SystemAlert::CAUTION) {
-      pause();
-    } else if ((msg->type ==  cav_msgs::msg::SystemAlert::SHUTDOWN) | (msg->type ==  cav_msgs::msg::SystemAlert::FATAL)) {
-      shutdown();
-    }
-}
-
 void
 LifecycleManager::createLifecycleServiceClients()
 {
   RCLCPP_INFO(get_logger(), "Creating and initializing lifecycle service clients");
 
   for (auto & node_name : node_names_) {
-
-    // distinguish drivers
-    if (node_name.find("driver") != std::string::npos) {
-      driver_manager_ = true;
-    }
 
     node_map_[node_name] =
       std::make_shared<LifecycleServiceClient>(node_name, shared_from_this());
@@ -271,14 +239,6 @@ LifecycleManager::startup()
     return false;
   }
   RCLCPP_INFO(get_logger(), "Managed nodes are active");
-
-  if (driver_manager_) {
-    // Example alert message
-    cav_msgs::msg::SystemAlert alert_msg;
-    alert_msg.type = cav_msgs::msg::SystemAlert::DRIVERS_READY;
-    alert_msg.description = "Drivers are ready";
-    system_alert_pub_->publish(alert_msg);
-  }
 
   createBondTimer();
   return true;

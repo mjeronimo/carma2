@@ -14,31 +14,31 @@
 // the License.
 //
 
-#include "roadway_objects/roadway_objects.hpp"
+#include "ekf_localizer/ekf_localizer.hpp"
 
-namespace roadway_objects
+namespace ekf_localizer
 {
 
-RoadwayObjects::RoadwayObjects()
-: CarmaNode("roadway_objects")
+EkfLocalizer::EkfLocalizer()
+: CarmaNode("ekf_localizer")
 {
-   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1,
-        std::bind(&RoadwayObjects::systemAlertHandler, this, std::placeholders::_1));
 }
 
-RoadwayObjects::~RoadwayObjects()
+EkfLocalizer::~EkfLocalizer()
 {
 }
 
 carma_utils::CallbackReturn
-RoadwayObjects::on_configure(const rclcpp_lifecycle::State & /*state*/)
+EkfLocalizer::on_configure(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
+  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1,
+        std::bind(&EkfLocalizer::systemAlertHandler, this, std::placeholders::_1));
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 carma_utils::CallbackReturn
-RoadwayObjects::on_activate(const rclcpp_lifecycle::State & /*state*/)
+EkfLocalizer::on_activate(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Activating");
 
@@ -49,7 +49,7 @@ RoadwayObjects::on_activate(const rclcpp_lifecycle::State & /*state*/)
 }
 
 carma_utils::CallbackReturn
-RoadwayObjects::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
+EkfLocalizer::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
 
@@ -60,21 +60,21 @@ RoadwayObjects::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
 }
 
 carma_utils::CallbackReturn
-RoadwayObjects::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
+EkfLocalizer::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 carma_utils::CallbackReturn
-RoadwayObjects::on_shutdown(const rclcpp_lifecycle::State & /*state*/)
+EkfLocalizer::on_shutdown(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Shutting down");
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 carma_utils::CallbackReturn
-RoadwayObjects::on_error(const rclcpp_lifecycle::State & /*state*/)
+EkfLocalizer::on_error(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_FATAL(get_logger(), "Lifecycle node error");
   return carma_utils::CallbackReturn::SUCCESS;
@@ -82,11 +82,11 @@ RoadwayObjects::on_error(const rclcpp_lifecycle::State & /*state*/)
 
 
 void
-RoadwayObjects::systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg)
+EkfLocalizer::systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
   RCLCPP_INFO(get_logger(),"Received SystemAlert message of type: %u, msg: %s",
               msg->type,msg->description.c_str());
-  RCLCPP_INFO(get_logger(),"Perform RoadwayObjects-specific system event handling");
+  RCLCPP_INFO(get_logger(),"Perform EkfLocalizer-specific system event handling");
 }
 
-}  // namespace roadway_objects
+}  // namespace ekf_localizer

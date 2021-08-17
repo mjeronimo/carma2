@@ -25,6 +25,7 @@
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "ros2_utils/node_thread.hpp"
+#include "carma_utils/visibility_control.h"
 
 namespace carma_utils
 {
@@ -42,7 +43,12 @@ public:
     const std::string & ns = "",
     bool use_rclcpp_node = false,
     const rclcpp::NodeOptions & options = rclcpp::NodeOptions());
+
   virtual ~CarmaNode();
+
+  // Make the CarmaNode Composition capable 
+  COMPOSITION_PUBLIC
+  CarmaNode(const rclcpp::NodeOptions & options);
 
   std::shared_ptr<carma_utils::CarmaNode> shared_from_this();
 

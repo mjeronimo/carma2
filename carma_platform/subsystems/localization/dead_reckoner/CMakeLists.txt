@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(roadway_objects)
+project(dead_reckoner)
 
 find_package(ament_cmake REQUIRED)
 find_package(carma_common REQUIRED)
@@ -26,7 +26,7 @@ set(dependencies
 )
 
 add_library(${library_name} SHARED
-  src/roadway_objects.cpp
+  src/dead_reckoner.cpp
 )
 
 ament_target_dependencies(${library_name}

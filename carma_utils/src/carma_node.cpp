@@ -19,6 +19,7 @@
 #include <vector>
 
 #include "lifecycle_msgs/msg/state.hpp"
+#include "rclcpp_components/register_node_macro.hpp"
 
 namespace carma_utils
 {
@@ -56,6 +57,21 @@ CarmaNode::CarmaNode(
   RCLCPP_INFO(
     get_logger(),
     "Lifecycle node launched, waiting on state transition requests");
+}
+
+
+CarmaNode::CarmaNode(const rclcpp::NodeOptions & options): rclcpp_lifecycle::LifecycleNode("carma_node", "", options)
+{
+  // TODO: Creation of pubs and sub should be in on_configure
+
+  // Create a system alert publisher. The subscriber will be made by the child class
+  system_alert_pub_ = create_publisher<cav_msgs::msg::SystemAlert>(system_alert_topic_, 0);
+
+  // The server side never times out from lifecycle manager
+  declare_parameter(bond::msg::Constants::DISABLE_HEARTBEAT_TIMEOUT_PARAM, true);
+  set_parameter(rclcpp::Parameter( bond::msg::Constants::DISABLE_HEARTBEAT_TIMEOUT_PARAM, true));
+
+  RCLCPP_INFO(get_logger(),"Lifecycle node launched, waiting on state transition requests");
 }
 
 CarmaNode::~CarmaNode()
@@ -122,3 +138,9 @@ CarmaNode::spin()
 }
 
 }  // namespace carma_utils
+
+
+// Register the component with class_loader.
+// This acts as a sort of entry point, allowing the component to be discoverable when its library
+// is being loaded into a running process.
+RCLCPP_COMPONENTS_REGISTER_NODE(carma_utils::CarmaNode)

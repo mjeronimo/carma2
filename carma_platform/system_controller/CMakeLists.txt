@@ -1,12 +1,19 @@
 cmake_minimum_required(VERSION 3.5)
-project(world_model_controller)
+project(system_controller)
 
+
+find_package(ros2_lifecycle_manager REQUIRED)
 find_package(ament_cmake REQUIRED)
 find_package(carma_common REQUIRED)
 find_package(carma_utils REQUIRED)
-find_package(rclcpp REQUIRED)
+find_package(cav_msgs REQUIRED)
+find_package(lifecycle_msgs REQUIRED)
+find_package(rclcpp_action REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
+find_package(rclcpp REQUIRED)
 find_package(ros2_lifecycle_manager_msgs REQUIRED)
+find_package(ros2_utils REQUIRED)
+find_package(std_srvs REQUIRED)
 
 carma_package()
 
@@ -22,11 +29,12 @@ set(dependencies
   carma_utils
   rclcpp
   rclcpp_lifecycle
+  ros2_lifecycle_manager
   ros2_lifecycle_manager_msgs
 )
 
 add_library(${library_name} SHARED
-  src/world_model_controller.cpp
+  src/system_controller.cpp
 )
 
 ament_target_dependencies(${library_name}

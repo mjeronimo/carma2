@@ -22,8 +22,6 @@ namespace carma_delphi_srr2_driver
 CarmaDelphiSrr2Driver::CarmaDelphiSrr2Driver()
 : CarmaNode("carma_delphi_srr2_driver")
 {
-  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1,
-    std::bind(&CarmaDelphiSrr2Driver::handle_system_alert, this, std::placeholders::_1));
 }
 
 CarmaDelphiSrr2Driver::~CarmaDelphiSrr2Driver()
@@ -34,6 +32,8 @@ carma_utils::CallbackReturn
 CarmaDelphiSrr2Driver::on_configure(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
+  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1,
+  std::bind(&CarmaDelphiSrr2Driver::handle_system_alert, this, std::placeholders::_1));
   return carma_utils::CallbackReturn::SUCCESS;
 }
 

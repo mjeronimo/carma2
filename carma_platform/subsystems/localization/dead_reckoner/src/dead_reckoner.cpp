@@ -14,31 +14,31 @@
 // the License.
 //
 
-#include "world_model_controller/world_model_controller.hpp"
+#include "dead_reckoner/dead_reckoner.hpp"
 
-namespace world_model_controller
+namespace dead_reckoner
 {
 
-WorldModelController::WorldModelController()
-: CarmaNode("world_model_controller")
+DeadReckoner::DeadReckoner()
+: CarmaNode("dead_reckoner")
 {
-   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1, 
-        std::bind(&WorldModelController::systemAlertHandler, this, std::placeholders::_1));
 }
 
-WorldModelController::~WorldModelController()
+DeadReckoner::~DeadReckoner()
 {
 }
 
 carma_utils::CallbackReturn
-WorldModelController::on_configure(const rclcpp_lifecycle::State & /*state*/)
+DeadReckoner::on_configure(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
+  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1, 
+        std::bind(&DeadReckoner::systemAlertHandler, this, std::placeholders::_1));
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 carma_utils::CallbackReturn
-WorldModelController::on_activate(const rclcpp_lifecycle::State & /*state*/)
+DeadReckoner::on_activate(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Activating");
  
@@ -49,7 +49,7 @@ WorldModelController::on_activate(const rclcpp_lifecycle::State & /*state*/)
 }
 
 carma_utils::CallbackReturn
-WorldModelController::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
+DeadReckoner::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
 
@@ -60,32 +60,32 @@ WorldModelController::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
 }
 
 carma_utils::CallbackReturn 
-WorldModelController::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
+DeadReckoner::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 carma_utils::CallbackReturn 
-WorldModelController::on_shutdown(const rclcpp_lifecycle::State & /*state*/)
+DeadReckoner::on_shutdown(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Shutting down");
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 carma_utils::CallbackReturn
-WorldModelController::on_error(const rclcpp_lifecycle::State & /*state*/)
+DeadReckoner::on_error(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_FATAL(get_logger(), "Lifecycle node error");
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 void
-WorldModelController::systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg)
+DeadReckoner::systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
   RCLCPP_INFO(get_logger(),"Received SystemAlert message of type: %u, msg: %s",
               msg->type,msg->description.c_str());
-  RCLCPP_INFO(get_logger(),"Perform WorldModelController-specific system event handling");
+  RCLCPP_INFO(get_logger(),"Perform DeadReckoner-specific system event handling");
 }
 
-}  // namespace world_model_controller
+}  // namespace dead_reckoner

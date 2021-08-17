@@ -7,6 +7,8 @@ from launch import LaunchDescription
 from launch.actions import (DeclareLaunchArgument, SetEnvironmentVariable)
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
+from launch_ros.actions import ComposableNodeContainer
+from launch_ros.descriptions import ComposableNode
 
 
 def generate_launch_description():
@@ -44,16 +46,15 @@ def generate_launch_description():
         'autostart', default_value='true',
         description='Automatically startup the nav2 stack')
 
-    driver_nodes = ['carma_delphi_srr2_driver', 'carma_velodyne_lidar_driver']
-    world_model_nodes = ['roadway_objects', 'world_model_controller']
+    carma_nodes = ['carma_delphi_srr2_driver', 'carma_velodyne_lidar_driver','dead_reckoner', 'ekf_localizer','camera_driver','camera_driver_client']
 
-    # Drivers Subsystem
+
+    # Perception Subsystem
     carma_delphi_srr2_driver = Node(
             package='carma_delphi_srr2_driver',
             executable='carma_delphi_srr2_driver',
             output='screen',
             prefix='xterm -geometry 150x40 -hold -e',
-            namespace='perception_subsystem',
             respawn=True
             )
     carma_velodyne_lidar_driver = Node(
@@ -61,47 +62,52 @@ def generate_launch_description():
             executable='carma_velodyne_lidar_driver',
             output='screen',
             prefix='xterm -geometry 150x40 -hold -e',
-            namespace='perception_subsystem',
-            respawn=True
             )
-    drivers_lifecycle_manager = Node(
-            package='ros2_lifecycle_manager',
-            executable='lifecycle_manager',
-            name='drivers_lifecycle_manager',
-            output='screen',
-            prefix='xterm -geometry 150x40 -hold -e',
-            namespace='perception_subsystem',
-            parameters=[{'use_sim_time': use_sim_time},
-                        {'autostart': autostart},
-                        {'node_names': driver_nodes}])
 
-    # World Model Subsystem
-    roadway_objects = Node(
-            package='roadway_objects',
-            executable='roadway_objects',
+
+    """Composable node container for perception subsystem"""
+    container = ComposableNodeContainer(
+            name='my_container',
+            namespace='',
+            package='rclcpp_components',
+            executable='component_container',
+            composable_node_descriptions=[
+                ComposableNode(
+                    package='camera_driver',
+                    plugin='camera_driver::CameraDriver',
+                    name='camera_driver'),
+                ComposableNode(
+                    package='camera_driver',
+                    plugin='camera_driver_client::CameraDriverClient',
+                    name='camera_driver_client')
+            ],
             output='screen',
-            prefix='xterm -geometry 150x40 -hold -e',
-            namespace='world_model_subsystem',
-            respawn=True
-            )
-    world_model_controller = Node(
-            package='world_model_controller',
-            executable='world_model_controller',
-            output='screen',
-            prefix='xterm -geometry 150x40 -hold -e',
-            namespace='world_model_subsystem',
-            respawn=True
-            )
-    world_model_lifecycle_manager = Node(
-            package='ros2_lifecycle_manager',
-            executable='lifecycle_manager',
-            name='world_model_lifecycle_manager',
-            output='screen',
-            prefix='xterm -geometry 150x40 -hold -e',
-            namespace='world_model_subsystem',
-            parameters=[{'use_sim_time': use_sim_time},
-                        {'autostart': autostart},
-                        {'node_names': world_model_nodes}])
+    )
+
+    # Localization Subsystem
+    dead_reckoner = Node(
+        package='dead_reckoner',
+        executable='dead_reckoner',
+        output='screen',
+        prefix='xterm -geometry 150x40 -hold -e',
+        )
+        
+    ekf_localizer = Node(
+        package='ekf_localizer',
+        executable='ekf_localizer',
+        output='screen',
+        prefix='xterm -geometry 150x40 -hold -e',
+        )
+    
+    carma_system_controller = Node(
+        package='system_controller',
+        executable='system_controller',
+        name='carma_system_controller',
+        output='screen',
+        prefix='xterm -geometry 150x40 -hold -e',
+        parameters=[{'use_sim_time': use_sim_time},
+        {'autostart': autostart},{'node_names': carma_nodes}]
+        )
 
     # Create the launch description
     ld = LaunchDescription()
@@ -116,14 +122,12 @@ def generate_launch_description():
     ld.add_action(declare_params_file_cmd)
     ld.add_action(declare_autostart_cmd)
 
-    # Add the actions to launch the perception subsystem
+    # Add the actions to launch the carma subsystems
     ld.add_action(carma_delphi_srr2_driver)
     ld.add_action(carma_velodyne_lidar_driver)
-    ld.add_action(drivers_lifecycle_manager)
-
-    # Add the actions to launch the world model subsystem
-    ld.add_action(roadway_objects)
-    ld.add_action(world_model_controller)
-    ld.add_action(world_model_lifecycle_manager)
+    ld.add_action(container)
+    ld.add_action(dead_reckoner)
+    ld.add_action(ekf_localizer)
+    ld.add_action(carma_system_controller)
 
     return ld

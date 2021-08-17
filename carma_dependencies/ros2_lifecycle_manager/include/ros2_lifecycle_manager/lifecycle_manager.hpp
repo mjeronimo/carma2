@@ -23,7 +23,6 @@
 #include <vector>
 
 #include "bondcpp/bond.hpp"
-#include "cav_msgs/msg/system_alert.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "ros2_lifecycle_manager_msgs/srv/manage_lifecycle_nodes.hpp"
 #include "ros2_utils/lifecycle_service_client.hpp"
@@ -63,9 +62,6 @@ protected:
   bool changeStateForAllNodes(std::uint8_t transition);
   void shutdownAllNodes();
 
-  void publish_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
-  void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
-
   // Callback group used by services and timers
   rclcpp::CallbackGroup::SharedPtr callback_group_;
   std::unique_ptr<ros2_utils::NodeThread> service_thread_;
@@ -94,11 +90,6 @@ protected:
   // A map of the expected transitions to primary states
   std::unordered_map<std::uint8_t, std::uint8_t> transition_state_map_;
 
-  // System alerts
-  static std::string system_alert_topic_;
-  rclcpp::Subscription<cav_msgs::msg::SystemAlert>::SharedPtr system_alert_sub_;
-  rclcpp::Publisher<cav_msgs::msg::SystemAlert>::SharedPtr system_alert_pub_;
-
   // The names of the nodes to be managed, in the order of desired bring-up
   std::vector<std::string> node_names_;
 
@@ -107,8 +98,6 @@ protected:
 
   bool system_active_{false};
   
-  // whether or not this is a driver manager (ideally this would be more sophisticated)
-  bool driver_manager_{false};
 };
 
 }  // namespace ros2_lifecycle_manager
