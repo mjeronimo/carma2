@@ -15,12 +15,18 @@
 //
 
 #include "camera_driver/camera_driver.hpp"
+using namespace std::chrono_literals;
 
 namespace camera_driver
 {
 
 CameraDriver::CameraDriver()
 : CarmaNode("camera_driver")
+{
+}
+
+CameraDriver::CameraDriver(const rclcpp::NodeOptions & options)
+: CarmaNode(options)
 {
 }
 
@@ -48,6 +54,9 @@ CameraDriver::on_configure(const rclcpp_lifecycle::State & /*state*/)
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1, 
         std::bind(&CameraDriver::handle_system_alert, this, std::placeholders::_1));
   cam_pub_ = this->create_publisher<sensor_msgs::msg::Image> ("camera/image", 0);
+
+  // Use a timer to schedule periodic message publishing.
+  timer_ = create_wall_timer(1s, std::bind(&CameraDriver::publish_image, this));
 
   active_=true;
 
@@ -106,39 +115,32 @@ CameraDriver::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr ms
   RCLCPP_INFO(get_logger(),"Perform CameraDriver-specific system event handling");
 }
 
-void CameraDriver::spin()
+void CameraDriver::publish_image()
 {
-  try 
+
+  sensor_msgs::msg::Image::SharedPtr msg;
+  std_msgs::msg::Header hdr;
+  msg = cv_bridge::CvImage(hdr, "bgr8", image).toImageMsg();
+
+  if(active_)
   {
-    rclcpp::WallRate loop_rate(10);
-    rclcpp::node_interfaces::NodeBaseInterface::SharedPtr nd = get_node_base_interface();
-    while (rclcpp::ok()) {
-
-      sensor_msgs::msg::Image::SharedPtr msg;
-      std_msgs::msg::Header hdr;
-      msg = cv_bridge::CvImage(hdr, "bgr8", image).toImageMsg();
-
-      if(active_)
-      {
-        if (!cam_pub_->is_activated())
-        {
-          RCLCPP_INFO(get_logger(), "Camera Driver is currently inactive. Messages are not published.");
-        } 
-        else
-        {
-            cam_pub_->publish(*msg);
-        }
-      }
-   
-      rclcpp::spin_some(nd);
-      loop_rate.sleep();
+    if (!cam_pub_->is_activated())
+    {
+      RCLCPP_INFO(get_logger(), "Camera Driver is currently inactive. Messages are not published.");
+    } 
+    else
+    {
+      cam_pub_->publish(*msg);
     }
-  } 
-  catch (const std::exception & e) {
-    RCLCPP_ERROR(
-      get_logger(),
-      "Handle exception %s, and issue system alert as you wish", e.what());
   }
 }
 
 }  // namespace camera_driver
+
+
+#include "rclcpp_components/register_node_macro.hpp"
+
+// Register the component with class_loader.
+// This acts as a sort of entry point, allowing the component to be discoverable when its library
+// is being loaded into a running process.
+RCLCPP_COMPONENTS_REGISTER_NODE(camera_driver::CameraDriver)

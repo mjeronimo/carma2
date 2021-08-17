@@ -7,6 +7,8 @@ from launch import LaunchDescription
 from launch.actions import (DeclareLaunchArgument, SetEnvironmentVariable)
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
+from launch_ros.actions import ComposableNodeContainer
+from launch_ros.descriptions import ComposableNode
 
 
 def generate_launch_description():
@@ -61,19 +63,26 @@ def generate_launch_description():
             output='screen',
             #prefix='xterm -geometry 150x40 -hold -e',
             )
-    camera_driver = Node(
-            package='camera_driver',
-            executable='camera_driver',
+
+
+    """Generate launch description with multiple components."""
+    container = ComposableNodeContainer(
+            name='my_container',
+            namespace='',
+            package='rclcpp_components',
+            executable='component_container',
+            composable_node_descriptions=[
+                ComposableNode(
+                    package='camera_driver',
+                    plugin='camera_driver::CameraDriver',
+                    name='camera_driver'),
+                ComposableNode(
+                    package='camera_driver',
+                    plugin='camera_driver_client::CameraDriverClient',
+                    name='camera_driver_client')
+            ],
             output='screen',
-            #prefix='xterm -geometry 150x40 -hold -e',
-            )
-    
-    camera_driver_client = Node(
-            package='camera_driver',
-            executable='camera_driver_client',
-            output='screen',
-            #prefix='xterm -geometry 150x40 -hold -e',
-            )
+    )
 
     # Localization Subsystem
     dead_reckoner = Node(
@@ -116,8 +125,7 @@ def generate_launch_description():
     # Add the actions to launch the carma subsystems
     ld.add_action(carma_delphi_srr2_driver)
     ld.add_action(carma_velodyne_lidar_driver)
-    ld.add_action(camera_driver)
-    ld.add_action(camera_driver_client)
+    ld.add_action(container)
     ld.add_action(dead_reckoner)
     ld.add_action(ekf_localizer)
     ld.add_action(carma_system_controller)

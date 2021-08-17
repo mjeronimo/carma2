@@ -61,13 +61,13 @@ Localization system recovery
 # Task List
 
 ```
-[ ] Add composable nodes to CarmaNode
-[ ]     NodeOptions constructor
-[ ]     Macro used in the implementation file 
-[ ]     Build magic
-[ ] Make sure that Perception subsystem uses composable nodes
-[ ]     Launch with ComposableNode
-[ ]     Nice if there was some data passed that demonstrated this
+[x] Add composable nodes to CarmaNode
+[x]     NodeOptions constructor
+[x]     Macro used in the implementation file 
+[x]     Build magic
+[x] Make sure that Perception subsystem uses composable nodes
+[x]     Launch with ComposableNode
+[x]     Nice if there was some data passed that demonstrated this
 
 [x] Localization Subsystem
 [x]     Rename the WorldModel subsystem to be the Localization subsystem

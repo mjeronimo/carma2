@@ -23,6 +23,7 @@
 #include <ament_index_cpp/get_package_share_directory.hpp>
 #include "opencv2/highgui/highgui.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include "carma_utils/visibility_control.h"
 
 namespace camera_driver_client
 {
@@ -32,6 +33,8 @@ class CameraDriverClient : public carma_utils::CarmaNode
 public:
   CameraDriverClient();
   ~CameraDriverClient();
+  COMPOSITION_PUBLIC
+  explicit CameraDriverClient(const rclcpp::NodeOptions & options);
 
 protected:
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr cam_sub_;

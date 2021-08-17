@@ -11,6 +11,8 @@ find_package(cv_bridge REQUIRED)
 find_package(image_transport REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(rclcpp_components REQUIRED)
+find_package(rcutils REQUIRED)
 
 carma_package()
 
@@ -30,12 +32,30 @@ set(dependencies
   cv_bridge
   image_transport
   OpenCV
+  rclcpp_components
   sensor_msgs
+  rcutils
 )
 
+set(node_plugins "")
 add_library(${library_name} SHARED
   src/camera_driver.cpp
 )
+target_compile_definitions(${library_name}
+  PRIVATE "COMPOSITION_BUILDING_DLL")
+ament_target_dependencies(${library_name} ${dependencies})
+rclcpp_components_register_nodes(${library_name} "camera_driver::CameraDriver")
+set(node_plugins "${node_plugins}camera_driver::CameraDriver;$<TARGET_FILE:camera_driver_core>\n")
+
+
+add_library(camera_driver_client_c SHARED
+  src/camera_driver_client.cpp)
+target_compile_definitions(camera_driver_client_c
+  PRIVATE "COMPOSITION_BUILDING_DLL")
+ament_target_dependencies(camera_driver_client_c ${dependencies})
+rclcpp_components_register_nodes(camera_driver_client_c  "camera_driver_client::CameraDriverClient")
+set(node_plugins "${node_plugins}camera_driver_client::CameraDriverClient;$<TARGET_FILE:camera_driver_client_c>\n")
+
 
 ament_target_dependencies(${library_name}
   ${dependencies}
@@ -60,7 +80,7 @@ ament_target_dependencies(${executable_name}
   ${dependencies}
 )
 
-install(TARGETS ${library_name}
+install(TARGETS ${library_name} camera_driver_client_c
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin

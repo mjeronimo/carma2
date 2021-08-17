@@ -26,6 +26,11 @@
 #include "rclcpp/publisher.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "rclcpp_lifecycle/lifecycle_publisher.hpp"
+#include "carma_utils/visibility_control.h"
+#include <chrono>
+#include <iostream>
+#include <memory>
+#include <utility>
 
 namespace camera_driver
 {
@@ -35,11 +40,13 @@ class CameraDriver : public carma_utils::CarmaNode
 public:
   CameraDriver();
   ~CameraDriver();
-  void spin();
+  // void spin();
+  COMPOSITION_PUBLIC
+  explicit CameraDriver(const rclcpp::NodeOptions & options);
 
 protected:
-  //rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr cam_pub_;
 
+  rclcpp::TimerBase::SharedPtr timer_;
 
   std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<sensor_msgs::msg::Image>> cam_pub_;
 

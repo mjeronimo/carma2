@@ -2,19 +2,19 @@ add_library(${library_name} SHARED
   carma_node.cpp
 )
 
+set(node_plugins "")
+target_compile_definitions(${library_name}
+  PRIVATE "COMPOSITION_BUILDING_DLL")
+rclcpp_components_register_nodes(${library_name} "carma_utils::CarmaNode")
+set(node_plugins "${node_plugins}carma_utils::CarmaNode;$<TARGET_FILE:carma_utils_core>\n")
+
 add_executable(event_pub
   publish_events.cpp
 )
 ament_target_dependencies(event_pub ${dependencies})
 
 ament_target_dependencies(${library_name}
-  bond
-  bondcpp
-  rclcpp
-  cav_msgs
-  rclcpp_lifecycle
-  ros2_lifecycle_manager_msgs
-  ros2_utils
+${dependencies}
 )
 
 install(TARGETS
