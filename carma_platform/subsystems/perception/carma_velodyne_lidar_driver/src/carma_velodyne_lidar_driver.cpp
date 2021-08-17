@@ -22,8 +22,6 @@ namespace carma_velodyne_lidar_driver
 CarmaVelodyneLidarDriver::CarmaVelodyneLidarDriver()
 : CarmaNode("carma_velodyne_lidar_driver")
 {
-   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1, 
-        std::bind(&CarmaVelodyneLidarDriver::handle_system_alert, this, std::placeholders::_1));
 }
 
 CarmaVelodyneLidarDriver::~CarmaVelodyneLidarDriver()
@@ -34,6 +32,8 @@ carma_utils::CallbackReturn
 CarmaVelodyneLidarDriver::on_configure(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
+  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1, 
+        std::bind(&CarmaVelodyneLidarDriver::handle_system_alert, this, std::placeholders::_1));
   return carma_utils::CallbackReturn::SUCCESS;
 }
 

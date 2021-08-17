@@ -14,31 +14,41 @@
 // the License.
 //
 
-#include "dead_reckoner/dead_reckoner.hpp"
+#include "camera_driver/camera_driver.hpp"
 
-namespace dead_reckoner
+namespace camera_driver
 {
 
-DeadReckoner::DeadReckoner()
-: CarmaNode("dead_reckoner")
+CameraDriver::CameraDriver()
+: CarmaNode("camera_driver")
 {
+
+
 }
 
-DeadReckoner::~DeadReckoner()
+CameraDriver::~CameraDriver()
 {
 }
 
 carma_utils::CallbackReturn
-DeadReckoner::on_configure(const rclcpp_lifecycle::State & /*state*/)
+CameraDriver::on_configure(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
+
+  std::string package_share_directory = ament_index_cpp::get_package_share_directory("camera_driver");
+
+  image = cv::imread(package_share_directory+"/resoures/image.jpg", cv::IMREAD_COLOR);
+  
+
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1, 
-        std::bind(&DeadReckoner::systemAlertHandler, this, std::placeholders::_1));
+        std::bind(&CameraDriver::handle_system_alert, this, std::placeholders::_1));
+  cam_pub_ = this->create_publisher<sensor_msgs::msg::Image> ("camera/image", 0);
+
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 carma_utils::CallbackReturn
-DeadReckoner::on_activate(const rclcpp_lifecycle::State & /*state*/)
+CameraDriver::on_activate(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Activating");
  
@@ -49,7 +59,7 @@ DeadReckoner::on_activate(const rclcpp_lifecycle::State & /*state*/)
 }
 
 carma_utils::CallbackReturn
-DeadReckoner::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
+CameraDriver::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
 
@@ -60,32 +70,56 @@ DeadReckoner::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
 }
 
 carma_utils::CallbackReturn 
-DeadReckoner::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
+CameraDriver::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 carma_utils::CallbackReturn 
-DeadReckoner::on_shutdown(const rclcpp_lifecycle::State & /*state*/)
+CameraDriver::on_shutdown(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Shutting down");
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 carma_utils::CallbackReturn
-DeadReckoner::on_error(const rclcpp_lifecycle::State & /*state*/)
+CameraDriver::on_error(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_FATAL(get_logger(), "Lifecycle node error");
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 void
-DeadReckoner::systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg)
+CameraDriver::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
   RCLCPP_INFO(get_logger(),"Received SystemAlert message of type: %u, msg: %s",
               msg->type,msg->description.c_str());
-  RCLCPP_INFO(get_logger(),"Perform DeadReckoner-specific system event handling");
+  RCLCPP_INFO(get_logger(),"Perform CameraDriver-specific system event handling");
 }
 
-}  // namespace dead_reckoner
+void CameraDriver::spin()
+{
+  try 
+  {
+    rclcpp::WallRate loop_rate(10);
+    rclcpp::node_interfaces::NodeBaseInterface::SharedPtr nd = get_node_base_interface();
+    while (rclcpp::ok()) {
+
+      sensor_msgs::msg::Image::SharedPtr msg;
+      std_msgs::msg::Header hdr;
+      msg = cv_bridge::CvImage(hdr, "bgr8", image).toImageMsg();
+
+      cam_pub_->publish(*msg);
+      rclcpp::spin_some(nd);
+      loop_rate.sleep();
+    }
+  } 
+  catch (const std::exception & e) {
+    RCLCPP_ERROR(
+      get_logger(),
+      "Handle exception %s, and issue system alert as you wish", e.what());
+  }
+}
+
+}  // namespace camera_driver

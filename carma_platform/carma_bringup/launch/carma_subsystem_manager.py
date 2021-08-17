@@ -44,22 +44,27 @@ def generate_launch_description():
         'autostart', default_value='true',
         description='Automatically startup the nav2 stack')
 
-    carma_nodes = ['carma_delphi_srr2_driver', 'carma_velodyne_lidar_driver','dead_reckoner', 'ekf_localizer']
+    carma_nodes = ['carma_delphi_srr2_driver', 'carma_velodyne_lidar_driver','dead_reckoner', 'ekf_localizer','camera_driver']
 
-    # Drivers Subsystem
+
+    # Perception Subsystem
     carma_delphi_srr2_driver = Node(
             package='carma_delphi_srr2_driver',
             executable='carma_delphi_srr2_driver',
             output='screen',
             #prefix='xterm -geometry 150x40 -hold -e',
-            namespace='perception_subsystem',
             )
     carma_velodyne_lidar_driver = Node(
             package='carma_velodyne_lidar_driver',
             executable='carma_velodyne_lidar_driver',
             output='screen',
             #prefix='xterm -geometry 150x40 -hold -e',
-            namespace='perception_subsystem',
+            )
+    camera_driver = Node(
+            package='camera_driver',
+            executable='camera_driver',
+            output='screen',
+            #prefix='xterm -geometry 150x40 -hold -e',
             )
     # Localization Subsystem
     dead_reckoner = Node(
@@ -67,7 +72,6 @@ def generate_launch_description():
         executable='dead_reckoner',
         output='screen',
         #prefix='xterm -geometry 150x40 -hold -e',
-        namespace='localization_subsystem',
         )
         
     ekf_localizer = Node(
@@ -75,7 +79,6 @@ def generate_launch_description():
         executable='ekf_localizer',
         output='screen',
         #prefix='xterm -geometry 150x40 -hold -e',
-        namespace='localization_subsystem',
         )
     
     carma_system_controller = Node(
@@ -84,7 +87,6 @@ def generate_launch_description():
         name='carma_system_controller',
         output='screen',
         #prefix='xterm -geometry 150x40 -hold -e',
-        namespace='perception_subsystem',
         parameters=[{'use_sim_time': use_sim_time},
         {'autostart': autostart},{'node_names': carma_nodes}]
         )
@@ -105,6 +107,7 @@ def generate_launch_description():
     # Add the actions to launch the carma subsystems
     ld.add_action(carma_delphi_srr2_driver)
     ld.add_action(carma_velodyne_lidar_driver)
+    ld.add_action(camera_driver)
     ld.add_action(dead_reckoner)
     ld.add_action(ekf_localizer)
     ld.add_action(carma_system_controller)

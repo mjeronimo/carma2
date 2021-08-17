@@ -22,8 +22,6 @@ namespace ekf_localizer
 EkfLocalizer::EkfLocalizer()
 : CarmaNode("ekf_localizer")
 {
-   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1,
-        std::bind(&EkfLocalizer::systemAlertHandler, this, std::placeholders::_1));
 }
 
 EkfLocalizer::~EkfLocalizer()
@@ -34,6 +32,8 @@ carma_utils::CallbackReturn
 EkfLocalizer::on_configure(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
+  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1,
+        std::bind(&EkfLocalizer::systemAlertHandler, this, std::placeholders::_1));
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
