@@ -371,7 +371,7 @@ LifecycleManager::destroyBondTimer()
 void
 LifecycleManager::checkBondConnections()
 {
-  if (!rclcpp::ok() || bond_map_.empty()) {
+  if (bond_map_.empty()) {
     return;
   }
 
@@ -381,10 +381,10 @@ LifecycleManager::checkBondConnections()
     }
 
     if (bond_map_[node_name]->isBroken()) {
-      std::string msg = std::string("Have not received a heartbeat from " + node_name + ", restarting");
-      RCLCPP_WARN(get_logger(), msg.c_str());
+      RCLCPP_WARN(get_logger(), "No heartbeat from %s, restarting", node_name.c_str());
 
-      // TODO: mutex?
+      // Remove the current bond from the map; we'll have to create a new one with the
+      // new node automatically restarted by the launch system
       bond_map_.erase(node_name);
 
       // TODO: make this more robust. For now, just assume that the node has crashed and has 
