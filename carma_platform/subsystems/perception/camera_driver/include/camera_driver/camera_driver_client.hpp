@@ -14,8 +14,8 @@
 // the License.
 //
 
-#ifndef CAMERA_DRIVER__CAMERA_DRIVER_HPP_
-#define CAMERA_DRIVER__CAMERA_DRIVER_HPP_
+#ifndef CAMERA_DRIVER_CLIENT__CAMERA_DRIVER_CLIENT_HPP_
+#define CAMERA_DRIVER_CLIENT__CAMERA_DRIVER_CLIENT_HPP_
 
 #include "carma_utils/carma_node.hpp"
 #include "cv_bridge/cv_bridge.h"
@@ -23,37 +23,26 @@
 #include <ament_index_cpp/get_package_share_directory.hpp>
 #include "opencv2/highgui/highgui.hpp"
 #include "rclcpp/rclcpp.hpp"
-#include "rclcpp/publisher.hpp"
-#include "rclcpp_lifecycle/lifecycle_node.hpp"
-#include "rclcpp_lifecycle/lifecycle_publisher.hpp"
 
-namespace camera_driver
+namespace camera_driver_client
 {
 
-class CameraDriver : public carma_utils::CarmaNode
+class CameraDriverClient : public carma_utils::CarmaNode
 {
 public:
-  CameraDriver();
-  ~CameraDriver();
-  void spin();
+  CameraDriverClient();
+  ~CameraDriverClient();
 
 protected:
-  //rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr cam_pub_;
-
-
-  std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<sensor_msgs::msg::Image>> cam_pub_;
-
-  cv::Mat image;
-  bool active_ = false;
-  void publish_image();
+  rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr cam_sub_;
+  bool show_image;
+  void image_callback(const sensor_msgs::msg::Image::SharedPtr msg);
   carma_utils::CallbackReturn on_configure(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_activate(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_deactivate(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_cleanup(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_shutdown(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_error(const rclcpp_lifecycle::State & state) override;
-
-
   void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
 };
 

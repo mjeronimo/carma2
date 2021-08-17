@@ -22,8 +22,6 @@ namespace camera_driver
 CameraDriver::CameraDriver()
 : CarmaNode("camera_driver")
 {
-
-
 }
 
 CameraDriver::~CameraDriver()
@@ -37,12 +35,21 @@ CameraDriver::on_configure(const rclcpp_lifecycle::State & /*state*/)
 
   std::string package_share_directory = ament_index_cpp::get_package_share_directory("camera_driver");
 
-  image = cv::imread(package_share_directory+"/resoures/image.jpg", cv::IMREAD_COLOR);
-  
+  try
+  {
+    image = cv::imread(package_share_directory+"/resources/image.jpg", cv::IMREAD_COLOR);
+  }
+  catch(cv::Exception& e )
+  {
+    RCLCPP_INFO(get_logger(), "Failed to Load Image");
+  }
 
+  
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1, 
         std::bind(&CameraDriver::handle_system_alert, this, std::placeholders::_1));
   cam_pub_ = this->create_publisher<sensor_msgs::msg::Image> ("camera/image", 0);
+
+  active_=true;
 
   return carma_utils::CallbackReturn::SUCCESS;
 }
@@ -51,10 +58,9 @@ carma_utils::CallbackReturn
 CameraDriver::on_activate(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Activating");
- 
+  cam_pub_->on_activate();
   // Create bond with the lifecycle manager
   create_bond();
-
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -62,7 +68,7 @@ carma_utils::CallbackReturn
 CameraDriver::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
-
+  cam_pub_->on_deactivate();
   // Destroy the bond with the lifecycle manager
   destroy_bond();
 
@@ -73,6 +79,7 @@ carma_utils::CallbackReturn
 CameraDriver::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
+  cam_pub_.reset();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -80,6 +87,7 @@ carma_utils::CallbackReturn
 CameraDriver::on_shutdown(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Shutting down");
+  cam_pub_.reset();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -110,7 +118,18 @@ void CameraDriver::spin()
       std_msgs::msg::Header hdr;
       msg = cv_bridge::CvImage(hdr, "bgr8", image).toImageMsg();
 
-      cam_pub_->publish(*msg);
+      if(active_)
+      {
+        if (!cam_pub_->is_activated())
+        {
+          RCLCPP_INFO(get_logger(), "Camera Driver is currently inactive. Messages are not published.");
+        } 
+        else
+        {
+            cam_pub_->publish(*msg);
+        }
+      }
+   
       rclcpp::spin_some(nd);
       loop_rate.sleep();
     }
