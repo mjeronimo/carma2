@@ -54,18 +54,18 @@ def generate_launch_description():
             package='carma_delphi_srr2_driver',
             executable='carma_delphi_srr2_driver',
             output='screen',
-            #prefix='xterm -geometry 150x40 -hold -e',
+            prefix='xterm -geometry 150x40 -hold -e',
             respawn=True
             )
     carma_velodyne_lidar_driver = Node(
             package='carma_velodyne_lidar_driver',
             executable='carma_velodyne_lidar_driver',
             output='screen',
-            #prefix='xterm -geometry 150x40 -hold -e',
+            prefix='xterm -geometry 150x40 -hold -e',
             )
 
 
-    """Generate launch description with multiple components."""
+    """Composable node container for perception subsystem"""
     container = ComposableNodeContainer(
             name='my_container',
             namespace='',
@@ -89,14 +89,14 @@ def generate_launch_description():
         package='dead_reckoner',
         executable='dead_reckoner',
         output='screen',
-        #prefix='xterm -geometry 150x40 -hold -e',
+        prefix='xterm -geometry 150x40 -hold -e',
         )
         
     ekf_localizer = Node(
         package='ekf_localizer',
         executable='ekf_localizer',
         output='screen',
-        #prefix='xterm -geometry 150x40 -hold -e',
+        prefix='xterm -geometry 150x40 -hold -e',
         )
     
     carma_system_controller = Node(
@@ -104,7 +104,7 @@ def generate_launch_description():
         executable='system_controller',
         name='carma_system_controller',
         output='screen',
-        #prefix='xterm -geometry 150x40 -hold -e',
+        prefix='xterm -geometry 150x40 -hold -e',
         parameters=[{'use_sim_time': use_sim_time},
         {'autostart': autostart},{'node_names': carma_nodes}]
         )
