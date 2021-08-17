@@ -152,7 +152,8 @@ LifecycleManager::createBondConnection(const std::string & node_name)
     bond_map_[node_name]->start();
     if (
       !bond_map_[node_name]->waitUntilFormed(
-        rclcpp::Duration(rclcpp::Duration::from_nanoseconds(timeout_ns / 2))))
+        //rclcpp::Duration(rclcpp::Duration::from_nanoseconds(timeout_ns / 2))))
+        rclcpp::Duration(rclcpp::Duration::from_nanoseconds(timeout_ns))))
     {
       RCLCPP_ERROR(
         get_logger(),
@@ -330,7 +331,7 @@ LifecycleManager::destroyBondTimer()
 void
 LifecycleManager::checkBondConnections()
 {
-  if (!rclcpp::ok() || bond_map_.empty()) {
+  if (bond_map_.empty()) {
     return;
   }
 
@@ -340,19 +341,16 @@ LifecycleManager::checkBondConnections()
     }
 
     if (bond_map_[node_name]->isBroken()) {
-      std::string msg = std::string("Have not received a heartbeat from " + node_name + ".");
-      RCLCPP_INFO(get_logger(), msg.c_str());
+      RCLCPP_WARN(get_logger(), "No heartbeat from %s, restarting", node_name.c_str());
 
-      // TODO: What is the policy here?
-      // If one is down, bring them all down
-      RCLCPP_ERROR(
-        get_logger(),
-        "CRITICAL FAILURE: SERVER %s IS DOWN after not receiving a heartbeat for %i ms."
-        " Shutting down related nodes.",
-        node_name.c_str(), static_cast<int>(bond_timeout_.count()));
+      // Remove the current bond from the map; we'll have to create a new one with the
+      // new node automatically restarted by the launch system
+      bond_map_.erase(node_name);
 
-      reset();
-      return;
+      // TODO: make this more robust. For now, just assume that the node has crashed and has 
+      // been restarted by the launch system. Therefore, we need to configure and activate it
+      changeStateForNode(node_name, Transition::TRANSITION_CONFIGURE);
+      changeStateForNode(node_name, Transition::TRANSITION_ACTIVATE);
     }
   }
 }

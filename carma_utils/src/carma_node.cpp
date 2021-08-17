@@ -55,7 +55,7 @@ CarmaNode::CarmaNode(
 
   RCLCPP_INFO(
     get_logger(),
-    "Lifecycle node launched, waiting on external lifecycle transitions to activate");
+    "Lifecycle node launched, waiting on state transition requests");
 }
 
 CarmaNode::~CarmaNode()
