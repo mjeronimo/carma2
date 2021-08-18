@@ -18,6 +18,7 @@
 #define CARMA_VELODYNE_LIDAR_DRIVER__CARMA_VELODYNE_LIDAR_DRIVER_HPP_
 
 #include "carma_utils/carma_node.hpp"
+#include "carma_utils/visibility_control.h"
 #include "rclcpp/rclcpp.hpp"
 
 namespace carma_velodyne_lidar_driver
@@ -27,7 +28,9 @@ class CarmaVelodyneLidarDriver : public carma_utils::CarmaNode
 {
 public:
   CarmaVelodyneLidarDriver();
-  ~CarmaVelodyneLidarDriver();
+
+  CARMA_UTILS_PUBLIC
+  explicit CarmaVelodyneLidarDriver(const rclcpp::NodeOptions & options);
 
 protected:
   carma_utils::CallbackReturn on_configure(const rclcpp_lifecycle::State & state) override;

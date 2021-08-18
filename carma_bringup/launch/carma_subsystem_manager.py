@@ -57,13 +57,6 @@ def generate_launch_description():
         'camera_driver_client'
         ]
 
-    carma_velodyne_lidar_driver = Node(
-        package='carma_velodyne_lidar_driver',
-        executable='carma_velodyne_lidar_driver',
-        output='screen',
-        prefix=term_prefix,
-        )
-
     # Composable node container for the Perception Subsystem nodes
     perception_container = ComposableNodeContainer(
         name='perception_container',
@@ -88,6 +81,12 @@ def generate_launch_description():
                 plugin='carma_delphi_srr2_driver::CarmaDelphiSrr2Driver',
                 name='carma_delphi_srr2_driver',
                 extra_arguments=[{'use_intra_process_comms': True}]
+                ),
+            ComposableNode(
+                package='carma_velodyne_lidar_driver',
+                plugin='carma_velodyne_lidar_driver::CarmaVelodyneLidarDriver',
+                name='carma_velodyne_lidar_driver',
+                extra_arguments=[{'use_intra_process_comms': True}]
                 )
             ],
         output='screen',
@@ -100,6 +99,7 @@ def generate_launch_description():
         executable='dead_reckoner',
         output='screen',
         prefix=term_prefix,
+        respawn='true'
         )
         
     ekf_localizer = Node(
@@ -107,8 +107,10 @@ def generate_launch_description():
         executable='ekf_localizer',
         output='screen',
         prefix=term_prefix,
+        respawn='true'
         )
     
+    # The lifecycle manager
     carma_system_controller = Node(
         package='system_controller',
         executable='system_controller',
@@ -136,7 +138,6 @@ def generate_launch_description():
     ld.add_action(declare_autostart_cmd)
 
     # Add the actions to launch the carma subsystems
-    ld.add_action(carma_velodyne_lidar_driver)
     ld.add_action(perception_container)
     ld.add_action(dead_reckoner)
     ld.add_action(ekf_localizer)

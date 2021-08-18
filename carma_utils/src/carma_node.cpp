@@ -105,7 +105,7 @@ CarmaNode::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 void
 CarmaNode::create_bond()
 {
-  RCLCPP_INFO(get_logger(), "Creating bond to lifecycle manager");
+  RCLCPP_DEBUG(get_logger(), "Creating bond to lifecycle manager");
 
   bond_ = std::make_unique<bond::Bond>(std::string("bond"), get_name(), shared_from_this());
   bond_->setHeartbeatPeriod(0.10);

@@ -161,7 +161,7 @@ LifecycleManager::createBondConnection(const std::string & node_name)
         node_name.c_str(), timeout_s);
       return false;
     }
-    RCLCPP_INFO(get_logger(), "Server %s connected with bond", node_name.c_str());
+    RCLCPP_DEBUG(get_logger(), "Server %s connected with bond", node_name.c_str());
   }
 
   return true;
@@ -310,7 +310,7 @@ LifecycleManager::createBondTimer()
     return;
   }
 
-  RCLCPP_INFO(get_logger(), "Creating bond timer");
+  RCLCPP_DEBUG(get_logger(), "Creating bond timer");
   bond_timer_ = create_wall_timer(
     200ms,
     std::bind(&LifecycleManager::checkBondConnections, this),

@@ -24,7 +24,8 @@ CarmaVelodyneLidarDriver::CarmaVelodyneLidarDriver()
 {
 }
 
-CarmaVelodyneLidarDriver::~CarmaVelodyneLidarDriver()
+CarmaVelodyneLidarDriver::CarmaVelodyneLidarDriver(const rclcpp::NodeOptions & options)
+: CarmaNode(options)
 {
 }
 
@@ -91,3 +92,8 @@ CarmaVelodyneLidarDriver::handle_system_alert(const cav_msgs::msg::SystemAlert::
 }
 
 }  // namespace carma_velodyne_lidar_driver
+
+#include "rclcpp_components/register_node_macro.hpp"
+
+// Register the component with class_loader
+RCLCPP_COMPONENTS_REGISTER_NODE(carma_velodyne_lidar_driver::CarmaVelodyneLidarDriver)
