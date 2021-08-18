@@ -23,8 +23,7 @@ namespace system_controller
 
 SystemController::SystemController()
 {
-  // Create the system alert publisher and subscriber
-  system_alert_pub_ = create_publisher<cav_msgs::msg::SystemAlert>(system_alert_topic_, 10);
+  system_alert_pub_ = this->create_publisher<cav_msgs::msg::SystemAlert>(system_alert_topic_, 10);
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
     system_alert_topic_, 10,
     std::bind(&SystemController::handle_system_alert, this, std::placeholders::_1));

@@ -27,7 +27,6 @@ using namespace std::placeholders;
 
 using lifecycle_msgs::msg::Transition;
 using lifecycle_msgs::msg::State;
-using ros2_utils::LifecycleServiceClient;
 
 namespace ros2_lifecycle_manager
 {
@@ -35,7 +34,6 @@ namespace ros2_lifecycle_manager
 LifecycleManager::LifecycleManager()
 : Node("lifecycle_manager")
 {
-
   // The list of names is parameterized, allowing this module to be used with a different set
   // of managed nodes
   declare_parameter("node_names", rclcpp::PARAMETER_STRING_ARRAY);
@@ -70,8 +68,11 @@ LifecycleManager::LifecycleManager()
   transition_label_map_[Transition::TRANSITION_UNCONFIGURED_SHUTDOWN] =
     std::string("Shutting down ");
 
+  // TODO: Get rid of this timer callback and do it a different way (avoid race condition)
+  // Can't use shared_from_this() during construction
   init_timer_ = create_wall_timer(
-    std::chrono::nanoseconds(10),
+    //std::chrono::nanoseconds(10),
+    std::chrono::seconds(1),
     [this]() -> void {
       init_timer_->cancel();
       createLifecycleServiceClients();
@@ -120,11 +121,9 @@ void
 LifecycleManager::createLifecycleServiceClients()
 {
   RCLCPP_INFO(get_logger(), "Creating and initializing lifecycle service clients");
-
   for (auto & node_name : node_names_) {
-
     node_map_[node_name] =
-      std::make_shared<LifecycleServiceClient>(node_name, shared_from_this());
+      std::make_shared<ros2_utils::LifecycleServiceClient>(node_name, shared_from_this());
   }
 }
 

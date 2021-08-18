@@ -74,7 +74,7 @@ def generate_launch_description():
 
     # Composable node container for the Perception Subsystem nodes
     container = ComposableNodeContainer(
-        name='my_container',
+        name='perception_container',
         namespace='',
         package='rclcpp_components',
         executable='component_container',
