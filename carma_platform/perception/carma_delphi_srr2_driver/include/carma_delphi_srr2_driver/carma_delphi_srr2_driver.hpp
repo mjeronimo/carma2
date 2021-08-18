@@ -18,6 +18,7 @@
 #define CARMA_DELPHI_SRR2_DRIVER__CARMA_DELPHI_SRR2_DRIVER_HPP_
 
 #include "carma_utils/carma_node.hpp"
+#include "carma_utils/visibility_control.h"
 #include "rclcpp/rclcpp.hpp"
 
 namespace carma_delphi_srr2_driver
@@ -27,7 +28,9 @@ class CarmaDelphiSrr2Driver : public carma_utils::CarmaNode
 {
 public:
   CarmaDelphiSrr2Driver();
-  ~CarmaDelphiSrr2Driver();
+
+  CARMA_UTILS_PUBLIC
+  explicit CarmaDelphiSrr2Driver(const rclcpp::NodeOptions & options);
 
 protected:
   carma_utils::CallbackReturn on_configure(const rclcpp_lifecycle::State & state) override;
@@ -37,7 +40,7 @@ protected:
   carma_utils::CallbackReturn on_shutdown(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_error(const rclcpp_lifecycle::State & state) override;
 
-  void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
+  void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg) override;
 };
 
 }  // namespace carma_delphi_srr2_driver

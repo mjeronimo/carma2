@@ -84,9 +84,9 @@ EkfLocalizer::on_error(const rclcpp_lifecycle::State & /*state*/)
 void
 EkfLocalizer::systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
-  RCLCPP_INFO(get_logger(),"Received SystemAlert message of type: %u, msg: %s",
-              msg->type,msg->description.c_str());
-  RCLCPP_INFO(get_logger(),"Perform EkfLocalizer-specific system event handling");
+  RCLCPP_INFO(get_logger(), "Received SystemAlert message of type: %u, msg: %s",
+              msg->type, msg->description.c_str());
+  RCLCPP_INFO(get_logger(), "Perform EkfLocalizer-specific system event handling");
 }
 
 }  // namespace ekf_localizer

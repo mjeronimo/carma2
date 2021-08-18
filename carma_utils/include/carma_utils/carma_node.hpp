@@ -58,7 +58,7 @@ public:
 
   // TODO: SystemEvent
   void publish_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
-  void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
+  virtual void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
 
   // Spin with try catch block
   void spin();
