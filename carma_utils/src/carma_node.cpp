@@ -24,8 +24,6 @@
 namespace carma_utils
 {
 
-std::string CarmaNode::system_alert_topic_ = "/system_alert";
-
 CarmaNode::CarmaNode(
   const std::string & node_name,
   const std::string & ns,
@@ -37,7 +35,7 @@ CarmaNode::CarmaNode(
   // TODO: Creation of pubs and sub should be in on_configure
 
   // Create a system alert publisher. The subscriber will be made by the child class
-  system_alert_pub_ = create_publisher<cav_msgs::msg::SystemAlert>(system_alert_topic_, 0);
+  system_alert_pub_ = create_publisher<cav_msgs::msg::SystemAlert>(system_alert_topic_, 10);
 
   // The server side never times out from lifecycle manager
   declare_parameter(bond::msg::Constants::DISABLE_HEARTBEAT_TIMEOUT_PARAM, true);
@@ -59,13 +57,13 @@ CarmaNode::CarmaNode(
     "Lifecycle node launched, waiting on state transition requests");
 }
 
-
-CarmaNode::CarmaNode(const rclcpp::NodeOptions & options): rclcpp_lifecycle::LifecycleNode("carma_node", "", options)
+CarmaNode::CarmaNode(const rclcpp::NodeOptions & options)
+: rclcpp_lifecycle::LifecycleNode("carma_node", "", options)
 {
   // TODO: Creation of pubs and sub should be in on_configure
 
   // Create a system alert publisher. The subscriber will be made by the child class
-  system_alert_pub_ = create_publisher<cav_msgs::msg::SystemAlert>(system_alert_topic_, 0);
+  system_alert_pub_ = create_publisher<cav_msgs::msg::SystemAlert>(system_alert_topic_, 10);
 
   // The server side never times out from lifecycle manager
   declare_parameter(bond::msg::Constants::DISABLE_HEARTBEAT_TIMEOUT_PARAM, true);
@@ -139,8 +137,6 @@ CarmaNode::spin()
 
 }  // namespace carma_utils
 
-
-// Register the component with class_loader.
-// This acts as a sort of entry point, allowing the component to be discoverable when its library
-// is being loaded into a running process.
+// Register the component with class_loader. This acts as a sort of entry point, allowing
+// the component to be discoverable when its library is being loaded into a running process.
 RCLCPP_COMPONENTS_REGISTER_NODE(carma_utils::CarmaNode)

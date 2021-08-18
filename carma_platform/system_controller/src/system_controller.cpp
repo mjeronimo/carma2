@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-
 #include <chrono>
 #include <memory>
 #include <stdexcept>
@@ -24,7 +22,6 @@
 #include "ros2_lifecycle_manager/lifecycle_manager.hpp"
 #include "system_controller/system_controller.hpp"
 
-
 namespace system_controller
 {
 
@@ -34,7 +31,6 @@ SystemController::SystemController()
 {
 }
   
-
 SystemController::~SystemController()
 {
 }
@@ -43,9 +39,9 @@ void
 SystemController::subscribe_to_system_alerts()
 {
    // Create system alert subscriber and publisher for lifcycle manager
-  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1, 
+  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 10, 
         std::bind(&SystemController::handle_system_alert, this, std::placeholders::_1));
-  system_alert_pub_ = create_publisher<cav_msgs::msg::SystemAlert> (system_alert_topic_, 0);
+  system_alert_pub_ = create_publisher<cav_msgs::msg::SystemAlert> (system_alert_topic_, 10);
 }
 
 // Carma alert publisher
@@ -59,16 +55,15 @@ SystemController::publish_system_alert(const cav_msgs::msg::SystemAlert::SharedP
 void 
 SystemController::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg) 
 {
-    RCLCPP_INFO(get_logger(),"Received SystemAlert message of type: %u, msg: %s",
-                msg->type,msg->description.c_str());
+  RCLCPP_INFO(get_logger(),"Received SystemAlert message of type: %u, msg: %s",
+              msg->type,msg->description.c_str());
 
-    if (msg->type ==  cav_msgs::msg::SystemAlert::CAUTION) {
-      pause();
-    } else if ((msg->type ==  cav_msgs::msg::SystemAlert::SHUTDOWN) | (msg->type ==  cav_msgs::msg::SystemAlert::FATAL)) {
-      shutdown();
-    }
+  if (msg->type ==  cav_msgs::msg::SystemAlert::CAUTION) {
+    pause();
+  } else if ((msg->type ==  cav_msgs::msg::SystemAlert::SHUTDOWN) | (msg->type ==  cav_msgs::msg::SystemAlert::FATAL)) {
+    shutdown();
+  }
 }
-
 
 // bool
 // SystemController::startup()

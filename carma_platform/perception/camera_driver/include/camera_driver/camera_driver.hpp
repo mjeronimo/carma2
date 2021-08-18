@@ -17,20 +17,21 @@
 #ifndef CAMERA_DRIVER__CAMERA_DRIVER_HPP_
 #define CAMERA_DRIVER__CAMERA_DRIVER_HPP_
 
-#include "carma_utils/carma_node.hpp"
-#include "cv_bridge/cv_bridge.h"
-#include "image_transport/image_transport.hpp"
-#include <ament_index_cpp/get_package_share_directory.hpp>
-#include "opencv2/highgui/highgui.hpp"
-#include "rclcpp/rclcpp.hpp"
-#include "rclcpp/publisher.hpp"
-#include "rclcpp_lifecycle/lifecycle_node.hpp"
-#include "rclcpp_lifecycle/lifecycle_publisher.hpp"
-#include "carma_utils/visibility_control.h"
 #include <chrono>
 #include <iostream>
 #include <memory>
 #include <utility>
+
+#include "ament_index_cpp/get_package_share_directory.hpp"
+#include "carma_utils/carma_node.hpp"
+#include "carma_utils/visibility_control.h"
+#include "cv_bridge/cv_bridge.h"
+#include "image_transport/image_transport.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include "rclcpp_lifecycle/lifecycle_node.hpp"
+#include "rclcpp_lifecycle/lifecycle_publisher.hpp"
+#include "rclcpp/publisher.hpp"
+#include "rclcpp/rclcpp.hpp"
 
 namespace camera_driver
 {
@@ -39,20 +40,11 @@ class CameraDriver : public carma_utils::CarmaNode
 {
 public:
   CameraDriver();
-  ~CameraDriver();
-  // void spin();
-  COMPOSITION_PUBLIC
+  CARMA_UTILS_PUBLIC
   explicit CameraDriver(const rclcpp::NodeOptions & options);
+  ~CameraDriver();
 
 protected:
-
-  rclcpp::TimerBase::SharedPtr timer_;
-
-  std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<sensor_msgs::msg::Image>> cam_pub_;
-
-  cv::Mat image;
-  bool active_ = false;
-  void publish_image();
   carma_utils::CallbackReturn on_configure(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_activate(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_deactivate(const rclcpp_lifecycle::State & state) override;
@@ -60,8 +52,14 @@ protected:
   carma_utils::CallbackReturn on_shutdown(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_error(const rclcpp_lifecycle::State & state) override;
 
-
   void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
+
+  rclcpp::TimerBase::SharedPtr timer_;
+  std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<sensor_msgs::msg::Image>> cam_pub_;
+
+  cv::Mat image;
+  bool active_ = false;
+  void publish_image();
 };
 
 }  // namespace camera_driver

@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef COMPOSITION__VISIBILITY_CONTROL_H_
-#define COMPOSITION__VISIBILITY_CONTROL_H_
+#ifndef CARMA_UTILS__VISIBILITY_CONTROL_H_
+#define CARMA_UTILS__VISIBILITY_CONTROL_H_
 
 #ifdef __cplusplus
 extern "C"
@@ -25,34 +25,34 @@ extern "C"
 
 #if defined _WIN32 || defined __CYGWIN__
   #ifdef __GNUC__
-    #define COMPOSITION_EXPORT __attribute__ ((dllexport))
-    #define COMPOSITION_IMPORT __attribute__ ((dllimport))
+    #define CARMA_UTILS_EXPORT __attribute__ ((dllexport))
+    #define CARMA_UTILS_IMPORT __attribute__ ((dllimport))
   #else
-    #define COMPOSITION_EXPORT __declspec(dllexport)
-    #define COMPOSITION_IMPORT __declspec(dllimport)
+    #define CARMA_UTILS_EXPORT __declspec(dllexport)
+    #define CARMA_UTILS_IMPORT __declspec(dllimport)
   #endif
-  #ifdef COMPOSITION_BUILDING_DLL
-    #define COMPOSITION_PUBLIC COMPOSITION_EXPORT
+  #ifdef CARMA_UTILS_BUILDING_DLL
+    #define CARMA_UTILS_PUBLIC CARMA_UTILS_EXPORT
   #else
-    #define COMPOSITION_PUBLIC COMPOSITION_IMPORT
+    #define CARMA_UTILS_PUBLIC CARMA_UTILS_IMPORT
   #endif
-  #define COMPOSITION_PUBLIC_TYPE COMPOSITION_PUBLIC
-  #define COMPOSITION_LOCAL
+  #define CARMA_UTILS_PUBLIC_TYPE CARMA_UTILS_PUBLIC
+  #define CARMA_UTILS_LOCAL
 #else
-  #define COMPOSITION_EXPORT __attribute__ ((visibility("default")))
-  #define COMPOSITION_IMPORT
+  #define CARMA_UTILS_EXPORT __attribute__ ((visibility("default")))
+  #define CARMA_UTILS_IMPORT
   #if __GNUC__ >= 4
-    #define COMPOSITION_PUBLIC __attribute__ ((visibility("default")))
-    #define COMPOSITION_LOCAL  __attribute__ ((visibility("hidden")))
+    #define CARMA_UTILS_PUBLIC __attribute__ ((visibility("default")))
+    #define CARMA_UTILS_LOCAL  __attribute__ ((visibility("hidden")))
   #else
-    #define COMPOSITION_PUBLIC
-    #define COMPOSITION_LOCAL
+    #define CARMA_UTILS_PUBLIC
+    #define CARMA_UTILS_LOCAL
   #endif
-  #define COMPOSITION_PUBLIC_TYPE
+  #define CARMA_UTILS_PUBLIC_TYPE
 #endif
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // COMPOSITION__VISIBILITY_CONTROL_H_
+#endif  // CARMA_UTILS__VISIBILITY_CONTROL_H_

@@ -35,21 +35,16 @@ public:
     const std::string & lifecycle_node_name,
     rclcpp::Node::SharedPtr parent_node);
 
-  /// Trigger a state change
-  /**
-   * Throws std::runtime_error on failure
-   */
+  // Trigger a state change. Throws std::runtime_error on failure.
   bool change_state(
     const uint8_t transition,  // takes a lifecycle_msgs::msg::Transition id
     const std::chrono::seconds timeout);
 
-  /// Trigger a state change, returning result
+  // Trigger a state change, returning result
   bool change_state(std::uint8_t transition);
 
-  /// Get the current state as a lifecycle_msgs::msg::State id value
-  /**
-   * Throws std::runtime_error on failure
-   */
+  // Get the current state as a lifecycle_msgs::msg::State id value. 
+  // Throws std::runtime_error on failure.
   uint8_t get_state(const std::chrono::seconds timeout = std::chrono::seconds::max());
 
 protected:

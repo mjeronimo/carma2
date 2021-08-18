@@ -1,17 +1,20 @@
 
 # Features/Capabilities
 
-* CMake macro that can be included by CARMA packages ("carma_project()")
-    * A single source for compiler settings, etc.
+The example code in this repository provides the following features:
+
+* CMake code
+    * Can be included by CARMA packages
+    * The carma_project() macro serves as a single source for compiler settings, etc.
 
 * CarmaNode
     * Derives from rclcpp_lifecycle::LifecycleNode (could also be a template that can use either Node or LifecycleNode)
-    * Automatically creates a bond with the lifecycle manager(see: https://github.com/ros/bond_core)
+    * Automatically creates a bond with the lifecycle manager (see: https://github.com/ros/bond_core)
     * System alert capable
 
 * Lifecycle Manager
-    * Manages the lifecycle nodes
-    * Monitors bonds with the managed nodes, can detect lack of heartbeat
+    * Manages the lifecycle nodes, initiating state transitions
+    * Monitors bonds with the managed nodes, can detect lack of heartbeat and initialize restarted nodes
     * System alert capable
 
 * Subsystems
@@ -23,29 +26,28 @@
 
 # Architecture Questions
 
-* All CARMA nodes as lifecycle nodes?
+* All CARMA nodes as lifecycle nodes? Yes
 
-* All CARMA nodes as Composable nodes?
+* All CARMA nodes as Composable nodes? Yes
 
-* Is there a lifecycle manager for each subsystem?
+* Is there a lifecycle manager for each subsystem? No, only one central lifecycle manager to start.
     * With one central lifecycle manager that interacts with the subsystems?
-
-* How does the CARMA architecture intersect with Docker containers? Per subsystem?
 
 * What is the recovery strategy?
     * Notify the system monitor?
-    * Monitor and reset a subsystem?[ ] Add composable nodes to CarmaNode
+    * Monitor and reset a subsystem?
 
 * How does Launch interact with Lifecycle nodes and recovery?
     * Which component owns restarting the nodes?
 
-Launch
-Lifecycle nodes
-Parameters
-Subsystems
-System Eventing and state machines
-Composable nodes (especially in subsystems)
-Recovery
+* Topic
+    * Launch
+    * Lifecycle nodes
+    * Parameters
+    * Subsystems
+    * System Eventing and state machines
+    * Composable nodes (especially in subsystems)
+    * Recovery
 
 Localization system recovery
     LiDAR-based localization fails, transitions output pose to GPS
@@ -56,7 +58,6 @@ Localization system recovery
     Separate node from the health monitoring
         Monitor and then decide when to shut down
         Checking heartbeat status of the nodes
-
 
 # Task List
 
@@ -87,4 +88,3 @@ Localization system recovery
 [x]     Use only one central lifecycle manager (instead of per subsystem)
 
 ```
-

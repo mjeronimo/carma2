@@ -12,12 +12,14 @@ from launch_ros.descriptions import ComposableNode
 
 
 def generate_launch_description():
-    # Get the launch directory
     bringup_dir = get_package_share_directory('carma_bringup')
-   
-    use_sim_time = LaunchConfiguration('use_sim_time')
 
+    use_sim_time = LaunchConfiguration('use_sim_time')
     autostart = LaunchConfiguration('autostart')
+    use_term = LaunchConfiguration('use_term')
+
+    term_prefix = 'xterm -geometry 150x40 -hold -e'
+    #term_prefix = ''
 
     stdout_linebuf_envvar = SetEnvironmentVariable(
         'RCUTILS_LOGGING_BUFFERED_STREAM', '1')
@@ -30,7 +32,7 @@ def generate_launch_description():
     declare_use_namespace_cmd = DeclareLaunchArgument(
         'use_namespace',
         default_value='false',
-        description='Whether to apply a namespace to the navigation stack')
+        description='Whether to apply a namespace to all nodes')
 
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         'use_sim_time',
@@ -46,57 +48,67 @@ def generate_launch_description():
         'autostart', default_value='true',
         description='Automatically startup the nav2 stack')
 
-    carma_nodes = ['carma_delphi_srr2_driver', 'carma_velodyne_lidar_driver','dead_reckoner', 'ekf_localizer','camera_driver','camera_driver_client']
+    carma_nodes = [
+        'carma_delphi_srr2_driver', 
+        'carma_velodyne_lidar_driver',
+        'dead_reckoner', 
+        'ekf_localizer',
+        'camera_driver',
+        'camera_driver_client'
+        ]
 
-
-    # Perception Subsystem
+    # Nodes in the Perception Subsystem
     carma_delphi_srr2_driver = Node(
-            package='carma_delphi_srr2_driver',
-            executable='carma_delphi_srr2_driver',
-            output='screen',
-            prefix='xterm -geometry 150x40 -hold -e',
-            respawn=True
-            )
+        package='carma_delphi_srr2_driver',
+        executable='carma_delphi_srr2_driver',
+        output='screen',
+        prefix=term_prefix,
+        respawn=True
+        )
     carma_velodyne_lidar_driver = Node(
-            package='carma_velodyne_lidar_driver',
-            executable='carma_velodyne_lidar_driver',
-            output='screen',
-            prefix='xterm -geometry 150x40 -hold -e',
-            )
+        package='carma_velodyne_lidar_driver',
+        executable='carma_velodyne_lidar_driver',
+        output='screen',
+        prefix=term_prefix,
+        )
 
-
-    """Composable node container for perception subsystem"""
+    # Composable node container for the Perception Subsystem nodes
     container = ComposableNodeContainer(
-            name='my_container',
-            namespace='',
-            package='rclcpp_components',
-            executable='component_container',
-            composable_node_descriptions=[
-                ComposableNode(
-                    package='camera_driver',
-                    plugin='camera_driver::CameraDriver',
-                    name='camera_driver'),
-                ComposableNode(
-                    package='camera_driver',
-                    plugin='camera_driver_client::CameraDriverClient',
-                    name='camera_driver_client')
+        name='my_container',
+        namespace='',
+        package='rclcpp_components',
+        executable='component_container',
+        composable_node_descriptions=[
+            ComposableNode(
+                package='camera_driver',
+                plugin='camera_driver::CameraDriver',
+                name='camera_driver',
+                extra_arguments=[{'use_intra_process_comms': True}]
+                ),
+            ComposableNode(
+                package='camera_driver',
+                plugin='camera_driver_client::CameraDriverClient',
+                name='camera_driver_client',
+                extra_arguments=[{'use_intra_process_comms': True}]
+                ),
             ],
-            output='screen',
-    )
+        output='screen',
+        prefix=term_prefix,
+        )
 
     # Localization Subsystem
     dead_reckoner = Node(
         package='dead_reckoner',
         executable='dead_reckoner',
         output='screen',
-        prefix='xterm -geometry 150x40 -hold -e',
+        prefix=term_prefix,
         )
         
     ekf_localizer = Node(
         package='ekf_localizer',
         executable='ekf_localizer',
         output='screen',
-        prefix='xterm -geometry 150x40 -hold -e',
+        prefix=term_prefix,
         )
     
     carma_system_controller = Node(
@@ -104,9 +116,12 @@ def generate_launch_description():
         executable='system_controller',
         name='carma_system_controller',
         output='screen',
-        prefix='xterm -geometry 150x40 -hold -e',
-        parameters=[{'use_sim_time': use_sim_time},
-        {'autostart': autostart},{'node_names': carma_nodes}]
+        prefix=term_prefix,
+        parameters=[
+            {'use_sim_time': use_sim_time},
+            {'autostart': autostart},
+            {'node_names': carma_nodes}
+            ]
         )
 
     # Create the launch description

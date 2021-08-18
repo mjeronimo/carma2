@@ -22,18 +22,15 @@
 #include "lifecycle_msgs/srv/get_state.hpp"
 
 using std::chrono::seconds;
-using std::make_shared;
-using std::string;
 using std::chrono::high_resolution_clock;
-using std::to_string;
 
 namespace ros2_utils
 {
 
 std::string
-sanitize_node_name(const string & potential_node_name)
+sanitize_node_name(const std::string & potential_node_name)
 {
-  string node_name(potential_node_name);
+  std::string node_name(potential_node_name);
   // read this as `replace` characters in `node_name` `if` not alphanumeric.
   // replace with '_'
   replace_if(
@@ -45,10 +42,10 @@ sanitize_node_name(const string & potential_node_name)
 
 std::string time_to_string(size_t len)
 {
-  string output(len, '0');  // prefill the string with zeros
+  std::string output(len, '0');  // prefill the string with zeros
   auto timepoint = high_resolution_clock::now();
   auto timecount = timepoint.time_since_epoch().count();
-  auto timestring = to_string(timecount);
+  auto timestring = std::to_string(timecount);
   if (timestring.length() >= len) {
     // if `timestring` is shorter, put it at the end of `output`
     output.replace(
@@ -82,7 +79,7 @@ generate_internal_node(const std::string & prefix)
   return rclcpp::Node::make_shared("_", options);
 }
 
-LifecycleServiceClient::LifecycleServiceClient(const string & lifecycle_node_name)
+LifecycleServiceClient::LifecycleServiceClient(const std::string & lifecycle_node_name)
 : node_(generate_internal_node(lifecycle_node_name + "_lifecycle_client")),
   change_state_client_(lifecycle_node_name + "/change_state", node_),
   get_state_client_(lifecycle_node_name + "/get_state", node_)
@@ -90,7 +87,7 @@ LifecycleServiceClient::LifecycleServiceClient(const string & lifecycle_node_nam
 }
 
 LifecycleServiceClient::LifecycleServiceClient(
-  const string & lifecycle_node_name,
+  const std::string & lifecycle_node_name,
   rclcpp::Node::SharedPtr parent_node)
 : node_(parent_node),
   change_state_client_(lifecycle_node_name + "/change_state", node_),

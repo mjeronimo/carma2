@@ -20,23 +20,23 @@
 namespace ros2_utils
 {
 
-/// @brief Measures execution time of code between calls to start and end
+// Measures execution time of code between calls to start and end
 class ExecutionTimer
 {
 public:
   using Clock = std::chrono::high_resolution_clock;
   using nanoseconds = std::chrono::nanoseconds;
 
-  /// @brief Call just prior to code you want to measure
+  // Call just prior to code you want to measure
   void start() {start_ = Clock::now();}
 
-  /// @brief Call just after the code you want to measure
+  // Call just after the code you want to measure
   void end() {end_ = Clock::now();}
 
-  /// @brief Extract the measured time as an integral std::chrono::duration object
+  // Extract the measured time as an integral std::chrono::duration object
   nanoseconds elapsed_time() {return end_ - start_;}
 
-  /// @brief Extract the measured time as a floating point number of seconds.
+  // Extract the measured time as a floating point number of seconds.
   double elapsed_time_in_seconds()
   {
     return std::chrono::duration<double>(end_ - start_).count();

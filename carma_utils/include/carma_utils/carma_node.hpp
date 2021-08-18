@@ -21,34 +21,34 @@
 
 #include "bondcpp/bond.hpp"
 #include "bond/msg/constants.hpp"
+#include "carma_utils/visibility_control.h"
 #include "cav_msgs/msg/system_alert.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "ros2_utils/node_thread.hpp"
-#include "carma_utils/visibility_control.h"
 
 namespace carma_utils
 {
 
 using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
-// Common node functionality
 // TODO: Make this a template that takes either Node or LifecycleNode
+
+// Common node functionality
 class CarmaNode : public rclcpp_lifecycle::LifecycleNode 
 {
 public:
-  // TODO: Make this capable of being used as a ComposableNode
   CarmaNode(
     const std::string & node_name,
     const std::string & ns = "",
     bool use_rclcpp_node = false,
     const rclcpp::NodeOptions & options = rclcpp::NodeOptions());
 
-  virtual ~CarmaNode();
-
-  // Make the CarmaNode Composition capable 
-  COMPOSITION_PUBLIC
+  // A composition-capable CarmaNode
+  CARMA_UTILS_PUBLIC
   CarmaNode(const rclcpp::NodeOptions & options);
+
+  virtual ~CarmaNode();
 
   std::shared_ptr<carma_utils::CarmaNode> shared_from_this();
 
@@ -64,21 +64,18 @@ public:
   void spin();
 
 protected:
-  // Whether or not to create a local rclcpp::Node which can be used for ROS2 classes that
-  // don't yet support lifecycle nodes
-  bool use_rclcpp_node_{false};
-
-  // System alert pub/sub
-  static std::string system_alert_topic_;
-  rclcpp::Subscription<cav_msgs::msg::SystemAlert>::SharedPtr system_alert_sub_;
-  rclcpp::Publisher<cav_msgs::msg::SystemAlert>::SharedPtr system_alert_pub_;
-
-  // The local rclcpp node and the thread to spin it
-  rclcpp::Node::SharedPtr rclcpp_node_;
-  std::unique_ptr<ros2_utils::NodeThread> rclcpp_thread_;
+  // Machinery to support ROS2 classes that don't yet support lifecycle nodes
+  bool use_rclcpp_node_{false};            // Whether or not to create a local rclcpp::Node
+  rclcpp::Node::SharedPtr rclcpp_node_;    // The rclcpp node
+  std::unique_ptr<ros2_utils::NodeThread> rclcpp_thread_; // The thread to spin it
 
   // Bond connection for heartbeat messages
   std::unique_ptr<bond::Bond> bond_;
+
+  // System alert pub/sub
+  const std::string system_alert_topic_{"/system_alert"};
+  rclcpp::Subscription<cav_msgs::msg::SystemAlert>::SharedPtr system_alert_sub_;
+  rclcpp::Publisher<cav_msgs::msg::SystemAlert>::SharedPtr system_alert_pub_;
 };
 
 }  // namespace carma_utils
