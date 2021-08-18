@@ -14,6 +14,11 @@
 
 #include "camera_driver/camera_driver_client.hpp"
 
+#include <memory>
+
+#include "cv_bridge/cv_bridge.h"
+#include "opencv2/highgui/highgui.hpp"
+
 namespace camera_driver_client
 {
 
@@ -32,11 +37,13 @@ CameraDriverClient::on_configure(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
 
-  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1, 
-        std::bind(&CameraDriverClient::handle_system_alert, this, std::placeholders::_1));
-  
-  cam_sub_ = create_subscription<sensor_msgs::msg::Image>("camera/image", 1, 
-        std::bind(&CameraDriverClient::image_callback, this, std::placeholders::_1));
+  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
+    system_alert_topic_, 1,
+    std::bind(&CameraDriverClient::handle_system_alert, this, std::placeholders::_1));
+
+  cam_sub_ = create_subscription<sensor_msgs::msg::Image>(
+    "camera/image", 1,
+    std::bind(&CameraDriverClient::image_callback, this, std::placeholders::_1));
 
   return carma_utils::CallbackReturn::SUCCESS;
 }
@@ -45,7 +52,7 @@ carma_utils::CallbackReturn
 CameraDriverClient::on_activate(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Activating");
- 
+
   // Create bond with the lifecycle manager
   create_bond();
 
@@ -63,14 +70,14 @@ CameraDriverClient::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
-carma_utils::CallbackReturn 
+carma_utils::CallbackReturn
 CameraDriverClient::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
-carma_utils::CallbackReturn 
+carma_utils::CallbackReturn
 CameraDriverClient::on_shutdown(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Shutting down");
@@ -87,9 +94,10 @@ CameraDriverClient::on_error(const rclcpp_lifecycle::State & /*state*/)
 void
 CameraDriverClient::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
-  RCLCPP_INFO(get_logger(),"Received SystemAlert message of type: %u, msg: %s",
-              msg->type,msg->description.c_str());
-  RCLCPP_INFO(get_logger(),"Perform CameraDriverClient-specific system event handling");
+  RCLCPP_INFO(
+    get_logger(), "Received SystemAlert message of type: %u, msg: %s",
+    msg->type, msg->description.c_str());
+  RCLCPP_INFO(get_logger(), "Perform CameraDriverClient-specific system event handling");
 }
 
 void
@@ -100,7 +108,7 @@ CameraDriverClient::image_callback(const sensor_msgs::msg::Image::SharedPtr msg)
       cv::imshow("view", cv_bridge::toCvShare(msg, "bgr8")->image);
       cv::waitKey(10);
     } else {
-      RCLCPP_INFO(get_logger(),"received message");
+      RCLCPP_INFO(get_logger(), "received message");
     }
   } catch (cv_bridge::Exception & e) {
     auto logger = rclcpp::get_logger("my_subscriber");

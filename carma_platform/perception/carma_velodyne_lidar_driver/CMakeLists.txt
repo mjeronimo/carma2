@@ -28,9 +28,14 @@ set(dependencies
 add_library(${library_name} SHARED
   src/carma_velodyne_lidar_driver.cpp
 )
-
+target_compile_definitions(${library_name}
+  PRIVATE "COMPOSITION_BUILDING_DLL"
+)
 ament_target_dependencies(${library_name}
   ${dependencies}
+)
+rclcpp_components_register_nodes(${library_name}
+  "carma_velodyne_lidar_driver::CarmaVelodyneLidarDriver"
 )
 
 add_executable(${executable_name}

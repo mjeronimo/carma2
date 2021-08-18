@@ -26,6 +26,9 @@ The example code in this repository provides the following features:
 
 # Architecture Questions
 
+* If a ComposableNode crashes, does it bring down the container?
+    * What about respawning CompsableNodes (can't use 'respawn' in the launch file)
+
 * All CARMA nodes as lifecycle nodes? Yes
 
 * All CARMA nodes as Composable nodes? Yes

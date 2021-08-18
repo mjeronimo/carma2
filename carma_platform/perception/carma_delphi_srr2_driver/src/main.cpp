@@ -22,9 +22,9 @@
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
-
   auto node = std::make_shared<carma_delphi_srr2_driver::CarmaDelphiSrr2Driver>();
   node->spin();
   rclcpp::shutdown();
+
   return 0;
 }

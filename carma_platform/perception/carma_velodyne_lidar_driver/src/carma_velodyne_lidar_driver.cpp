@@ -24,7 +24,8 @@ CarmaVelodyneLidarDriver::CarmaVelodyneLidarDriver()
 {
 }
 
-CarmaVelodyneLidarDriver::~CarmaVelodyneLidarDriver()
+CarmaVelodyneLidarDriver::CarmaVelodyneLidarDriver(const rclcpp::NodeOptions & options)
+: CarmaNode(options)
 {
 }
 
@@ -32,8 +33,9 @@ carma_utils::CallbackReturn
 CarmaVelodyneLidarDriver::on_configure(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
-  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1, 
-        std::bind(&CarmaVelodyneLidarDriver::handle_system_alert, this, std::placeholders::_1));
+  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
+    system_alert_topic_, 1,
+    std::bind(&CarmaVelodyneLidarDriver::handle_system_alert, this, std::placeholders::_1));
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -41,7 +43,7 @@ carma_utils::CallbackReturn
 CarmaVelodyneLidarDriver::on_activate(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Activating");
- 
+
   // Create bond with the lifecycle manager
   create_bond();
 
@@ -59,14 +61,14 @@ CarmaVelodyneLidarDriver::on_deactivate(const rclcpp_lifecycle::State & /*state*
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
-carma_utils::CallbackReturn 
+carma_utils::CallbackReturn
 CarmaVelodyneLidarDriver::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
-carma_utils::CallbackReturn 
+carma_utils::CallbackReturn
 CarmaVelodyneLidarDriver::on_shutdown(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Shutting down");
@@ -83,9 +85,15 @@ CarmaVelodyneLidarDriver::on_error(const rclcpp_lifecycle::State & /*state*/)
 void
 CarmaVelodyneLidarDriver::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
-  RCLCPP_INFO(get_logger(),"Received SystemAlert message of type: %u, msg: %s",
-              msg->type,msg->description.c_str());
-  RCLCPP_INFO(get_logger(),"Perform CarmaVelodyneLidarDriver-specific system event handling");
+  RCLCPP_INFO(
+    get_logger(), "Received SystemAlert message of type: %u, msg: %s",
+    msg->type, msg->description.c_str());
+  RCLCPP_INFO(get_logger(), "Perform CarmaVelodyneLidarDriver-specific system event handling");
 }
 
 }  // namespace carma_velodyne_lidar_driver
+
+#include "rclcpp_components/register_node_macro.hpp"
+
+// Register the component with class_loader
+RCLCPP_COMPONENTS_REGISTER_NODE(carma_velodyne_lidar_driver::CarmaVelodyneLidarDriver)

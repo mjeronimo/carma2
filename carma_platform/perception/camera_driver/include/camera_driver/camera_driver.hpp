@@ -40,9 +40,9 @@ class CameraDriver : public carma_utils::CarmaNode
 {
 public:
   CameraDriver();
+
   CARMA_UTILS_PUBLIC
   explicit CameraDriver(const rclcpp::NodeOptions & options);
-  ~CameraDriver();
 
 protected:
   carma_utils::CallbackReturn on_configure(const rclcpp_lifecycle::State & state) override;
@@ -52,13 +52,13 @@ protected:
   carma_utils::CallbackReturn on_shutdown(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_error(const rclcpp_lifecycle::State & state) override;
 
-  void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
+  void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg) override;
 
   rclcpp::TimerBase::SharedPtr timer_;
   std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<sensor_msgs::msg::Image>> cam_pub_;
 
   cv::Mat image;
-  bool active_ = false;
+  bool active_{false};
   void publish_image();
 };
 

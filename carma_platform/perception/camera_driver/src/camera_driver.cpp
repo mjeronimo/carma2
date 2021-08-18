@@ -13,6 +13,13 @@
 // limitations under the License.
 
 #include "camera_driver/camera_driver.hpp"
+
+#include <string>
+
+#include "cv_bridge/cv_bridge.h"
+#include "image_transport/image_transport.hpp"
+#include "opencv2/highgui/highgui.hpp"
+
 using namespace std::chrono_literals;
 
 namespace camera_driver
@@ -28,24 +35,22 @@ CameraDriver::CameraDriver(const rclcpp::NodeOptions & options)
 {
 }
 
-CameraDriver::~CameraDriver()
-{
-}
-
 carma_utils::CallbackReturn
 CameraDriver::on_configure(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
-  std::string package_share_directory = ament_index_cpp::get_package_share_directory("camera_driver");
+  std::string package_share_directory =
+    ament_index_cpp::get_package_share_directory("camera_driver");
 
   try {
-    image = cv::imread(package_share_directory+"/resources/image.jpg", cv::IMREAD_COLOR);
-  } catch(cv::Exception& e ) {
+    image = cv::imread(package_share_directory + "/resources/image.jpg", cv::IMREAD_COLOR);
+  } catch (cv::Exception & e) {
     RCLCPP_INFO(get_logger(), "Failed to Load Image");
   }
 
-  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1, 
-        std::bind(&CameraDriver::handle_system_alert, this, std::placeholders::_1));
+  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
+    system_alert_topic_, 1,
+    std::bind(&CameraDriver::handle_system_alert, this, std::placeholders::_1));
   cam_pub_ = this->create_publisher<sensor_msgs::msg::Image>("camera/image", 10);
 
   // Use a timer to schedule periodic message publishing
@@ -76,7 +81,7 @@ CameraDriver::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
-carma_utils::CallbackReturn 
+carma_utils::CallbackReturn
 CameraDriver::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
@@ -84,7 +89,7 @@ CameraDriver::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
-carma_utils::CallbackReturn 
+carma_utils::CallbackReturn
 CameraDriver::on_shutdown(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Shutting down");
@@ -102,9 +107,10 @@ CameraDriver::on_error(const rclcpp_lifecycle::State & /*state*/)
 void
 CameraDriver::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
-  RCLCPP_INFO(get_logger(),"Received SystemAlert message of type: %u, msg: %s",
-              msg->type,msg->description.c_str());
-  RCLCPP_INFO(get_logger(),"Perform CameraDriver-specific system event handling");
+  RCLCPP_INFO(
+    get_logger(), "Received SystemAlert message of type: %u, msg: %s",
+    msg->type, msg->description.c_str());
+  RCLCPP_INFO(get_logger(), "Perform CameraDriver-specific system event handling");
 }
 
 void CameraDriver::publish_image()
@@ -123,7 +129,6 @@ void CameraDriver::publish_image()
 }
 
 }  // namespace camera_driver
-
 
 #include "rclcpp_components/register_node_macro.hpp"
 
