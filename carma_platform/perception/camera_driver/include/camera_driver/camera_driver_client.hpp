@@ -34,7 +34,6 @@ public:
   CameraDriverClient();
   CARMA_UTILS_PUBLIC
   explicit CameraDriverClient(const rclcpp::NodeOptions & options);
-  ~CameraDriverClient();
 
 protected:
   carma_utils::CallbackReturn on_configure(const rclcpp_lifecycle::State & state) override;
@@ -48,7 +47,7 @@ protected:
   void image_callback(const sensor_msgs::msg::Image::SharedPtr msg);
 
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr cam_sub_;
-  bool show_image;
+  bool show_image_{true};
 };
 
 }  // namespace camera_driver

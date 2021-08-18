@@ -26,15 +26,15 @@ set(library_name ${executable_name}_core)
 set(dependencies
   carma_common
   carma_utils
-  rclcpp
-  rclcpp_lifecycle
-  ros2_lifecycle_manager_msgs
   cv_bridge
   image_transport
   OpenCV
+  rclcpp
   rclcpp_components
-  sensor_msgs
+  rclcpp_lifecycle
   rcutils
+  ros2_lifecycle_manager_msgs
+  sensor_msgs
 )
 
 set(node_plugins "")
@@ -47,7 +47,6 @@ ament_target_dependencies(${library_name} ${dependencies})
 rclcpp_components_register_nodes(${library_name} "camera_driver::CameraDriver")
 set(node_plugins "${node_plugins}camera_driver::CameraDriver;$<TARGET_FILE:camera_driver_core>\n")
 
-
 add_library(camera_driver_client_c SHARED
   src/camera_driver_client.cpp)
 target_compile_definitions(camera_driver_client_c
@@ -55,7 +54,6 @@ target_compile_definitions(camera_driver_client_c
 ament_target_dependencies(camera_driver_client_c ${dependencies})
 rclcpp_components_register_nodes(camera_driver_client_c  "camera_driver_client::CameraDriverClient")
 set(node_plugins "${node_plugins}camera_driver_client::CameraDriverClient;$<TARGET_FILE:camera_driver_client_c>\n")
-
 
 ament_target_dependencies(${library_name}
   ${dependencies}

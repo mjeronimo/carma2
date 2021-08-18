@@ -20,15 +20,10 @@ namespace camera_driver_client
 CameraDriverClient::CameraDriverClient()
 : CarmaNode("camera_driver_client")
 {
-  show_image = false;
 }
 
 CameraDriverClient::CameraDriverClient(const rclcpp::NodeOptions & options)
 : CarmaNode(options)
-{
-}
-
-CameraDriverClient::~CameraDriverClient()
 {
 }
 
@@ -101,21 +96,18 @@ void
 CameraDriverClient::image_callback(const sensor_msgs::msg::Image::SharedPtr msg)
 {
   try {
-    if(show_image)
-    {
+    if (show_image_) {
       cv::imshow("view", cv_bridge::toCvShare(msg, "bgr8")->image);
       cv::waitKey(10);
-    }
-    else
-    {
+    } else {
       RCLCPP_INFO(get_logger(),"received message");
     }
-    
   } catch (cv_bridge::Exception & e) {
     auto logger = rclcpp::get_logger("my_subscriber");
     RCLCPP_ERROR(logger, "Could not convert from '%s' to 'bgr8'.", msg->encoding.c_str());
   }
 }
+
 }  // namespace camera_driver_client
 
 
@@ -129,10 +121,9 @@ RCLCPP_COMPONENTS_REGISTER_NODE(camera_driver_client::CameraDriverClient)
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
-
   auto node = std::make_shared<camera_driver_client::CameraDriverClient>();
   node->spin();
-
   rclcpp::shutdown();
+
   return 0;
 }

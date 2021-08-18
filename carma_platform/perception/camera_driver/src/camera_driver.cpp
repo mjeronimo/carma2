@@ -36,15 +36,11 @@ carma_utils::CallbackReturn
 CameraDriver::on_configure(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
-
   std::string package_share_directory = ament_index_cpp::get_package_share_directory("camera_driver");
 
-  try
-  {
+  try {
     image = cv::imread(package_share_directory+"/resources/image.jpg", cv::IMREAD_COLOR);
-  }
-  catch(cv::Exception& e )
-  {
+  } catch(cv::Exception& e ) {
     RCLCPP_INFO(get_logger(), "Failed to Load Image");
   }
 
@@ -53,7 +49,7 @@ CameraDriver::on_configure(const rclcpp_lifecycle::State & /*state*/)
   cam_pub_ = this->create_publisher<sensor_msgs::msg::Image>("camera/image", 10);
 
   // Use a timer to schedule periodic message publishing
-  timer_ = create_wall_timer(500ms, std::bind(&CameraDriver::publish_image, this));
+  timer_ = create_wall_timer(1s, std::bind(&CameraDriver::publish_image, this));
 
   active_ = true;
   return carma_utils::CallbackReturn::SUCCESS;
