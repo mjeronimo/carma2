@@ -113,17 +113,44 @@ CameraDriver::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr ms
   RCLCPP_INFO(get_logger(), "Perform CameraDriver-specific system event handling");
 }
 
+std::string 
+CameraDriver::mat_type2encoding(int mat_type)
+  {
+    switch (mat_type) {
+      case CV_8UC1:
+        return "mono8";
+      case CV_8UC3:
+        return "bgr8";
+      case CV_16SC1:
+        return "mono16";
+      case CV_8UC4:
+        return "rgba8";
+      default:
+        throw std::runtime_error("unsupported encoding type");
+    }
+  }
+
 void CameraDriver::publish_image()
 {
-  sensor_msgs::msg::Image::SharedPtr msg;
-  std_msgs::msg::Header hdr;
-  msg = cv_bridge::CvImage(hdr, "bgr8", image).toImageMsg();
+
+   
+  sensor_msgs::msg::Image::UniquePtr image_msg(new sensor_msgs::msg::Image());
+  // Convert OpenCV Mat to ROS Image
+  image_msg->header.stamp = this->get_clock()->now();
+  image_msg->header.frame_id = "";
+  image_msg->height = image.rows;
+  image_msg->width = image.cols;
+  image_msg->encoding = mat_type2encoding(image.type());
+  image_msg->is_bigendian = false;
+  image_msg->step = static_cast<sensor_msgs::msg::Image::_step_type>(image.step);
+  image_msg->data.assign(image.datastart, image.dataend);
 
   if (active_) {
     if (!cam_pub_->is_activated()) {
       RCLCPP_INFO(get_logger(), "Camera Driver is currently inactive. Messages are not published.");
     } else {
-      cam_pub_->publish(*msg);
+      RCLCPP_INFO(get_logger(), "publishing image at address %p",(void*)reinterpret_cast<std::uintptr_t>(image_msg.get()));
+      cam_pub_->publish(std::move(image_msg));
     }
   }
 }

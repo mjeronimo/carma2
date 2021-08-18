@@ -53,6 +53,8 @@ protected:
   carma_utils::CallbackReturn on_error(const rclcpp_lifecycle::State & state) override;
 
   void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg) override;
+  std::string mat_type2encoding(int mat_type);
+
 
   rclcpp::TimerBase::SharedPtr timer_;
   std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<sensor_msgs::msg::Image>> cam_pub_;

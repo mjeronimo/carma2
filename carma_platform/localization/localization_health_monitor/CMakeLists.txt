@@ -7,7 +7,9 @@ find_package(carma_utils REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(ros2_lifecycle_manager_msgs REQUIRED)
-
+find_package(rclcpp_components REQUIRED)
+find_package(rcutils REQUIRED)
+find_package(std_msgs REQUIRED)
 carma_package()
 
 include_directories(
@@ -24,6 +26,9 @@ set(dependencies
   rclcpp
   rclcpp_lifecycle
   ros2_lifecycle_manager_msgs
+  rclcpp_components 
+  rcutils 
+  std_msgs
 )
 
 add_library(${library_name} SHARED
