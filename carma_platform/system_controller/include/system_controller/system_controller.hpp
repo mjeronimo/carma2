@@ -27,24 +27,21 @@
 #include "rclcpp/rclcpp.hpp"
 
 
-
 namespace system_controller
 {
 
 
 // The System Controller inherits from the lifecycle manager class from ROS2
-// It adds system alerts for the CARMA System on top of the existing lifecycle functionality. 
+// It adds system alerts for the CARMA System on top of the existing lifecycle functionality.
 
-class SystemController : public ros2_lifecycle_manager::LifecycleManager       
+class SystemController : public ros2_lifecycle_manager::LifecycleManager
 {
 public:
   SystemController();
-  ~SystemController();
-  void subscribe_to_system_alerts();
 
 protected:
   // System alerts
-  static std::string system_alert_topic_;
+  const std::string system_alert_topic_{"/system_alert"};
   rclcpp::Subscription<cav_msgs::msg::SystemAlert>::SharedPtr system_alert_sub_;
   rclcpp::Publisher<cav_msgs::msg::SystemAlert>::SharedPtr system_alert_pub_;
 

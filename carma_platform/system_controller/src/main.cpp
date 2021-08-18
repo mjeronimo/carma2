@@ -1,4 +1,4 @@
-// Copyright (c) 2019 Intel Corporation
+// Copyright 2021 Open Source Robotics Foundation, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
   auto node = std::make_shared<system_controller::SystemController>();
-  node->subscribe_to_system_alerts();
   rclcpp::spin(node);
   rclcpp::shutdown();
 
