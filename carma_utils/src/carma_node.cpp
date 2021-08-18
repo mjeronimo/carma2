@@ -116,7 +116,7 @@ CarmaNode::create_bond()
 void
 CarmaNode::destroy_bond()
 {
-  RCLCPP_INFO(get_logger(), "Destroying bond (%s) to lifecycle manager.", get_name());
+  RCLCPP_DEBUG(get_logger(), "Destroying bond to lifecycle manager.");
 
   if (bond_) {
     bond_.reset();

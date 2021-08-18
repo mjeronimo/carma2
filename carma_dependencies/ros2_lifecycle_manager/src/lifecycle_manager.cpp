@@ -321,7 +321,7 @@ void
 LifecycleManager::destroyBondTimer()
 {
   if (bond_timer_) {
-    RCLCPP_INFO(get_logger(), "Terminating bond timer");
+    RCLCPP_DEBUG(get_logger(), "Terminating bond timer");
     bond_timer_->cancel();
     bond_timer_.reset();
   }
