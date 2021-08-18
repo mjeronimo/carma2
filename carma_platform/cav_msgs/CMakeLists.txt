@@ -14,6 +14,7 @@ endif()
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/SystemAlert.msg"
+  "msg/LocalizationStatusReport.msg"
 )
 
 ament_export_dependencies(rosidl_default_runtime)
