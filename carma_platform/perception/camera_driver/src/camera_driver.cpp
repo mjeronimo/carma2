@@ -132,9 +132,9 @@ CameraDriver::mat_type2encoding(int mat_type)
 
 void CameraDriver::publish_image()
 {
-
-   
+  // Use a unique_ptr for no copy intra-process communication
   sensor_msgs::msg::Image::UniquePtr image_msg(new sensor_msgs::msg::Image());
+
   // Convert OpenCV Mat to ROS Image
   image_msg->header.stamp = this->get_clock()->now();
   image_msg->header.frame_id = "";

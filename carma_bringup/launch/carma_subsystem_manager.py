@@ -4,7 +4,7 @@ import os
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import (DeclareLaunchArgument, SetEnvironmentVariable)
+from launch.actions import (DeclareLaunchArgument, SetEnvironmentVariable, LogInfo)
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch_ros.actions import ComposableNodeContainer
@@ -78,8 +78,9 @@ def generate_launch_description():
                 plugin='carma_velodyne_lidar_driver::CarmaVelodyneLidarDriver',
                 name='carma_velodyne_lidar_driver',
                 extra_arguments=[{'use_intra_process_comms': True}]
-                )
+                ),
             ],
+        on_exit=[LogInfo(msg='perception_container')],
         output='screen',
         prefix=term_prefix,
         respawn='true'

@@ -33,7 +33,6 @@ LocalizationHealthMonitor::on_configure(const rclcpp_lifecycle::State & /*state*
 {
   RCLCPP_INFO(get_logger(), "Configuring");
 
-  
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1,
   std::bind(&LocalizationHealthMonitor::handle_system_alert, this, std::placeholders::_1));
 
@@ -41,8 +40,6 @@ LocalizationHealthMonitor::on_configure(const rclcpp_lifecycle::State & /*state*
   std::bind(&LocalizationHealthMonitor::handle_localization_status, this, std::placeholders::_1));
   
   return carma_utils::CallbackReturn::SUCCESS;
-
-   
 }
 
 carma_utils::CallbackReturn
@@ -94,7 +91,6 @@ LocalizationHealthMonitor::on_error(const rclcpp_lifecycle::State & /*state*/)
 void
 LocalizationHealthMonitor::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
-
   // This where I will implement the logic for the LocalizationHealthMonitor
   RCLCPP_INFO(get_logger(),"Received SystemAlert message of type: %u, msg: %s",
               msg->type,msg->description.c_str());
@@ -104,7 +100,6 @@ LocalizationHealthMonitor::handle_system_alert(const cav_msgs::msg::SystemAlert:
 void
 LocalizationHealthMonitor::handle_localization_status(const cav_msgs::msg::LocalizationStatusReport::SharedPtr msg)
 {
-
   RCLCPP_INFO(get_logger(),"pub is activated %d",system_alert_pub_->is_activated());
   switch (msg->status) {
     case cav_msgs::msg::LocalizationStatusReport::INITIALIZING:
@@ -112,13 +107,13 @@ LocalizationHealthMonitor::handle_localization_status(const cav_msgs::msg::Local
       break;
     case cav_msgs::msg::LocalizationStatusReport::DEGRADED_NO_LIDAR_FIX:
       alert_msg.type = cav_msgs::msg::SystemAlert::FATAL;
-      alert_msg.description = "Localization in Degraged Mode No Fix";
+      alert_msg.description = "Localization in Degraded Mode No Fix";
       this->system_alert_pub_->publish(alert_msg);
       break;
     case cav_msgs::msg::LocalizationStatusReport::DEGRADED:
     case cav_msgs::msg::LocalizationStatusReport::AWAIT_MANUAL_INITIALIZATION:
       alert_msg.type = cav_msgs::msg::SystemAlert::CAUTION;
-      alert_msg.description = "Localization in Degraged Mode";
+      alert_msg.description = "Localization in Degraded Mode";
       this->system_alert_pub_->publish(alert_msg);
       break;
   }

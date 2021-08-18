@@ -348,8 +348,13 @@ LifecycleManager::checkBondConnections()
 
       // TODO: make this more robust. For now, just assume that the node has crashed and has 
       // been restarted by the launch system. Therefore, we need to configure and activate it
-      changeStateForNode(node_name, Transition::TRANSITION_CONFIGURE);
-      changeStateForNode(node_name, Transition::TRANSITION_ACTIVATE);
+      if (changeStateForNode(node_name, Transition::TRANSITION_CONFIGURE)) {
+        if (!changeStateForNode(node_name, Transition::TRANSITION_ACTIVATE)) {
+          bond_map_.erase(node_name);
+        }
+      } else {
+        bond_map_.erase(node_name);
+      }
     }
   }
 }
