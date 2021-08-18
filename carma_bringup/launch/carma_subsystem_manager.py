@@ -102,6 +102,14 @@ def generate_launch_description():
         respawn='true'
         )
 
+    localization_health_monitor= Node(
+        package='localization_health_monitor',
+        executable='localization_health_monitor',
+        output='screen',
+        prefix=term_prefix,
+        respawn='true'
+        )
+
     # The system controller manages the lifecycle nodes
     carma_system_controller = Node(
         package='system_controller',
@@ -118,7 +126,8 @@ def generate_launch_description():
                 'carma_delphi_srr2_driver',
                 'carma_velodyne_lidar_driver',
                 'dead_reckoner',
-                'ekf_localizer'
+                'ekf_localizer',
+                'localization_health_monitor'
                 ]}
             ]
         )
@@ -140,6 +149,7 @@ def generate_launch_description():
     ld.add_action(perception_container)
     ld.add_action(dead_reckoner)
     ld.add_action(ekf_localizer)
+    ld.add_action(localization_health_monitor)
     ld.add_action(carma_system_controller)
 
     return ld

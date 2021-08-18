@@ -75,7 +75,9 @@ protected:
   // System alert pub/sub
   const std::string system_alert_topic_{"/system_alert"};
   rclcpp::Subscription<cav_msgs::msg::SystemAlert>::SharedPtr system_alert_sub_;
-  rclcpp::Publisher<cav_msgs::msg::SystemAlert>::SharedPtr system_alert_pub_;
+
+  std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<cav_msgs::msg::SystemAlert>> system_alert_pub_;
+
 };
 
 }  // namespace carma_utils

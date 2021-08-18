@@ -41,6 +41,7 @@ carma_utils::CallbackReturn
 DeadReckoner::on_activate(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Activating");
+  system_alert_pub_->on_activate();
 
   // Create bond with the lifecycle manager
   create_bond();
@@ -52,6 +53,7 @@ carma_utils::CallbackReturn
 DeadReckoner::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
+  system_alert_pub_->on_deactivate();
 
   // Destroy the bond with the lifecycle manager
   destroy_bond();
@@ -63,6 +65,7 @@ carma_utils::CallbackReturn
 DeadReckoner::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
+  system_alert_pub_.reset();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -70,6 +73,7 @@ carma_utils::CallbackReturn
 DeadReckoner::on_shutdown(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Shutting down");
+  system_alert_pub_.reset();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 

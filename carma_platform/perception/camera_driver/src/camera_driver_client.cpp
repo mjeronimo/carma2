@@ -101,19 +101,41 @@ CameraDriverClient::handle_system_alert(const cav_msgs::msg::SystemAlert::Shared
 }
 
 void
-CameraDriverClient::image_callback(const sensor_msgs::msg::Image::SharedPtr msg)
+CameraDriverClient::image_callback(const sensor_msgs::msg::Image::UniquePtr  msg)
 {
   try {
     if (show_image_) {
-      cv::imshow("view", cv_bridge::toCvShare(msg, "bgr8")->image);
+      cv::Mat cv_mat(msg->height, msg->width,encoding2mat_type(msg->encoding),msg->data.data());
+
+
+      cv::imshow("view", cv_mat);
       cv::waitKey(10);
-    } else {
-      RCLCPP_INFO(get_logger(), "received message");
-    }
+
+    } 
+    
+
+    RCLCPP_INFO(get_logger(), "received message, at address %p",(void*)reinterpret_cast<std::uintptr_t>(msg.get()));
+    
   } catch (cv_bridge::Exception & e) {
     auto logger = rclcpp::get_logger("my_subscriber");
     RCLCPP_ERROR(logger, "Could not convert from '%s' to 'bgr8'.", msg->encoding.c_str());
   }
+}
+
+
+int
+CameraDriverClient::encoding2mat_type(const std::string & encoding)
+{
+  if (encoding == "mono8") {
+    return CV_8UC1;
+  } else if (encoding == "bgr8") {
+    return CV_8UC3;
+  } else if (encoding == "mono16") {
+    return CV_16SC1;
+  } else if (encoding == "rgba8") {
+    return CV_8UC4;
+  }
+  throw std::runtime_error("Unsupported mat type");
 }
 
 }  // namespace camera_driver_client

@@ -14,23 +14,21 @@
 // the License.
 //
 
-#ifndef CAMERA_DRIVER__CAMERA_DRIVER_CLIENT_HPP_
-#define CAMERA_DRIVER__CAMERA_DRIVER_CLIENT_HPP_
+#ifndef LOCALIZATION_HEALTH_MONITOR__LOCALIZATION_HEALTH_MONITOR_HPP_
+#define LOCALIZATION_HEALTH_MONITOR__LOCALIZATION_HEALTH_MONITOR_HPP_
 
 #include "carma_utils/carma_node.hpp"
-#include "carma_utils/visibility_control.h"
+#include "cav_msgs/msg/localization_status_report.hpp"
 #include "rclcpp/rclcpp.hpp"
-#include "sensor_msgs/msg/image.hpp"
 
-namespace camera_driver_client
+namespace localization_health_monitor
 {
 
-class CameraDriverClient : public carma_utils::CarmaNode
+class LocalizationHealthMonitor : public carma_utils::CarmaNode
 {
 public:
-  CameraDriverClient();
-  CARMA_UTILS_PUBLIC
-  explicit CameraDriverClient(const rclcpp::NodeOptions & options);
+  LocalizationHealthMonitor();
+  ~LocalizationHealthMonitor();
 
 protected:
   carma_utils::CallbackReturn on_configure(const rclcpp_lifecycle::State & state) override;
@@ -39,15 +37,12 @@ protected:
   carma_utils::CallbackReturn on_cleanup(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_shutdown(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_error(const rclcpp_lifecycle::State & state) override;
-
-  void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg) override;
-
-  void image_callback(const sensor_msgs::msg::Image::UniquePtr msg);
-  rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr cam_sub_;
-  int encoding2mat_type(const std::string & encoding);
-  bool show_image_{false};
+  cav_msgs::msg::SystemAlert alert_msg;
+  rclcpp::Subscription<cav_msgs::msg::LocalizationStatusReport>::SharedPtr localization_status_sub_;
+  void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
+  void handle_localization_status(const cav_msgs::msg::LocalizationStatusReport::SharedPtr msg);
 };
 
-}  // namespace camera_driver_client
+}  // namespace localization_health_monitor
 
-#endif  //  CAMERA_DRIVER__CAMERA_DRIVER_CLIENT_HPP_
+#endif  //  LOCALIZATION_HEALTH_MONITOR__LOCALIZATION_HEALTH_MONITOR_HPP_
