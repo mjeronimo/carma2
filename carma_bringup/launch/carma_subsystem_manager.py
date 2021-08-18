@@ -18,8 +18,8 @@ def generate_launch_description():
     autostart = LaunchConfiguration('autostart')
     use_term = LaunchConfiguration('use_term')
 
-    #term_prefix = 'xterm -geometry 150x40 -hold -e'
-    term_prefix = ''
+    term_prefix = 'xterm -geometry 150x40 -hold -e'
+    #term_prefix = ''
 
     stdout_linebuf_envvar = SetEnvironmentVariable(
         'RCUTILS_LOGGING_BUFFERED_STREAM', '1')
