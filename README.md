@@ -8,33 +8,44 @@ The example code in this repository provides the following features:
     * The carma_project() macro serves as a single source for compiler settings, etc.
 
 * CarmaNode
+    * A base class for CARMA nodes in the system
     * Derives from rclcpp_lifecycle::LifecycleNode (could also be a template that can use either Node or LifecycleNode)
     * Automatically creates a bond with the lifecycle manager (see: https://github.com/ros/bond_core)
     * System alert capable
 
-* Lifecycle Manager
-    * Manages the lifecycle nodes, initiating state transitions
+* Perception Subsystem
+    * All nodes are lifecycle nodes
+    * All nodes are composable nodes loaded into a single container
+        * A stub Carma Delphi Srr2 Driver
+        * A stub Carma Velodyne LiDAR Driver
+        * A sample "camera driver" sending images to a client 
+        * A sample camera client to receive images
+    * No-copy messages communication within the subsystem
+
+* Localization Subsystem
+    * All nodes are lifecycle nodes
+        * A stub dead_reckoner node
+        * A stub ekf_localizer node node
+        * Localization Health Monitor
+            * With sample parameters
+            * Handles LocalizationStatusReport messages
+            * Messages sent manually using a sample command line program
+
+* System Controller 
+    * A Lifecycle Manager that manages the state of the CARMA nodes (lifecycle nodes), initiating state transitions
     * Monitors bonds with the managed nodes, can detect lack of heartbeat and initialize restarted nodes
+        * The launch system restarts the nodes, based on "respawn" setting
+    * Messages (such as SHUTDOWN) can be sent manually via a command-line program
     * System alert capable
 
-* Subsystems
-    * Lifecycle management of a subsystem
-    * Composable Nodes - likely used per-subsystem
+# Issues
 
-* Recovery
-    * What to do here?
+* When setting the composable node container to respawn, the contained composable nodes aren't reloaded
+* If a ComposableNode crashes, does it bring down the container?
 
 # Architecture Questions
 
-* If a ComposableNode crashes, does it bring down the container?
-    * What about respawning CompsableNodes (can't use 'respawn' in the launch file)
-
-* All CARMA nodes as lifecycle nodes? Yes
-
-* All CARMA nodes as Composable nodes? Yes
-
 * Is there a lifecycle manager for each subsystem? No, only one central lifecycle manager to start.
-    * With one central lifecycle manager that interacts with the subsystems?
 
 * What is the recovery strategy?
     * Notify the system monitor?
@@ -43,24 +54,26 @@ The example code in this repository provides the following features:
 * How does Launch interact with Lifecycle nodes and recovery?
     * Which component owns restarting the nodes?
 
-* Topic
-    * Launch
-    * Lifecycle nodes
-    * Parameters
-    * Subsystems
-    * System Eventing and state machines
-    * Composable nodes (especially in subsystems)
-    * Recovery
+# ROS 2 Porting considerations
+* Launch
+* Lifecycle nodes
+* Parameters
+* Subsystems
+* System Eventing and state machines
+* Composable nodes (especially in subsystems)
+* Recovery
 
-Localization system recovery
-    LiDAR-based localization fails, transitions output pose to GPS
-    Localization Manager
-        Monitoring the performance of the system and heartbeat status
-        Implements recovery internally
+# Notes
 
-    Separate node from the health monitoring
-        Monitor and then decide when to shut down
-        Checking heartbeat status of the nodes
+    Localization system recovery
+        LiDAR-based localization fails, transitions output pose to GPS
+        Localization Manager
+            Monitoring the performance of the system and heartbeat status
+            Implements recovery internally
+
+        Separate node from the health monitoring
+            Monitor and then decide when to shut down
+            Checking heartbeat status of the nodes
 
 # Task List
 
