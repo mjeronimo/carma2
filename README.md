@@ -103,4 +103,8 @@ The example code in this repository provides the following features:
 [x] Launch
 [x]     Use only one central lifecycle manager (instead of per subsystem)
 
+[ ] Sample usage of the rclcpp node, such as using a transform_listener
+[ ] Using a helper class that itself creates pubs/subs, but accepts a node (not itself a node)
+[ ] Using a plugin (a kind of helper; not a node)
+
 ```
