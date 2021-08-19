@@ -41,6 +41,14 @@ protected:
   rclcpp::Subscription<cav_msgs::msg::LocalizationStatusReport>::SharedPtr localization_status_sub_;
   void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
   void handle_localization_status(const cav_msgs::msg::LocalizationStatusReport::SharedPtr msg);
+
+  // parameters
+  int auto_initialization_timeout_;
+  double fitness_score_degraded_threshold_;
+  double fitness_score_fault_threshold_;
+  int gnss_only_operation_timeout_;
+  double ndt_frequency_degraded_threshold_;
+  double ndt_frequency_fault_threshold_;
 };
 
 }  // namespace localization_health_monitor
