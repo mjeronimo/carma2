@@ -108,6 +108,14 @@ def generate_launch_description():
         executable='localization_health_monitor',
         output='screen',
         prefix=term_prefix,
+        parameters=[
+                {'auto_initialization_timeout': 3000},
+                {'fitness_score_degraded_threshold': 20.0},
+                {'fitness_score_fault_threshold': 100000.0},
+                {'gnss_only_operation_timeout': 20000},
+                {'ndt_frequency_degraded_threshold': 8.0},
+                {'ndt_frequency_fault_threshold': 0.01}
+            ],
         respawn='true'
         )
 
