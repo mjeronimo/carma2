@@ -40,8 +40,13 @@ LocalizationHealthMonitor::on_configure(const rclcpp_lifecycle::State & /*state*
 {
   RCLCPP_INFO(get_logger(), "Configuring");
 
-  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(system_alert_topic_, 1,
-  std::bind(&LocalizationHealthMonitor::handle_system_alert, this, std::placeholders::_1));
+  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
+    system_alert_topic_, 1,
+    std::bind(&LocalizationHealthMonitor::handle_system_alert, this, std::placeholders::_1));
+
+  localization_status_sub_ = create_subscription<cav_msgs::msg::LocalizationStatusReport>(
+    "/localization_status", 1,
+    std::bind(&LocalizationHealthMonitor::handle_localization_status, this, std::placeholders::_1));
 
   localization_status_sub_=create_subscription<cav_msgs::msg::LocalizationStatusReport>("/localization_status", 1,
   std::bind(&LocalizationHealthMonitor::handle_localization_status, this, std::placeholders::_1));
@@ -106,18 +111,22 @@ void
 LocalizationHealthMonitor::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
   // This where I will implement the logic for the LocalizationHealthMonitor
-  RCLCPP_INFO(get_logger(),"Received SystemAlert message of type: %u, msg: %s",
-              msg->type,msg->description.c_str());
-  RCLCPP_INFO(get_logger(),"Perform Localization-Health-Monitor-specific system event handling");
+  RCLCPP_INFO(
+    get_logger(), "Received SystemAlert message of type: %u, msg: %s",
+    msg->type, msg->description.c_str());
+  RCLCPP_INFO(get_logger(), "Perform Localization-Health-Monitor-specific system event handling");
 }
 
 void
-LocalizationHealthMonitor::handle_localization_status(const cav_msgs::msg::LocalizationStatusReport::SharedPtr msg)
+LocalizationHealthMonitor::handle_localization_status(
+  const cav_msgs::msg::LocalizationStatusReport::SharedPtr msg)
 {
-  RCLCPP_INFO(get_logger(),"pub is activated %d",system_alert_pub_->is_activated());
+  RCLCPP_INFO(get_logger(), "pub is activated %d", system_alert_pub_->is_activated());
+
+  cav_msgs::msg::SystemAlert alert_msg;
   switch (msg->status) {
     case cav_msgs::msg::LocalizationStatusReport::INITIALIZING:
-      RCLCPP_INFO(get_logger(),"Localization System Initializing");
+      RCLCPP_INFO(get_logger(), "Localization System Initializing");
       break;
     case cav_msgs::msg::LocalizationStatusReport::DEGRADED_NO_LIDAR_FIX:
       alert_msg.type = cav_msgs::msg::SystemAlert::FATAL;
@@ -134,5 +143,3 @@ LocalizationHealthMonitor::handle_localization_status(const cav_msgs::msg::Local
 }
 
 }  // namespace localization_health_monitor
-
-     

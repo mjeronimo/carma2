@@ -93,7 +93,6 @@ carma_utils::CallbackReturn
 CameraDriver::on_shutdown(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Shutting down");
-  cam_pub_.reset();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 

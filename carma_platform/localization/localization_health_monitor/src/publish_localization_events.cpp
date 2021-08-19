@@ -1,3 +1,19 @@
+//
+// Copyright (C) 2021 LEIDOS.
+//
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+//
+
 #include <signal.h>
 #include <stdio.h>
 #include <termios.h>
@@ -31,15 +47,17 @@ public:
 private:
   std::shared_ptr<rclcpp::Node> nh_;
   rclcpp::Publisher<cav_msgs::msg::LocalizationStatusReport>::SharedPtr event_pub_;
-  rclcpp::Clock::SharedPtr clock; 
+  rclcpp::Clock::SharedPtr clock;
   rclcpp::TimeSource ts;
 };
 
 LocalizationEventPub::LocalizationEventPub(std::shared_ptr<rclcpp::Node> nh)
-: nh_(nh),ts(nh)
+: nh_(nh), ts(nh)
 {
-  event_pub_ = nh_->create_publisher<cav_msgs::msg::LocalizationStatusReport>("localization_status", 1);
-  clock= std::make_shared<rclcpp::Clock>(RCL_ROS_TIME);
+  event_pub_ = nh_->create_publisher<cav_msgs::msg::LocalizationStatusReport>(
+    "localization_status",
+    1);
+  clock = std::make_shared<rclcpp::Clock>(RCL_ROS_TIME);
   ts.attachClock(clock);
 }
 
@@ -57,7 +75,9 @@ void LocalizationEventPub::keyLoop()
 
   puts("Reading from keyboard");
   puts("---------------------------");
-  puts("Use 1(UNINITIALIZED),2(INITIALIZING),3(OPERATIONAL),4(DEGRADED),5(DEGRADED_NO_LIDAR_FIX),6(AWAIT_MANUAL_INITIALIZATION) keys to issue system alerts");
+  puts(
+    "Use 1(UNINITIALIZED),2(INITIALIZING),3(OPERATIONAL),4(DEGRADED),5(DEGRADED_NO_LIDAR_FIX),"
+    "6(AWAIT_MANUAL_INITIALIZATION) keys to issue system alerts");
 
   for (;; ) {
     // Get the next event from the keyboard
@@ -73,27 +93,27 @@ void LocalizationEventPub::keyLoop()
     switch (c) {
       case KEYCODE_1:
         std::cout << "UNINITIALIZED" << std::endl;
-        new_msg.status= cav_msgs::msg::LocalizationStatusReport::UNINITIALIZED;
+        new_msg.status = cav_msgs::msg::LocalizationStatusReport::UNINITIALIZED;
         break;
       case KEYCODE_2:
         std::cout << "INITIALIZING" << std::endl;
-        new_msg.status= cav_msgs::msg::LocalizationStatusReport::INITIALIZING;
+        new_msg.status = cav_msgs::msg::LocalizationStatusReport::INITIALIZING;
         break;
       case KEYCODE_3:
         std::cout << "OPERATIONAL" << std::endl;
-        new_msg.status= cav_msgs::msg::LocalizationStatusReport::OPERATIONAL;
+        new_msg.status = cav_msgs::msg::LocalizationStatusReport::OPERATIONAL;
         break;
       case KEYCODE_4:
         std::cout << "DEGRADED" << std::endl;
-        new_msg.status= cav_msgs::msg::LocalizationStatusReport::DEGRADED;
+        new_msg.status = cav_msgs::msg::LocalizationStatusReport::DEGRADED;
         break;
       case KEYCODE_5:
         std::cout << "DEGRADED_NO_LIDAR_FIX" << std::endl;
-        new_msg.status= cav_msgs::msg::LocalizationStatusReport::DEGRADED_NO_LIDAR_FIX;
+        new_msg.status = cav_msgs::msg::LocalizationStatusReport::DEGRADED_NO_LIDAR_FIX;
         break;
       case KEYCODE_6:
         std::cout << "AWAIT_MANUAL_INITIALIZATION" << std::endl;
-        new_msg.status= cav_msgs::msg::LocalizationStatusReport::AWAIT_MANUAL_INITIALIZATION;
+        new_msg.status = cav_msgs::msg::LocalizationStatusReport::AWAIT_MANUAL_INITIALIZATION;
         break;
       default:
         return;

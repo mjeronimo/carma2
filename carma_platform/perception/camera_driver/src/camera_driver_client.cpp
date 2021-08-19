@@ -106,22 +106,15 @@ CameraDriverClient::image_callback(const sensor_msgs::msg::Image::UniquePtr  msg
   try {
     if (show_image_) {
       cv::Mat cv_mat(msg->height, msg->width,encoding2mat_type(msg->encoding),msg->data.data());
-
-
       cv::imshow("view", cv_mat);
       cv::waitKey(10);
-
     } 
-    
-
     RCLCPP_INFO(get_logger(), "received message, at address %p",(void*)reinterpret_cast<std::uintptr_t>(msg.get()));
-    
   } catch (cv_bridge::Exception & e) {
     auto logger = rclcpp::get_logger("my_subscriber");
     RCLCPP_ERROR(logger, "Could not convert from '%s' to 'bgr8'.", msg->encoding.c_str());
   }
 }
-
 
 int
 CameraDriverClient::encoding2mat_type(const std::string & encoding)
@@ -139,7 +132,6 @@ CameraDriverClient::encoding2mat_type(const std::string & encoding)
 }
 
 }  // namespace camera_driver_client
-
 
 #include "rclcpp_components/register_node_macro.hpp"
 

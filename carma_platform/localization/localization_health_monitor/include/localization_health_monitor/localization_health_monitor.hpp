@@ -37,10 +37,11 @@ protected:
   carma_utils::CallbackReturn on_cleanup(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_shutdown(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_error(const rclcpp_lifecycle::State & state) override;
-  cav_msgs::msg::SystemAlert alert_msg;
-  rclcpp::Subscription<cav_msgs::msg::LocalizationStatusReport>::SharedPtr localization_status_sub_;
+
   void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
   void handle_localization_status(const cav_msgs::msg::LocalizationStatusReport::SharedPtr msg);
+
+  rclcpp::Subscription<cav_msgs::msg::LocalizationStatusReport>::SharedPtr localization_status_sub_;
 
   // parameters
   int auto_initialization_timeout_;

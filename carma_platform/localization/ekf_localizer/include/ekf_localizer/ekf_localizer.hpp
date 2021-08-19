@@ -37,7 +37,7 @@ protected:
   carma_utils::CallbackReturn on_shutdown(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_error(const rclcpp_lifecycle::State & state) override;
 
-  void systemAlertHandler(const cav_msgs::msg::SystemAlert::SharedPtr msg);
+  void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
 };
 
 }  // namespace ekf_localizer
