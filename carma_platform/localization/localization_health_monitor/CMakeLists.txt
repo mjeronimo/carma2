@@ -26,8 +26,8 @@ set(dependencies
   rclcpp
   rclcpp_lifecycle
   ros2_lifecycle_manager_msgs
-  rclcpp_components 
-  rcutils 
+  rclcpp_components
+  rcutils
   std_msgs
 )
 

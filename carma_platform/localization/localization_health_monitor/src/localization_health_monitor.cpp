@@ -1,18 +1,16 @@
+// Copyright 2021 Open Source Robotics Foundation, Inc.
 //
-// Copyright (C) 2021 LEIDOS.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-// Licensed under the Apache License, Version 2.0 (the "License"); you may not
-// use this file except in compliance with the License. You may obtain a copy of
-// the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
+//     http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-// License for the specific language governing permissions and limitations under
-// the License.
-//
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 #include "localization_health_monitor/localization_health_monitor.hpp"
 
@@ -23,12 +21,12 @@ LocalizationHealthMonitor::LocalizationHealthMonitor()
 : CarmaNode("localization_health_monitor")
 {
 
-  declare_parameter("auto_initialization_timeout",rclcpp::ParameterValue(30000));
-  declare_parameter("fitness_score_degraded_threshold",rclcpp::ParameterValue(20.0));
-  declare_parameter("fitness_score_fault_threshold",rclcpp::ParameterValue(100000.0));
-  declare_parameter("gnss_only_operation_timeout",rclcpp::ParameterValue(20000));
-  declare_parameter("ndt_frequency_degraded_threshold",rclcpp::ParameterValue( 8.0));
-  declare_parameter("ndt_frequency_fault_threshold",rclcpp::ParameterValue( 0.01));
+  declare_parameter("auto_initialization_timeout", rclcpp::ParameterValue(30000));
+  declare_parameter("fitness_score_degraded_threshold", rclcpp::ParameterValue(20.0));
+  declare_parameter("fitness_score_fault_threshold", rclcpp::ParameterValue(100000.0));
+  declare_parameter("gnss_only_operation_timeout", rclcpp::ParameterValue(20000));
+  declare_parameter("ndt_frequency_degraded_threshold", rclcpp::ParameterValue(8.0));
+  declare_parameter("ndt_frequency_fault_threshold", rclcpp::ParameterValue(0.01));
 }
 
 LocalizationHealthMonitor::~LocalizationHealthMonitor()
@@ -48,16 +46,17 @@ LocalizationHealthMonitor::on_configure(const rclcpp_lifecycle::State & /*state*
     "/localization_status", 1,
     std::bind(&LocalizationHealthMonitor::handle_localization_status, this, std::placeholders::_1));
 
-  localization_status_sub_=create_subscription<cav_msgs::msg::LocalizationStatusReport>("/localization_status", 1,
-  std::bind(&LocalizationHealthMonitor::handle_localization_status, this, std::placeholders::_1));
+  localization_status_sub_ = create_subscription<cav_msgs::msg::LocalizationStatusReport>(
+    "/localization_status", 1,
+    std::bind(&LocalizationHealthMonitor::handle_localization_status, this, std::placeholders::_1));
 
-  get_parameter("auto_initialization_timeout",auto_initialization_timeout_);
-  get_parameter("fitness_score_degraded_threshold",fitness_score_degraded_threshold_);
-  get_parameter("fitness_score_fault_threshold",fitness_score_fault_threshold_);
-  get_parameter("gnss_only_operation_timeout",gnss_only_operation_timeout_);
-  get_parameter("ndt_frequency_degraded_threshold",ndt_frequency_degraded_threshold_);
-  get_parameter("ndt_frequency_fault_threshold",ndt_frequency_fault_threshold_);
-  
+  get_parameter("auto_initialization_timeout", auto_initialization_timeout_);
+  get_parameter("fitness_score_degraded_threshold", fitness_score_degraded_threshold_);
+  get_parameter("fitness_score_fault_threshold", fitness_score_fault_threshold_);
+  get_parameter("gnss_only_operation_timeout", gnss_only_operation_timeout_);
+  get_parameter("ndt_frequency_degraded_threshold", ndt_frequency_degraded_threshold_);
+  get_parameter("ndt_frequency_fault_threshold", ndt_frequency_fault_threshold_);
+
   return carma_utils::CallbackReturn::SUCCESS;
 }
 

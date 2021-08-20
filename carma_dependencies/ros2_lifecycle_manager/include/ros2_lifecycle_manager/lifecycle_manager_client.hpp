@@ -31,10 +31,10 @@ class LifecycleManagerClient
 public:
   explicit LifecycleManagerClient(
     const std::string & managed_node_name,
-    std::shared_ptr<rclcpp::Node> parent_node);     // The node that executes the service calls: TODO: node_logging_interface, node_services_interface
-
-  // TODO: LifecycleNode ctor
-  // TODO: Raw interfaces ctor; delegating constructors
+    std::shared_ptr<rclcpp::Node> parent_node);  // The node that executes the service calls
+  // TODO(@mjeronimo): node_logging_interface, node_services_interface
+  // TODO(@mjeronimo): LifecycleNode ctor
+  // TODO(@mjeronimo): Raw interfaces ctor; delegating constructors
 
   // Client interface to the lifecycle manager
   bool startup(const std::chrono::nanoseconds timeout = std::chrono::nanoseconds(-1));
@@ -54,10 +54,8 @@ protected:
   // The node to use for the service call
   rclcpp::Node::SharedPtr node_;
 
-  // TODO:
   std::shared_ptr<ros2_utils::ServiceClient<ManageLifecycleNodes>> lifecycle_manager_client_;
 
-  // TODO:
   std::string manage_service_name_;
 };
 

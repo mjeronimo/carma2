@@ -68,7 +68,8 @@ LifecycleManager::LifecycleManager()
   transition_label_map_[Transition::TRANSITION_UNCONFIGURED_SHUTDOWN] =
     std::string("Shutting down ");
 
-  // TODO: Get rid of this timer callback and do it a different way (avoid race condition)
+  // TODO(@mjeronimo): Get rid of this timer callback
+  // and do it a different way (avoid race condition)
   // Can't use shared_from_this() during construction
   init_timer_ = create_wall_timer(
     //std::chrono::nanoseconds(10),
@@ -175,7 +176,7 @@ LifecycleManager::changeStateForNode(const std::string & node_name, std::uint8_t
 
   try {
     if (!node_map_[node_name]->change_state(transition, 1s) ||
-      !(node_map_[node_name]->get_state() == transition_state_map_[transition]))      // TODO
+      !(node_map_[node_name]->get_state() == transition_state_map_[transition]))
     {
       RCLCPP_ERROR(get_logger(), "Failed to change state for node: %s", node_name.c_str());
       return false;
@@ -342,11 +343,12 @@ LifecycleManager::checkBondConnections()
     if (bond_map_[node_name]->isBroken()) {
       RCLCPP_WARN(get_logger(), "No heartbeat from %s, restarting", node_name.c_str());
 
-      // Remove the current bond from the map; we'll have to create a new one with the
+      // Remove the current bond from the map;
+      // we'll have to create a new one with the
       // new node automatically restarted by the launch system
       bond_map_.erase(node_name);
 
-      // TODO: make this more robust. For now, just assume that the node has crashed and has 
+      // TODO(@mjeronimo): make this more robust. For now, just assume that the node has crashed and has
       // been restarted by the launch system. Therefore, we need to configure and activate it
       if (changeStateForNode(node_name, Transition::TRANSITION_CONFIGURE)) {
         if (!changeStateForNode(node_name, Transition::TRANSITION_ACTIVATE)) {

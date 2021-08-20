@@ -1,4 +1,4 @@
-// Copyright (c) 2019 Intel Corporation
+// Copyright 2021 Open Source Robotics Foundation, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,10 +32,12 @@ namespace carma_utils
 
 using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
-// TODO: Make this a template that takes either Node or LifecycleNode
+// TODO(@pmusau17): Make this a template that takes either Node or LifecycleNode
 
 // Common node functionality
-class CarmaNode : public rclcpp_lifecycle::LifecycleNode 
+
+
+class CarmaNode : public rclcpp_lifecycle::LifecycleNode
 {
 public:
   CarmaNode(
@@ -45,6 +47,8 @@ public:
     const rclcpp::NodeOptions & options = rclcpp::NodeOptions());
 
   // A composition-capable CarmaNode
+
+
   CARMA_UTILS_PUBLIC
   CarmaNode(const rclcpp::NodeOptions & options);
 
@@ -52,32 +56,38 @@ public:
 
   std::shared_ptr<carma_utils::CarmaNode> shared_from_this();
 
-  // TODO: BondPeer
   void create_bond();
   void destroy_bond();
 
-  // TODO: SystemEvent
   void publish_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
   virtual void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
 
   // Spin with try catch block
+
+
   void spin();
 
 protected:
   // Machinery to support ROS2 classes that don't yet support lifecycle nodes
+
+
   bool use_rclcpp_node_{false};            // Whether or not to create a local rclcpp::Node
   rclcpp::Node::SharedPtr rclcpp_node_;    // The rclcpp node
-  std::unique_ptr<ros2_utils::NodeThread> rclcpp_thread_; // The thread to spin it
+  std::unique_ptr<ros2_utils::NodeThread> rclcpp_thread_;  // The thread to spin it
 
   // Bond connection for heartbeat messages
+
+
   std::unique_ptr<bond::Bond> bond_;
 
   // System alert pub/sub
+
+
   const std::string system_alert_topic_{"/system_alert"};
   rclcpp::Subscription<cav_msgs::msg::SystemAlert>::SharedPtr system_alert_sub_;
 
-  std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<cav_msgs::msg::SystemAlert>> system_alert_pub_;
-
+  std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<cav_msgs::msg::SystemAlert>>
+  system_alert_pub_;
 };
 
 }  // namespace carma_utils

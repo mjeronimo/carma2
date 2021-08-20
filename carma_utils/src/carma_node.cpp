@@ -1,4 +1,4 @@
-// Copyright (c) 2019 Intel Corporation
+// Copyright 2021 Open Source Robotics Foundation, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,14 +32,14 @@ CarmaNode::CarmaNode(
 : rclcpp_lifecycle::LifecycleNode(node_name, ns, options),
   use_rclcpp_node_(use_rclcpp_node)
 {
-  // TODO: Creation of pubs and sub should be in on_configure
+  // TODO(@pmusau17): Creation of pubs and sub should be in on_configure
 
   // Create a system alert publisher. The subscriber will be made by the child class
   system_alert_pub_ = create_publisher<cav_msgs::msg::SystemAlert>(system_alert_topic_, 10);
 
   // The server side never times out from lifecycle manager
   declare_parameter(bond::msg::Constants::DISABLE_HEARTBEAT_TIMEOUT_PARAM, true);
-  set_parameter(rclcpp::Parameter( bond::msg::Constants::DISABLE_HEARTBEAT_TIMEOUT_PARAM, true));
+  set_parameter(rclcpp::Parameter(bond::msg::Constants::DISABLE_HEARTBEAT_TIMEOUT_PARAM, true));
 
   if (use_rclcpp_node_) {
     std::vector<std::string> new_args = options.arguments();
@@ -60,16 +60,16 @@ CarmaNode::CarmaNode(
 CarmaNode::CarmaNode(const rclcpp::NodeOptions & options)
 : rclcpp_lifecycle::LifecycleNode("carma_node", "", options)
 {
-  // TODO: Creation of pubs and sub should be in on_configure
+  // TODO(@pmusau17): Creation of pubs and sub should be in on_configure
 
   // Create a system alert publisher. The subscriber will be made by the child class
   system_alert_pub_ = create_publisher<cav_msgs::msg::SystemAlert>(system_alert_topic_, 10);
 
   // The server side never times out from lifecycle manager
   declare_parameter(bond::msg::Constants::DISABLE_HEARTBEAT_TIMEOUT_PARAM, true);
-  set_parameter(rclcpp::Parameter( bond::msg::Constants::DISABLE_HEARTBEAT_TIMEOUT_PARAM, true));
+  set_parameter(rclcpp::Parameter(bond::msg::Constants::DISABLE_HEARTBEAT_TIMEOUT_PARAM, true));
 
-  RCLCPP_INFO(get_logger(),"Lifecycle node launched, waiting on state transition requests");
+  RCLCPP_INFO(get_logger(), "Lifecycle node launched, waiting on state transition requests");
 }
 
 CarmaNode::~CarmaNode()

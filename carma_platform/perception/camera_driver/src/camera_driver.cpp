@@ -1,4 +1,4 @@
-// Copyright (C) 2021 LEIDOS.
+// Copyright 2021 Open Source Robotics Foundation, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
 #include "camera_driver/camera_driver.hpp"
 
 #include <string>
+#include <utility>
 
 #include "cv_bridge/cv_bridge.h"
 #include "image_transport/image_transport.hpp"
@@ -112,22 +113,22 @@ CameraDriver::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr ms
   RCLCPP_INFO(get_logger(), "Perform CameraDriver-specific system event handling");
 }
 
-std::string 
+std::string
 CameraDriver::mat_type2encoding(int mat_type)
-  {
-    switch (mat_type) {
-      case CV_8UC1:
-        return "mono8";
-      case CV_8UC3:
-        return "bgr8";
-      case CV_16SC1:
-        return "mono16";
-      case CV_8UC4:
-        return "rgba8";
-      default:
-        throw std::runtime_error("unsupported encoding type");
-    }
+{
+  switch (mat_type) {
+    case CV_8UC1:
+      return "mono8";
+    case CV_8UC3:
+      return "bgr8";
+    case CV_16SC1:
+      return "mono16";
+    case CV_8UC4:
+      return "rgba8";
+    default:
+      throw std::runtime_error("unsupported encoding type");
   }
+}
 
 void CameraDriver::publish_image()
 {
@@ -148,7 +149,9 @@ void CameraDriver::publish_image()
     if (!cam_pub_->is_activated()) {
       RCLCPP_INFO(get_logger(), "Camera Driver is currently inactive. Messages are not published.");
     } else {
-      RCLCPP_INFO(get_logger(), "publishing image at address %p",(void*)reinterpret_cast<std::uintptr_t>(image_msg.get()));
+      RCLCPP_INFO(
+        get_logger(), "publishing image at address %p",
+        (void *)reinterpret_cast<std::uintptr_t>(image_msg.get()));
       cam_pub_->publish(std::move(image_msg));
     }
   }

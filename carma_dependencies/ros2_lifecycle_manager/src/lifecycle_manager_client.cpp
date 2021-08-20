@@ -77,7 +77,7 @@ LifecycleManagerClient::call_service(uint8_t command, const std::chrono::nanosec
   while (!lifecycle_manager_client_->wait_for_service(timeout)) {
     if (!rclcpp::ok()) {
       RCLCPP_ERROR(
-        node_->get_logger(), 
+        node_->get_logger(),
         "Client interrupted while waiting for service to appear");
       return false;
     }

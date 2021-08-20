@@ -1,13 +1,26 @@
+# Copyright 2021 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 import os
 
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import (DeclareLaunchArgument, SetEnvironmentVariable, LogInfo)
+from launch.actions import (DeclareLaunchArgument, LogInfo, SetEnvironmentVariable)
 from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import Node
 from launch_ros.actions import ComposableNodeContainer
+from launch_ros.actions import Node
 from launch_ros.descriptions import ComposableNode
 
 
@@ -16,10 +29,9 @@ def generate_launch_description():
 
     use_sim_time = LaunchConfiguration('use_sim_time')
     autostart = LaunchConfiguration('autostart')
-    use_term = LaunchConfiguration('use_term')
 
-    term_prefix = 'xterm -geometry 150x40 -hold -e'
-    #term_prefix = ''
+    term_prefix = "xterm -fa 'Monospace' -fs 14 -geometry 100x20 -hold -e"
+    # term_prefix = ''
 
     stdout_linebuf_envvar = SetEnvironmentVariable(
         'RCUTILS_LOGGING_BUFFERED_STREAM', '1')
@@ -103,7 +115,7 @@ def generate_launch_description():
         respawn='true'
         )
 
-    localization_health_monitor= Node(
+    localization_health_monitor = Node(
         package='localization_health_monitor',
         executable='localization_health_monitor',
         output='screen',
