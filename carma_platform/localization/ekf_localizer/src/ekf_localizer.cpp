@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include "ekf_localizer/ekf_localizer.hpp"
+#include <memory>
 
 using namespace std::chrono_literals;
 
@@ -107,22 +108,18 @@ EkfLocalizer::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 void
 EkfLocalizer::lookup_transform()
 {
-  if(tf_->canTransform("odom", "laser", rclcpp::Time(0)))
-  {
-    geometry_msgs::msg::TransformStamped odomLaserTransform; 
-    try
-    {
-      odomLaserTransform = tf_->lookupTransform("odom", "laser",tf2::TimePointZero,tf2::durationFromSec(0.0));
-      RCLCPP_INFO(get_logger(),"Transform Received");
-   	}
-    catch (tf2::TransformException & ex)
-    {
-      RCLCPP_ERROR(this->get_logger(), "%s",ex.what());
+  if (tf_->canTransform("odom", "laser", rclcpp::Time(0))) {
+    geometry_msgs::msg::TransformStamped odomLaserTransform;
+    try {
+      odomLaserTransform = tf_->lookupTransform(
+        "odom", "laser", tf2::TimePointZero, tf2::durationFromSec(
+          0.0));
+      RCLCPP_INFO(get_logger(), "Transform Received");
+    } catch (tf2::TransformException & ex) {
+      RCLCPP_ERROR(this->get_logger(), "%s", ex.what());
     }
-  }
-  else 
-  {
-    RCLCPP_INFO(get_logger(),"can't transform");
+  } else {
+    RCLCPP_INFO(get_logger(), "can't transform");
   }
 }
 

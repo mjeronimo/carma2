@@ -43,7 +43,7 @@ protected:
 
   void image_callback(const sensor_msgs::msg::Image::UniquePtr msg);
 
-  // TODO: Move to cv_utils
+  // TODO(@pmusau17): Move to cv_utils
   int encoding2mat_type(const std::string & encoding);
   bool show_image_{true};
 

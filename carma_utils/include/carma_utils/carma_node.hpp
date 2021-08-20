@@ -48,7 +48,7 @@ public:
 
   virtual ~CarmaNode();
 
-  // TODO(mjeronimo): BondPeer
+  // TODO(@mjeronimo): BondPeer
   void create_bond();
   void destroy_bond();
 
