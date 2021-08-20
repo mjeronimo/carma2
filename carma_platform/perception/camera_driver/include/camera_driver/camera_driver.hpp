@@ -15,22 +15,15 @@
 #ifndef CAMERA_DRIVER__CAMERA_DRIVER_HPP_
 #define CAMERA_DRIVER__CAMERA_DRIVER_HPP_
 
-#include <chrono>
-#include <iostream>
 #include <memory>
-#include <utility>
 #include <string>
+#include <utility>
 
-#include "ament_index_cpp/get_package_share_directory.hpp"
 #include "carma_utils/carma_node.hpp"
-#include "carma_utils/visibility_control.h"
-#include "cv_bridge/cv_bridge.h"
-#include "image_transport/image_transport.hpp"
-#include "opencv2/highgui/highgui.hpp"
-#include "rclcpp_lifecycle/lifecycle_node.hpp"
-#include "rclcpp_lifecycle/lifecycle_publisher.hpp"
-#include "rclcpp/publisher.hpp"
+#include "carma_utils/visibility_control.hpp"
+#include "opencv2/core.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include "sensor_msgs/msg/image.hpp"
 
 namespace camera_driver
 {
@@ -38,8 +31,6 @@ namespace camera_driver
 class CameraDriver : public carma_utils::CarmaNode
 {
 public:
-  CameraDriver();
-
   CARMA_UTILS_PUBLIC
   explicit CameraDriver(const rclcpp::NodeOptions & options);
 
@@ -51,9 +42,10 @@ protected:
   carma_utils::CallbackReturn on_shutdown(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_error(const rclcpp_lifecycle::State & state) override;
 
-  void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg) override;
-  std::string mat_type2encoding(int mat_type);
+  void on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg) override;
 
+  // TODO: Move to cv_utils
+  std::string mat_type2encoding(int mat_type);
 
   rclcpp::TimerBase::SharedPtr timer_;
   std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<sensor_msgs::msg::Image>> cam_pub_;

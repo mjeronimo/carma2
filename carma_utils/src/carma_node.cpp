@@ -24,6 +24,7 @@
 namespace carma_utils
 {
 
+#if 0
 CarmaNode::CarmaNode(
   const std::string & node_name,
   const std::string & ns,
@@ -56,6 +57,7 @@ CarmaNode::CarmaNode(
     get_logger(),
     "Lifecycle node launched, waiting on state transition requests");
 }
+#endif
 
 CarmaNode::CarmaNode(const rclcpp::NodeOptions & options)
 : rclcpp_lifecycle::LifecycleNode("carma_node", "", options)
@@ -97,7 +99,7 @@ CarmaNode::publish_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 }
 
 void
-CarmaNode::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
+CarmaNode::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
   RCLCPP_INFO(get_logger(), "Received SystemAlert message of type: %u", msg->type);
 }

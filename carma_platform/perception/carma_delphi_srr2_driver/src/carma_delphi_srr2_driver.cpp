@@ -17,11 +17,6 @@
 namespace carma_delphi_srr2_driver
 {
 
-CarmaDelphiSrr2Driver::CarmaDelphiSrr2Driver()
-: CarmaNode("carma_delphi_srr2_driver")
-{
-}
-
 CarmaDelphiSrr2Driver::CarmaDelphiSrr2Driver(const rclcpp::NodeOptions & options)
 : CarmaNode(options)
 {
@@ -33,7 +28,7 @@ CarmaDelphiSrr2Driver::on_configure(const rclcpp_lifecycle::State & /*state*/)
   RCLCPP_INFO(get_logger(), "Configuring");
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
     system_alert_topic_, 1,
-    std::bind(&CarmaDelphiSrr2Driver::handle_system_alert, this, std::placeholders::_1));
+    std::bind(&CarmaDelphiSrr2Driver::on_system_alert, this, std::placeholders::_1));
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -84,7 +79,7 @@ CarmaDelphiSrr2Driver::on_error(const rclcpp_lifecycle::State & /*state*/)
 }
 
 void
-CarmaDelphiSrr2Driver::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
+CarmaDelphiSrr2Driver::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
   RCLCPP_INFO(
     get_logger(), "Received SystemAlert message of type: %u, msg: %s",

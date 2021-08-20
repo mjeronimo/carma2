@@ -23,11 +23,6 @@
 namespace camera_driver_client
 {
 
-CameraDriverClient::CameraDriverClient()
-: CarmaNode("camera_driver_client")
-{
-}
-
 CameraDriverClient::CameraDriverClient(const rclcpp::NodeOptions & options)
 : CarmaNode(options)
 {
@@ -40,7 +35,7 @@ CameraDriverClient::on_configure(const rclcpp_lifecycle::State & /*state*/)
 
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
     system_alert_topic_, 1,
-    std::bind(&CameraDriverClient::handle_system_alert, this, std::placeholders::_1));
+    std::bind(&CameraDriverClient::on_system_alert, this, std::placeholders::_1));
 
   cam_sub_ = create_subscription<sensor_msgs::msg::Image>(
     "camera/image", 1,
@@ -93,7 +88,7 @@ CameraDriverClient::on_error(const rclcpp_lifecycle::State & /*state*/)
 }
 
 void
-CameraDriverClient::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
+CameraDriverClient::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
   RCLCPP_INFO(
     get_logger(), "Received SystemAlert message of type: %u, msg: %s",
@@ -138,11 +133,10 @@ CameraDriverClient::encoding2mat_type(const std::string & encoding)
 
 #include "rclcpp_components/register_node_macro.hpp"
 
-// Register the component with class_loader.
-// This acts as a sort of entry point, allowing the component to be discoverable when its library
-// is being loaded into a running process.
+// Register the component with class_loader
 RCLCPP_COMPONENTS_REGISTER_NODE(camera_driver_client::CameraDriverClient)
 
+#if 0
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
@@ -152,3 +146,4 @@ int main(int argc, char ** argv)
 
   return 0;
 }
+#endif

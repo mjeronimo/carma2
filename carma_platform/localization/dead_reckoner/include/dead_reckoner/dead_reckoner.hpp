@@ -16,6 +16,7 @@
 #define DEAD_RECKONER__DEAD_RECKONER_HPP_
 
 #include "carma_utils/carma_node.hpp"
+#include "carma_utils/visibility_control.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 namespace dead_reckoner
@@ -24,8 +25,8 @@ namespace dead_reckoner
 class DeadReckoner : public carma_utils::CarmaNode
 {
 public:
-  DeadReckoner();
-  ~DeadReckoner();
+  CARMA_UTILS_PUBLIC
+  explicit DeadReckoner(const rclcpp::NodeOptions & options);
 
 protected:
   carma_utils::CallbackReturn on_configure(const rclcpp_lifecycle::State & state) override;
@@ -35,7 +36,7 @@ protected:
   carma_utils::CallbackReturn on_shutdown(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_error(const rclcpp_lifecycle::State & state) override;
 
-  void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
+  void on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
 };
 
 }  // namespace dead_reckoner

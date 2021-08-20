@@ -17,19 +17,14 @@
 #include <string>
 #include <utility>
 
+#include "ament_index_cpp/get_package_share_directory.hpp"
 #include "cv_bridge/cv_bridge.h"
-#include "image_transport/image_transport.hpp"
 #include "opencv2/highgui/highgui.hpp"
 
 using namespace std::chrono_literals;
 
 namespace camera_driver
 {
-
-CameraDriver::CameraDriver()
-: CarmaNode("camera_driver")
-{
-}
 
 CameraDriver::CameraDriver(const rclcpp::NodeOptions & options)
 : CarmaNode(options)
@@ -51,10 +46,12 @@ CameraDriver::on_configure(const rclcpp_lifecycle::State & /*state*/)
 
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
     system_alert_topic_, 1,
-  std::bind(&CameraDriver::handle_system_alert, this, std::placeholders::_1));
+    std::bind(&CameraDriver::on_system_alert, this, std::placeholders::_1));
+
   cam_pub_ = this->create_publisher<sensor_msgs::msg::Image>("camera/image", 10);
 
   // Use a timer to schedule periodic message publishing
+  // TODO: Move to on_activate (unless timer can be pause/resumed)
   timer_ = create_wall_timer(1s, std::bind(&CameraDriver::publish_image, this));
 
   active_ = true;
@@ -105,7 +102,7 @@ CameraDriver::on_error(const rclcpp_lifecycle::State & /*state*/)
 }
 
 void
-CameraDriver::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
+CameraDriver::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
   RCLCPP_INFO(
     get_logger(), "Received SystemAlert message of type: %u, msg: %s",
@@ -161,7 +158,5 @@ void CameraDriver::publish_image()
 
 #include "rclcpp_components/register_node_macro.hpp"
 
-// Register the component with class_loader.
-// This acts as a sort of entry point, allowing the component to be discoverable when its library
-// is being loaded into a running process.
+// Register the component with class_loader
 RCLCPP_COMPONENTS_REGISTER_NODE(camera_driver::CameraDriver)
