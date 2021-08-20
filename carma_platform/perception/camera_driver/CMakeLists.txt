@@ -38,45 +38,61 @@ set(dependencies
 )
 
 set(node_plugins "")
+
 add_library(${library_name} SHARED
   src/camera_driver.cpp
 )
-target_compile_definitions(${library_name}
-  PRIVATE "COMPOSITION_BUILDING_DLL")
-ament_target_dependencies(${library_name} ${dependencies})
-rclcpp_components_register_nodes(${library_name} "camera_driver::CameraDriver")
-set(node_plugins "${node_plugins}camera_driver::CameraDriver;$<TARGET_FILE:camera_driver_core>\n")
 
-add_library(camera_driver_client_c SHARED
-  src/camera_driver_client.cpp)
-target_compile_definitions(camera_driver_client_c
-  PRIVATE "COMPOSITION_BUILDING_DLL")
-ament_target_dependencies(camera_driver_client_c ${dependencies})
-rclcpp_components_register_nodes(camera_driver_client_c  "camera_driver_client::CameraDriverClient")
-set(node_plugins "${node_plugins}camera_driver_client::CameraDriverClient;$<TARGET_FILE:camera_driver_client_c>\n")
+target_compile_definitions(${library_name}
+  PRIVATE "COMPOSITION_BUILDING_DLL"
+)
 
 ament_target_dependencies(${library_name}
   ${dependencies}
 )
 
-add_executable(${executable_name}
-  src/main.cpp
+rclcpp_components_register_nodes(${library_name}
+  "camera_driver::CameraDriver"
 )
 
-target_link_libraries(${executable_name} ${library_name})
+set(node_plugins "${node_plugins}camera_driver::CameraDriver;$<TARGET_FILE:camera_driver_core>\n")
 
-add_executable(camera_driver_client
+add_library(camera_driver_client_c SHARED
   src/camera_driver_client.cpp
 )
+
+target_compile_definitions(camera_driver_client_c
+  PRIVATE "COMPOSITION_BUILDING_DLL"
+)
+
+ament_target_dependencies(camera_driver_client_c 
+  ${dependencies}
+)
+
+rclcpp_components_register_nodes(camera_driver_client_c 
+  "camera_driver_client::CameraDriverClient"
+)
+
+set(node_plugins "${node_plugins}camera_driver_client::CameraDriverClient;$<TARGET_FILE:camera_driver_client_c>\n")
+
+#add_executable(${executable_name}
+#  src/main.cpp
+#)
+
+#target_link_libraries(${executable_name} ${library_name})
+
+#add_executable(camera_driver_client
+#  src/camera_driver_client.cpp
+#)
 #target_link_libraries(camera_driver_client ${dependencies} carma_utils)
 
-ament_target_dependencies(camera_driver_client
-  ${dependencies}
-)
+#ament_target_dependencies(camera_driver_client
+#  ${dependencies}
+#)
 
-ament_target_dependencies(${executable_name}
-  ${dependencies}
-)
+#ament_target_dependencies(${executable_name}
+#  ${dependencies}
+#)
 
 install(TARGETS ${library_name} camera_driver_client_c
   ARCHIVE DESTINATION lib
@@ -84,9 +100,9 @@ install(TARGETS ${library_name} camera_driver_client_c
   RUNTIME DESTINATION bin
 )
 
-install(TARGETS ${executable_name} camera_driver_client
-  RUNTIME DESTINATION lib/${PROJECT_NAME}
-)
+#install(TARGETS ${executable_name} camera_driver_client
+#  RUNTIME DESTINATION lib/${PROJECT_NAME}
+#)
 
 install(DIRECTORY include/
   DESTINATION include/

@@ -26,7 +26,7 @@ SystemController::SystemController()
   system_alert_pub_ = this->create_publisher<cav_msgs::msg::SystemAlert>(system_alert_topic_, 10);
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
     system_alert_topic_, 10,
-    std::bind(&SystemController::handle_system_alert, this, std::placeholders::_1));
+    std::bind(&SystemController::on_system_alert, this, std::placeholders::_1));
 }
 
 void
@@ -36,7 +36,7 @@ SystemController::publish_system_alert(const cav_msgs::msg::SystemAlert::SharedP
 }
 
 void
-SystemController::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
+SystemController::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
   RCLCPP_INFO(
     get_logger(), "Received SystemAlert message of type: %u, msg: %s",

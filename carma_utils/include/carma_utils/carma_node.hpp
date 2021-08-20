@@ -21,7 +21,7 @@
 
 #include "bondcpp/bond.hpp"
 #include "bond/msg/constants.hpp"
-#include "carma_utils/visibility_control.h"
+#include "carma_utils/visibility_control.hpp"
 #include "cav_msgs/msg/system_alert.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -40,12 +40,6 @@ using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface
 class CarmaNode : public rclcpp_lifecycle::LifecycleNode
 {
 public:
-  CarmaNode(
-    const std::string & node_name,
-    const std::string & ns = "",
-    bool use_rclcpp_node = false,
-    const rclcpp::NodeOptions & options = rclcpp::NodeOptions());
-
   // A composition-capable CarmaNode
 
 
@@ -54,13 +48,14 @@ public:
 
   virtual ~CarmaNode();
 
-  std::shared_ptr<carma_utils::CarmaNode> shared_from_this();
-
+  // TODO(mjeronimo): BondPeer
   void create_bond();
   void destroy_bond();
 
   void publish_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
-  virtual void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
+  virtual void on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
+
+  std::shared_ptr<carma_utils::CarmaNode> shared_from_this();
 
   // Spin with try catch block
 
@@ -76,13 +71,9 @@ protected:
   std::unique_ptr<ros2_utils::NodeThread> rclcpp_thread_;  // The thread to spin it
 
   // Bond connection for heartbeat messages
-
-
   std::unique_ptr<bond::Bond> bond_;
 
   // System alert pub/sub
-
-
   const std::string system_alert_topic_{"/system_alert"};
   rclcpp::Subscription<cav_msgs::msg::SystemAlert>::SharedPtr system_alert_sub_;
 

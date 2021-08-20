@@ -40,7 +40,7 @@ protected:
   rclcpp::Publisher<cav_msgs::msg::SystemAlert>::SharedPtr system_alert_pub_;
 
   void publish_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
-  void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
+  void on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
 };
 
 }  // namespace system_controller

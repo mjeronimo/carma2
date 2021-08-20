@@ -17,12 +17,8 @@
 namespace dead_reckoner
 {
 
-DeadReckoner::DeadReckoner()
-: CarmaNode("dead_reckoner")
-{
-}
-
-DeadReckoner::~DeadReckoner()
+DeadReckoner::DeadReckoner(const rclcpp::NodeOptions & options)
+: CarmaNode(options)
 {
 }
 
@@ -32,7 +28,7 @@ DeadReckoner::on_configure(const rclcpp_lifecycle::State & /*state*/)
   RCLCPP_INFO(get_logger(), "Configuring");
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
     system_alert_topic_, 1,
-    std::bind(&DeadReckoner::handle_system_alert, this, std::placeholders::_1));
+    std::bind(&DeadReckoner::on_system_alert, this, std::placeholders::_1));
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -84,7 +80,7 @@ DeadReckoner::on_error(const rclcpp_lifecycle::State & /*state*/)
 }
 
 void
-DeadReckoner::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
+DeadReckoner::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
   RCLCPP_INFO(
     get_logger(), "Received SystemAlert message of type: %u, msg: %s",
