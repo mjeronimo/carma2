@@ -53,12 +53,12 @@ def generate_launch_description():
 
     declare_params_file_cmd = DeclareLaunchArgument(
         'params_file',
-        default_value=os.path.join(bringup_dir, 'params', 'nav2_params.yaml'),
+        default_value=os.path.join(bringup_dir, 'params', 'carma_params.yaml'),
         description='Full path to the ROS2 parameters file to use for all launched nodes')
 
     declare_autostart_cmd = DeclareLaunchArgument(
         'autostart', default_value='true',
-        description='Automatically startup the nav2 stack')
+        description='Automatically startup the CARMA stack')
 
     # Composable node container for the Perception Subsystem nodes
     perception_container = ComposableNodeContainer(
@@ -69,26 +69,26 @@ def generate_launch_description():
         composable_node_descriptions=[
             ComposableNode(
                 package='camera_driver',
-                plugin='camera_driver::CameraDriver',
                 name='camera_driver',
+                plugin='camera_driver::CameraDriver',
                 extra_arguments=[{'use_intra_process_comms': True}]
                 ),
             ComposableNode(
                 package='camera_driver',
-                plugin='camera_driver_client::CameraDriverClient',
                 name='camera_driver_client',
+                plugin='camera_driver_client::CameraDriverClient',
                 extra_arguments=[{'use_intra_process_comms': True}]
                 ),
             ComposableNode(
                 package='carma_delphi_srr2_driver',
-                plugin='carma_delphi_srr2_driver::CarmaDelphiSrr2Driver',
                 name='carma_delphi_srr2_driver',
+                plugin='carma_delphi_srr2_driver::CarmaDelphiSrr2Driver',
                 extra_arguments=[{'use_intra_process_comms': True}]
                 ),
             ComposableNode(
                 package='carma_velodyne_lidar_driver',
-                plugin='carma_velodyne_lidar_driver::CarmaVelodyneLidarDriver',
                 name='carma_velodyne_lidar_driver',
+                plugin='carma_velodyne_lidar_driver::CarmaVelodyneLidarDriver',
                 extra_arguments=[{'use_intra_process_comms': True}]
                 ),
             ],
@@ -101,6 +101,7 @@ def generate_launch_description():
     # Localization Subsystem
     dead_reckoner = Node(
         package='dead_reckoner',
+        name='dead_reckoner',
         executable='dead_reckoner',
         output='screen',
         prefix=term_prefix,
@@ -109,6 +110,7 @@ def generate_launch_description():
 
     ekf_localizer = Node(
         package='ekf_localizer',
+        name='ekf_localizer',
         executable='ekf_localizer',
         output='screen',
         prefix=term_prefix,
@@ -117,16 +119,17 @@ def generate_launch_description():
 
     localization_health_monitor = Node(
         package='localization_health_monitor',
+        name='localization_health_monitor',
         executable='localization_health_monitor',
         output='screen',
         prefix=term_prefix,
         parameters=[
-                {'auto_initialization_timeout': 3000},
-                {'fitness_score_degraded_threshold': 20.0},
-                {'fitness_score_fault_threshold': 100000.0},
-                {'gnss_only_operation_timeout': 20000},
-                {'ndt_frequency_degraded_threshold': 8.0},
-                {'ndt_frequency_fault_threshold': 0.01}
+            {'auto_initialization_timeout': 3000},
+            {'fitness_score_degraded_threshold': 20.0},
+            {'fitness_score_fault_threshold': 100000.0},
+            {'gnss_only_operation_timeout': 20000},
+            {'ndt_frequency_degraded_threshold': 8.0},
+            {'ndt_frequency_fault_threshold': 0.01}
             ],
         respawn='true'
         )
@@ -134,8 +137,8 @@ def generate_launch_description():
     # The system controller manages the lifecycle nodes
     carma_system_controller = Node(
         package='system_controller',
-        executable='system_controller',
         name='carma_system_controller',
+        executable='system_controller',
         output='screen',
         prefix=term_prefix,
         parameters=[

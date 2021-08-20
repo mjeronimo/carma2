@@ -20,7 +20,7 @@
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
-  auto node = std::make_shared<ekf_localizer::EkfLocalizer>();
+  auto node = std::make_shared<ekf_localizer::EkfLocalizer>(rclcpp::NodeOptions());
   node->spin();
   rclcpp::shutdown();
 

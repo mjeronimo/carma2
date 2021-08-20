@@ -39,15 +39,15 @@ ament_target_dependencies(${library_name}
   ${dependencies}
 )
 
-#add_executable(${executable_name}
-#  src/main.cpp
-#)
+add_executable(${executable_name}
+  src/main.cpp
+)
 
-#target_link_libraries(${executable_name} ${library_name})
+target_link_libraries(${executable_name} ${library_name})
 
-#ament_target_dependencies(${executable_name}
-#  ${dependencies}
-#)
+ament_target_dependencies(${executable_name}
+  ${dependencies}
+)
 
 add_executable(localization_event_pub
   src/publish_localization_events.cpp
@@ -60,8 +60,7 @@ install(TARGETS ${library_name}
   RUNTIME DESTINATION bin
 )
 
-#install(TARGETS ${executable_name} localization_event_pub
-install(TARGETS localization_event_pub
+install(TARGETS ${executable_name} localization_event_pub
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 
