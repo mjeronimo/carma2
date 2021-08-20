@@ -103,17 +103,10 @@ The example code in this repository provides the following features:
 [x] Launch
 [x]     Use only one central lifecycle manager (instead of per subsystem)
 
-[ ] Sample usage of the rclcpp node, such as using a transform_listener
-[ ] Using a helper class that itself creates pubs/subs, but accepts a node (not itself a node)
-[ ] Using a plugin (a kind of helper; not a node)
+[ ] Miscellaneous
+[ ]     Sample usage of the rclcpp node, such as using a message filter
+[ ]     Sample usage from a CARMA node of a transform listener (doesn't need the rclcpp_node)
+[ ]     Using a helper class that itself creates pubs/subs, but accepts a node (not itself a node)
+[ ]     Using a plugin (a kind of helper; not a node itself, but takes a node to use)
 
 ```
-
-Main executables
-[ ] Carma Velodyne
-[ ] Carma Delphi
-[ ] Dead reckoner
-[ ] EKF localizer
-[ ] Localization health monitor
-[ ] Camera driver
-[ ] Camera driver client

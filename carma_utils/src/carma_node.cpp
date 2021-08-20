@@ -24,41 +24,6 @@
 namespace carma_utils
 {
 
-#if 0
-CarmaNode::CarmaNode(
-  const std::string & node_name,
-  const std::string & ns,
-  bool use_rclcpp_node,
-  const rclcpp::NodeOptions & options)
-: rclcpp_lifecycle::LifecycleNode(node_name, ns, options),
-  use_rclcpp_node_(use_rclcpp_node)
-{
-  // TODO(@pmusau17): Creation of pubs and sub should be in on_configure
-
-  // Create a system alert publisher. The subscriber will be made by the child class
-  system_alert_pub_ = create_publisher<cav_msgs::msg::SystemAlert>(system_alert_topic_, 10);
-
-  // The server side never times out from lifecycle manager
-  declare_parameter(bond::msg::Constants::DISABLE_HEARTBEAT_TIMEOUT_PARAM, true);
-  set_parameter(rclcpp::Parameter(bond::msg::Constants::DISABLE_HEARTBEAT_TIMEOUT_PARAM, true));
-
-  if (use_rclcpp_node_) {
-    std::vector<std::string> new_args = options.arguments();
-    new_args.push_back("--ros-args");
-    new_args.push_back("-r");
-    new_args.push_back(std::string("__node:=") + get_name() + "_rclcpp_node");
-    new_args.push_back("--");
-    rclcpp_node_ = std::make_shared<rclcpp::Node>(
-      "_", ns, rclcpp::NodeOptions(options).arguments(new_args));
-    rclcpp_thread_ = std::make_unique<ros2_utils::NodeThread>(rclcpp_node_);
-  }
-
-  RCLCPP_INFO(
-    get_logger(),
-    "Lifecycle node launched, waiting on state transition requests");
-}
-#endif
-
 CarmaNode::CarmaNode(const rclcpp::NodeOptions & options)
 : rclcpp_lifecycle::LifecycleNode("carma_node", "", options)
 {
