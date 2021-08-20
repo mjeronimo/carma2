@@ -1,4 +1,4 @@
-// Copyright (C) 2021 LEIDOS.
+// Copyright 2021 Open Source Robotics Foundation, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include "camera_driver/camera_driver_client.hpp"
+#include <string>
 
 #include <memory>
 
@@ -101,15 +102,17 @@ CameraDriverClient::handle_system_alert(const cav_msgs::msg::SystemAlert::Shared
 }
 
 void
-CameraDriverClient::image_callback(const sensor_msgs::msg::Image::UniquePtr  msg)
+CameraDriverClient::image_callback(const sensor_msgs::msg::Image::UniquePtr msg)
 {
   try {
     if (show_image_) {
-      cv::Mat cv_mat(msg->height, msg->width,encoding2mat_type(msg->encoding),msg->data.data());
+      cv::Mat cv_mat(msg->height, msg->width, encoding2mat_type(msg->encoding), msg->data.data());
       cv::imshow("view", cv_mat);
       cv::waitKey(10);
-    } 
-    RCLCPP_INFO(get_logger(), "received message, at address %p",(void*)reinterpret_cast<std::uintptr_t>(msg.get()));
+    }
+    RCLCPP_INFO(
+      get_logger(), "received message, at address %p",
+      (void *)reinterpret_cast<std::uintptr_t>(msg.get()));
   } catch (cv_bridge::Exception & e) {
     auto logger = rclcpp::get_logger("my_subscriber");
     RCLCPP_ERROR(logger, "Could not convert from '%s' to 'bgr8'.", msg->encoding.c_str());

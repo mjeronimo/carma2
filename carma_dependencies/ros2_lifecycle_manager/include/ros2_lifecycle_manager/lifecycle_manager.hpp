@@ -35,9 +35,9 @@ namespace ros2_lifecycle_manager
 using ros2_lifecycle_manager_msgs::srv::ManageLifecycleNodes;
 
 // The LifecycleManager implements the service interface to transition managed nodes.
-// It receives a transition request and then uses the managed node's lifecycle 
+// It receives a transition request and then uses the managed node's lifecycle
 // interface to change its state.
-class LifecycleManager : public rclcpp::Node        // TODO: should be a CarmaNode to pick up the system alert (and other) stuff
+class LifecycleManager : public rclcpp::Node
 {
 public:
   LifecycleManager();
@@ -97,7 +97,6 @@ protected:
   bool autostart_{false};
 
   bool system_active_{false};
-  
 };
 
 }  // namespace ros2_lifecycle_manager
