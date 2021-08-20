@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "camera_driver/camera_driver_client.hpp"
+#include "camera_driver_client/camera_driver_client.hpp"
 #include <string>
 
 #include <memory>
@@ -135,15 +135,3 @@ CameraDriverClient::encoding2mat_type(const std::string & encoding)
 
 // Register the component with class_loader
 RCLCPP_COMPONENTS_REGISTER_NODE(camera_driver_client::CameraDriverClient)
-
-#if 0
-int main(int argc, char ** argv)
-{
-  rclcpp::init(argc, argv);
-  auto node = std::make_shared<camera_driver_client::CameraDriverClient>();
-  node->spin();
-  rclcpp::shutdown();
-
-  return 0;
-}
-#endif

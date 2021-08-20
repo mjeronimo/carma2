@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef CAMERA_DRIVER__CAMERA_DRIVER_CLIENT_HPP_
-#define CAMERA_DRIVER__CAMERA_DRIVER_CLIENT_HPP_
+#ifndef CAMERA_DRIVER_CLIENT__CAMERA_DRIVER_CLIENT_HPP_
+#define CAMERA_DRIVER_CLIENT__CAMERA_DRIVER_CLIENT_HPP_
 
 #include <string>
 
@@ -52,4 +52,4 @@ protected:
 
 }  // namespace camera_driver_client
 
-#endif  //  CAMERA_DRIVER__CAMERA_DRIVER_CLIENT_HPP_
+#endif  //  CAMERA_DRIVER_CLIENT__CAMERA_DRIVER_CLIENT_HPP_
