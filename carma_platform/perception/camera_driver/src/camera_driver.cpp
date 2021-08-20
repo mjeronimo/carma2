@@ -51,7 +51,7 @@ CameraDriver::on_configure(const rclcpp_lifecycle::State & /*state*/)
 
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
     system_alert_topic_, 1,
-    std::bind(&CameraDriver::handle_system_alert, this, std::placeholders::_1));
+  std::bind(&CameraDriver::handle_system_alert, this, std::placeholders::_1));
   cam_pub_ = this->create_publisher<sensor_msgs::msg::Image>("camera/image", 10);
 
   // Use a timer to schedule periodic message publishing

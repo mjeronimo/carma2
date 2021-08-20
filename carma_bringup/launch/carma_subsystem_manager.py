@@ -30,8 +30,8 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time')
     autostart = LaunchConfiguration('autostart')
 
-    term_prefix = "xterm -fa 'Monospace' -fs 14 -geometry 100x20 -hold -e"
-    # term_prefix = ''
+    # term_prefix = "xterm -fa 'Monospace' -fs 14 -geometry 100x20 -hold -e"
+    term_prefix = ''
 
     stdout_linebuf_envvar = SetEnvironmentVariable(
         'RCUTILS_LOGGING_BUFFERED_STREAM', '1')
@@ -115,6 +115,11 @@ def generate_launch_description():
         respawn='true'
         )
 
+    # Static Transform Publisher
+    transform_publisher_node = Node(package = "tf2_ros", 
+                       executable = "static_transform_publisher",
+                       arguments = ["0", "0", "0", "0", "0", "0", "odom", "laser"])
+
     localization_health_monitor = Node(
         package='localization_health_monitor',
         executable='localization_health_monitor',
@@ -171,6 +176,7 @@ def generate_launch_description():
     ld.add_action(dead_reckoner)
     ld.add_action(ekf_localizer)
     ld.add_action(localization_health_monitor)
+    ld.add_action(transform_publisher_node)
     ld.add_action(carma_system_controller)
 
     return ld
