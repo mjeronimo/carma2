@@ -17,12 +17,8 @@
 namespace ekf_localizer
 {
 
-EkfLocalizer::EkfLocalizer()
-: CarmaNode("ekf_localizer")
-{
-}
-
-EkfLocalizer::~EkfLocalizer()
+EkfLocalizer::EkfLocalizer(const rclcpp::NodeOptions & options)
+: CarmaNode(options)
 {
 }
 
@@ -32,7 +28,7 @@ EkfLocalizer::on_configure(const rclcpp_lifecycle::State & /*state*/)
   RCLCPP_INFO(get_logger(), "Configuring");
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
     system_alert_topic_, 1,
-    std::bind(&EkfLocalizer::handle_system_alert, this, std::placeholders::_1));
+    std::bind(&EkfLocalizer::on_system_alert, this, std::placeholders::_1));
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -44,7 +40,6 @@ EkfLocalizer::on_activate(const rclcpp_lifecycle::State & /*state*/)
 
   // Create bond with the lifecycle manager
   create_bond();
-
 
   return carma_utils::CallbackReturn::SUCCESS;
 }
@@ -83,9 +78,8 @@ EkfLocalizer::on_error(const rclcpp_lifecycle::State & /*state*/)
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
-
 void
-EkfLocalizer::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
+EkfLocalizer::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
   RCLCPP_INFO(
     get_logger(), "Received SystemAlert message of type: %u, msg: %s",

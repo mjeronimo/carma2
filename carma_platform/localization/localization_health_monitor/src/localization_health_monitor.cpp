@@ -17,20 +17,15 @@
 namespace localization_health_monitor
 {
 
-LocalizationHealthMonitor::LocalizationHealthMonitor()
-: CarmaNode("localization_health_monitor")
+LocalizationHealthMonitor::LocalizationHealthMonitor(const rclcpp::NodeOptions & options)
+: CarmaNode(options)
 {
-
   declare_parameter("auto_initialization_timeout", rclcpp::ParameterValue(30000));
   declare_parameter("fitness_score_degraded_threshold", rclcpp::ParameterValue(20.0));
   declare_parameter("fitness_score_fault_threshold", rclcpp::ParameterValue(100000.0));
   declare_parameter("gnss_only_operation_timeout", rclcpp::ParameterValue(20000));
   declare_parameter("ndt_frequency_degraded_threshold", rclcpp::ParameterValue(8.0));
   declare_parameter("ndt_frequency_fault_threshold", rclcpp::ParameterValue(0.01));
-}
-
-LocalizationHealthMonitor::~LocalizationHealthMonitor()
-{
 }
 
 carma_utils::CallbackReturn
@@ -40,11 +35,7 @@ LocalizationHealthMonitor::on_configure(const rclcpp_lifecycle::State & /*state*
 
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
     system_alert_topic_, 1,
-    std::bind(&LocalizationHealthMonitor::handle_system_alert, this, std::placeholders::_1));
-
-  localization_status_sub_ = create_subscription<cav_msgs::msg::LocalizationStatusReport>(
-    "/localization_status", 1,
-    std::bind(&LocalizationHealthMonitor::handle_localization_status, this, std::placeholders::_1));
+    std::bind(&LocalizationHealthMonitor::on_system_alert, this, std::placeholders::_1));
 
   localization_status_sub_ = create_subscription<cav_msgs::msg::LocalizationStatusReport>(
     "/localization_status", 1,
@@ -107,7 +98,7 @@ LocalizationHealthMonitor::on_error(const rclcpp_lifecycle::State & /*state*/)
 }
 
 void
-LocalizationHealthMonitor::handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
+LocalizationHealthMonitor::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
   // This where I will implement the logic for the LocalizationHealthMonitor
   RCLCPP_INFO(

@@ -38,15 +38,16 @@ rclcpp_components_register_nodes(${library_name}
   "carma_velodyne_lidar_driver::CarmaVelodyneLidarDriver"
 )
 
-add_executable(${executable_name}
-  src/main.cpp
-)
+#TODO
+#add_executable(${executable_name}
+#  src/main.cpp
+#)
 
-target_link_libraries(${executable_name} ${library_name})
+#target_link_libraries(${executable_name} ${library_name})
 
-ament_target_dependencies(${executable_name}
-  ${dependencies}
-)
+#ament_target_dependencies(${executable_name}
+  #${dependencies}
+#)
 
 install(TARGETS ${library_name}
   ARCHIVE DESTINATION lib
@@ -54,9 +55,9 @@ install(TARGETS ${library_name}
   RUNTIME DESTINATION bin
 )
 
-install(TARGETS ${executable_name}
-  RUNTIME DESTINATION lib/${PROJECT_NAME}
-)
+#install(TARGETS ${executable_name}
+#  RUNTIME DESTINATION lib/${PROJECT_NAME}
+#)
 
 install(DIRECTORY include/
   DESTINATION include/

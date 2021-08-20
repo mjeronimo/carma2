@@ -16,7 +16,7 @@
 #define CARMA_VELODYNE_LIDAR_DRIVER__CARMA_VELODYNE_LIDAR_DRIVER_HPP_
 
 #include "carma_utils/carma_node.hpp"
-#include "carma_utils/visibility_control.h"
+#include "carma_utils/visibility_control.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 namespace carma_velodyne_lidar_driver
@@ -38,7 +38,7 @@ protected:
   carma_utils::CallbackReturn on_shutdown(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_error(const rclcpp_lifecycle::State & state) override;
 
-  void handle_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg) override;
+  void on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg) override;
 };
 
 }  // namespace carma_velodyne_lidar_driver

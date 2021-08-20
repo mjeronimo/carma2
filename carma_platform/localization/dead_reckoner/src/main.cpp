@@ -20,7 +20,7 @@
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
-  auto node = std::make_shared<dead_reckoner::DeadReckoner>();
+  auto node = std::make_shared<dead_reckoner::DeadReckoner>(rclcpp::NodeOptions());
   node->spin();
   rclcpp::shutdown();
 

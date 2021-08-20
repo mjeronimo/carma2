@@ -178,11 +178,11 @@ LifecycleManager::changeStateForNode(const std::string & node_name, std::uint8_t
     if (!node_map_[node_name]->change_state(transition, 1s) ||
       !(node_map_[node_name]->get_state() == transition_state_map_[transition]))
     {
-      RCLCPP_ERROR(get_logger(), "Failed to change state for node: %s", node_name.c_str());
+      RCLCPP_ERROR(get_logger(), "Failed to change lifecycle node state");
       return false;
     }
   } catch (std::runtime_error & e) {
-    RCLCPP_ERROR(get_logger(), "Failed to change state for node: %s", node_name.c_str());
+    RCLCPP_ERROR(get_logger(), "Failed to change lifecycle node state");
     return false;
   }
 

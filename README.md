@@ -108,3 +108,12 @@ The example code in this repository provides the following features:
 [ ] Using a plugin (a kind of helper; not a node)
 
 ```
+
+Main executables
+[ ] Carma Velodyne
+[ ] Carma Delphi
+[ ] Dead reckoner
+[ ] EKF localizer
+[ ] Localization health monitor
+[ ] Camera driver
+[ ] Camera driver client
