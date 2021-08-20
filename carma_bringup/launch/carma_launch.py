@@ -12,27 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 import os
 
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import (DeclareLaunchArgument, SetEnvironmentVariable)
+from launch.actions import (DeclareLaunchArgument, LogInfo, SetEnvironmentVariable)
 from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import ComposableNodeContainer
 from launch_ros.actions import Node
+from launch_ros.descriptions import ComposableNode
 
 
 def generate_launch_description():
     bringup_dir = get_package_share_directory('carma_bringup')
-    # launch_dir = os.path.join(bringup_dir, 'launch')
 
-    # Create the launch configuration variables
-    # namespace = LaunchConfiguration('namespace')
-    # use_namespace = LaunchConfiguration('use_namespace')
     use_sim_time = LaunchConfiguration('use_sim_time')
-    # params_file = LaunchConfiguration('params_file')
     autostart = LaunchConfiguration('autostart')
+
+    term_prefix = "xterm -fa 'Monospace' -fs 14 -geometry 100x20 -hold -e"
+    # term_prefix = ''
 
     stdout_linebuf_envvar = SetEnvironmentVariable(
         'RCUTILS_LOGGING_BUFFERED_STREAM', '1')
@@ -45,7 +44,7 @@ def generate_launch_description():
     declare_use_namespace_cmd = DeclareLaunchArgument(
         'use_namespace',
         default_value='false',
-        description='Whether to apply a namespace to the navigation stack')
+        description='Whether to apply a namespace to all nodes')
 
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         'use_sim_time',
@@ -54,34 +53,108 @@ def generate_launch_description():
 
     declare_params_file_cmd = DeclareLaunchArgument(
         'params_file',
-        default_value=os.path.join(bringup_dir, 'params', 'nav2_params.yaml'),
+        default_value=os.path.join(bringup_dir, 'params', 'carma_params.yaml'),
         description='Full path to the ROS2 parameters file to use for all launched nodes')
 
     declare_autostart_cmd = DeclareLaunchArgument(
         'autostart', default_value='true',
-        description='Automatically startup the nav2 stack')
+        description='Automatically startup the CARMA stack')
 
-    carma_delphi_srr2_driver = Node(
-        package='carma_delphi_srr2_driver',
-        executable='carma_delphi_srr2_driver',
+    # Composable node container for the Perception Subsystem nodes
+    perception_container = ComposableNodeContainer(
+        name='perception_container',
+        namespace='',
+        package='rclcpp_components',
+        executable='component_container',
+        composable_node_descriptions=[
+            ComposableNode(
+                package='camera_driver',
+                name='camera_driver',
+                plugin='camera_driver::CameraDriver',
+                extra_arguments=[{'use_intra_process_comms': True}]
+                ),
+            ComposableNode(
+                package='camera_driver',
+                name='camera_driver_client',
+                plugin='camera_driver_client::CameraDriverClient',
+                extra_arguments=[{'use_intra_process_comms': True}]
+                ),
+            ComposableNode(
+                package='carma_delphi_srr2_driver',
+                name='carma_delphi_srr2_driver',
+                plugin='carma_delphi_srr2_driver::CarmaDelphiSrr2Driver',
+                extra_arguments=[{'use_intra_process_comms': True}]
+                ),
+            ComposableNode(
+                package='carma_velodyne_lidar_driver',
+                name='carma_velodyne_lidar_driver',
+                plugin='carma_velodyne_lidar_driver::CarmaVelodyneLidarDriver',
+                extra_arguments=[{'use_intra_process_comms': True}]
+                ),
+            ],
+        on_exit=[LogInfo(msg='perception_container')],
         output='screen',
+        prefix=term_prefix,
+        respawn='true'
         )
 
-    carma_velodyne_lidar_driver = Node(
-        package='carma_velodyne_lidar_driver',
-        executable='carma_velodyne_lidar_driver',
+    # Localization Subsystem
+    dead_reckoner = Node(
+        package='dead_reckoner',
+        name='dead_reckoner',
+        executable='dead_reckoner',
         output='screen',
+        prefix=term_prefix,
+        respawn='true'
         )
 
-    lifecycle_nodes = ['carma_delphi_srr2_driver', 'carma_velodyne_lidar_driver']
-    lifecycle_manager = Node(
-        package='ros2_lifecycle_manager',
-        executable='lifecycle_manager',
+    ekf_localizer = Node(
+        package='ekf_localizer',
+        name='ekf_localizer',
+        executable='ekf_localizer',
+        output='screen',
+        prefix=term_prefix,
+        respawn='true'
+        )
+
+    localization_health_monitor = Node(
+        package='localization_health_monitor',
+        name='localization_health_monitor',
+        executable='localization_health_monitor',
+        output='screen',
+        prefix=term_prefix,
+        parameters=[
+            {'auto_initialization_timeout': 3000},
+            {'fitness_score_degraded_threshold': 20.0},
+            {'fitness_score_fault_threshold': 100000.0},
+            {'gnss_only_operation_timeout': 20000},
+            {'ndt_frequency_degraded_threshold': 8.0},
+            {'ndt_frequency_fault_threshold': 0.01}
+            ],
+        respawn='true'
+        )
+
+    # The system controller manages the lifecycle nodes
+    carma_system_controller = Node(
+        package='system_controller',
         name='carma_system_controller',
+        executable='system_controller',
         output='screen',
-        parameters=[{'use_sim_time': use_sim_time},
-                    {'autostart': autostart},
-                    {'node_names': lifecycle_nodes}])
+        prefix=term_prefix,
+        parameters=[
+            {'use_sim_time': use_sim_time},
+            {'autostart': autostart},
+            {'node_names': [
+                'camera_driver',
+                'camera_driver_client',
+                'carma_delphi_srr2_driver',
+                'carma_velodyne_lidar_driver',
+                'dead_reckoner',
+                'ekf_localizer',
+                'localization_health_monitor'
+                ]}
+            ]
+        )
 
     # Create the launch description
     ld = LaunchDescription()
@@ -96,9 +169,11 @@ def generate_launch_description():
     ld.add_action(declare_params_file_cmd)
     ld.add_action(declare_autostart_cmd)
 
-    # Add the actions to launch all of the navigation nodes
-    ld.add_action(carma_delphi_srr2_driver)
-    ld.add_action(carma_velodyne_lidar_driver)
-    ld.add_action(lifecycle_manager)
+    # Add the actions to launch the carma subsystems
+    ld.add_action(perception_container)
+    ld.add_action(dead_reckoner)
+    ld.add_action(ekf_localizer)
+    ld.add_action(localization_health_monitor)
+    ld.add_action(carma_system_controller)
 
     return ld
