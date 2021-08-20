@@ -14,13 +14,13 @@
 
 #include <memory>
 
-#include "camera_driver/camera_driver.hpp"
+#include "camera_driver_client/camera_driver_client.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
-  auto node = std::make_shared<camera_driver::CameraDriver>(rclcpp::NodeOptions());
+  auto node = std::make_shared<camera_driver_client::CameraDriverClient>(rclcpp::NodeOptions());
   node->spin();
   rclcpp::shutdown();
 

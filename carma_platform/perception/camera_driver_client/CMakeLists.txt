@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(camera_driver)
+project(camera_driver_client)
 
 find_package(ament_cmake REQUIRED)
 find_package(carma_common REQUIRED)
@@ -40,7 +40,7 @@ set(dependencies
 set(node_plugins "")
 
 add_library(${library_name} SHARED
-  src/camera_driver.cpp
+  src/camera_driver_client.cpp
 )
 
 target_compile_definitions(${library_name}
@@ -52,10 +52,10 @@ ament_target_dependencies(${library_name}
 )
 
 rclcpp_components_register_nodes(${library_name}
-  "camera_driver::CameraDriver"
+  "camera_driver_client::CameraDriverClient"
 )
 
-set(node_plugins "${node_plugins}camera_driver::CameraDriver;$<TARGET_FILE:camera_driver_core>\n")
+set(node_plugins "${node_plugins}camera_driver_client::CameraDriverClient;$<TARGET_FILE:camera_driver_client_core>\n")
 
 add_executable(${executable_name}
   src/main.cpp
@@ -71,10 +71,6 @@ install(TARGETS ${library_name}
 
 install(DIRECTORY include/
   DESTINATION include/
-)
-
-install(DIRECTORY resources
-  DESTINATION share/${PROJECT_NAME}
 )
 
 if(BUILD_TESTING)

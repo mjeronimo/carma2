@@ -74,7 +74,7 @@ def generate_launch_description():
                 extra_arguments=[{'use_intra_process_comms': True}]
                 ),
             ComposableNode(
-                package='camera_driver',
+                package='camera_driver_client',
                 name='camera_driver_client',
                 plugin='camera_driver_client::CameraDriverClient',
                 extra_arguments=[{'use_intra_process_comms': True}]
