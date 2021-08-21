@@ -38,7 +38,7 @@ protected:
   carma_utils::CallbackReturn on_error(const rclcpp_lifecycle::State & state) override;
 
   void on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
-  void handle_localization_status(const cav_msgs::msg::LocalizationStatusReport::SharedPtr msg);
+  void on_localization_status_change(const cav_msgs::msg::LocalizationStatusReport::SharedPtr msg);
 
   rclcpp::Subscription<cav_msgs::msg::LocalizationStatusReport>::SharedPtr localization_status_sub_;
 
