@@ -57,6 +57,36 @@ CarmaNode::shared_from_this()
     rclcpp_lifecycle::LifecycleNode::shared_from_this());
 }
 
+carma_utils::CallbackReturn
+CarmaNode::on_configure(const rclcpp_lifecycle::State & /*state*/)
+{
+  return carma_utils::CallbackReturn::SUCCESS;
+}
+
+carma_utils::CallbackReturn
+CarmaNode::on_activate(const rclcpp_lifecycle::State & /*state*/)
+{
+  // Create bond with the lifecycle manager
+  create_bond();
+
+  return carma_utils::CallbackReturn::SUCCESS;
+}
+
+carma_utils::CallbackReturn
+CarmaNode::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
+{
+  // Destroy the bond with the lifecycle manager
+  destroy_bond();
+
+  return carma_utils::CallbackReturn::SUCCESS;
+}
+
+carma_utils::CallbackReturn
+CarmaNode::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
+{
+  return carma_utils::CallbackReturn::SUCCESS;
+}
+
 void
 CarmaNode::publish_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {

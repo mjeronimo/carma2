@@ -29,9 +29,10 @@ CameraDriverClient::CameraDriverClient(const rclcpp::NodeOptions & options)
 }
 
 carma_utils::CallbackReturn
-CameraDriverClient::on_configure(const rclcpp_lifecycle::State & /*state*/)
+CameraDriverClient::on_configure(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
+  CarmaNode::on_configure(state);
 
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
     system_alert_topic_, 1,
@@ -45,31 +46,26 @@ CameraDriverClient::on_configure(const rclcpp_lifecycle::State & /*state*/)
 }
 
 carma_utils::CallbackReturn
-CameraDriverClient::on_activate(const rclcpp_lifecycle::State & /*state*/)
+CameraDriverClient::on_activate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Activating");
-
-  // Create bond with the lifecycle manager
-  create_bond();
-
+  CarmaNode::on_activate(state);
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 carma_utils::CallbackReturn
-CameraDriverClient::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
+CameraDriverClient::on_deactivate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
-
-  // Destroy the bond with the lifecycle manager
-  destroy_bond();
-
+  CarmaNode::on_deactivate(state);
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 carma_utils::CallbackReturn
-CameraDriverClient::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
+CameraDriverClient::on_cleanup(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
+  CarmaNode::on_cleanup(state);
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
