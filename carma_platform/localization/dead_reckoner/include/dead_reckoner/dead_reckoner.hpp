@@ -56,7 +56,7 @@ protected:
   std::unique_ptr<tf2_ros::MessageFilter<sensor_msgs::msg::Image>> image_filter_;
   message_filters::Connection image_connection_;
 
-  void initMessageFilters();
+  void init_message_filters();
   void imageReceived(sensor_msgs::msg::Image::ConstSharedPtr image);
   void on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
 };

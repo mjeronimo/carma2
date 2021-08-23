@@ -23,14 +23,8 @@ namespace dead_reckoner
 DeadReckoner::DeadReckoner(const rclcpp::NodeOptions & options)
 : CarmaNode(options)
 {
-  std::vector<std::string> new_args = options.arguments();
-  new_args.push_back("--ros-args");
-  new_args.push_back("-r");
-  new_args.push_back(std::string("__node:=") + get_name() + "_rclcpp_node");
-  new_args.push_back("--");
-  rclcpp_node_ = std::make_shared<rclcpp::Node>(
-    "_", get_namespace(), rclcpp::NodeOptions(options).arguments(new_args));
-  rclcpp_thread_ = std::make_unique<ros2_utils::NodeThread>(rclcpp_node_);
+  // create rclcpp node
+  create_rclcpp_node(options);
 }
 
 carma_utils::CallbackReturn
@@ -50,7 +44,7 @@ DeadReckoner::on_configure(const rclcpp_lifecycle::State & /*state*/)
   tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
   tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(rclcpp_node_);
 
-  initMessageFilters();
+  init_message_filters();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -119,7 +113,7 @@ DeadReckoner::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 }
 
 void
-DeadReckoner::initMessageFilters()
+DeadReckoner::init_message_filters()
 {
   image_sub_ = std::make_unique<message_filters::Subscriber<sensor_msgs::msg::Image>>(
     rclcpp_node_.get(), "camera/image", rmw_qos_profile_sensor_data);
@@ -137,7 +131,7 @@ void
 DeadReckoner::imageReceived(sensor_msgs::msg::Image::ConstSharedPtr image)
 {
   RCLCPP_INFO(
-    get_logger(), "Image Received DeadReckonign in Frame: %s", image->header.frame_id.c_str());
+    get_logger(), "Image Received in Frame: %s", image->header.frame_id.c_str());
 }
 
 }  // namespace dead_reckoner
