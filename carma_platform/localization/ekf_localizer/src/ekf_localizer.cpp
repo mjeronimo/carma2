@@ -30,6 +30,7 @@ EkfLocalizer::on_configure(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
   CarmaNode::on_configure(state);
+
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
     system_alert_topic_, 1,
     std::bind(&EkfLocalizer::on_system_alert, this, std::placeholders::_1));
@@ -42,7 +43,6 @@ EkfLocalizer::on_configure(const rclcpp_lifecycle::State & state)
   tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_, this, false);
 
   timer_ = create_wall_timer(1s, std::bind(&EkfLocalizer::lookup_transform, this));
-
 
   return carma_utils::CallbackReturn::SUCCESS;
 }
@@ -101,7 +101,6 @@ EkfLocalizer::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
     msg->type, msg->description.c_str());
   RCLCPP_INFO(get_logger(), "Perform EkfLocalizer-specific system event handling");
 }
-
 
 void
 EkfLocalizer::lookup_transform()
