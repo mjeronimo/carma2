@@ -30,7 +30,7 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time')
     autostart = LaunchConfiguration('autostart')
 
-    term_prefix = "xterm -fa 'Monospace' -fs 14 -geometry 100x20 -hold -e"
+    term_prefix = "xterm -fa 'Monospace' -fs 10 -geometry 120x30 -hold -e"
     # term_prefix = ''
 
     stdout_linebuf_envvar = SetEnvironmentVariable(

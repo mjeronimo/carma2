@@ -41,37 +41,33 @@ class CarmaNode : public rclcpp_lifecycle::LifecycleNode
 {
 public:
   // A composition-capable CarmaNode
-
-
   CARMA_UTILS_PUBLIC
   CarmaNode(const rclcpp::NodeOptions & options);
 
   virtual ~CarmaNode();
 
-  // TODO(@mjeronimo): BondPeer
-  void create_bond();
-  void destroy_bond();
+  carma_utils::CallbackReturn on_configure(const rclcpp_lifecycle::State & state) override;
+  carma_utils::CallbackReturn on_activate(const rclcpp_lifecycle::State & state) override;
+  carma_utils::CallbackReturn on_deactivate(const rclcpp_lifecycle::State & state) override;
+  carma_utils::CallbackReturn on_cleanup(const rclcpp_lifecycle::State & state) override;
 
   void publish_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
   virtual void on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
-  
 
   std::shared_ptr<carma_utils::CarmaNode> shared_from_this();
 
   // Spin with try catch block
-
-
   void spin();
 
 protected:
   // Machinery to support ROS2 classes that don't yet support lifecycle nodes
-
-
   bool use_rclcpp_node_{false};            // Whether or not to create a local rclcpp::Node
   rclcpp::Node::SharedPtr rclcpp_node_;    // The rclcpp node
   std::unique_ptr<ros2_utils::NodeThread> rclcpp_thread_;  // The thread to spin it
 
   // Bond connection for heartbeat messages
+  void create_bond();
+  void destroy_bond();
   std::unique_ptr<bond::Bond> bond_;
 
   // System alert pub/sub

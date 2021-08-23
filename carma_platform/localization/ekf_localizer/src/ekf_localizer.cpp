@@ -26,9 +26,10 @@ EkfLocalizer::EkfLocalizer(const rclcpp::NodeOptions & options)
 }
 
 carma_utils::CallbackReturn
-EkfLocalizer::on_configure(const rclcpp_lifecycle::State & /*state*/)
+EkfLocalizer::on_configure(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
+  CarmaNode::on_configure(state);
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
     system_alert_topic_, 1,
     std::bind(&EkfLocalizer::on_system_alert, this, std::placeholders::_1));
@@ -47,35 +48,33 @@ EkfLocalizer::on_configure(const rclcpp_lifecycle::State & /*state*/)
 }
 
 carma_utils::CallbackReturn
-EkfLocalizer::on_activate(const rclcpp_lifecycle::State & /*state*/)
+EkfLocalizer::on_activate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Activating");
+  CarmaNode::on_activate(state);
   system_alert_pub_->on_activate();
-
-  // Create bond with the lifecycle manager
-  create_bond();
-
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 carma_utils::CallbackReturn
-EkfLocalizer::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
+EkfLocalizer::on_deactivate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
+  CarmaNode::on_deactivate(state);
   system_alert_pub_->on_deactivate();
-  // Destroy the bond with the lifecycle manager
-  destroy_bond();
-
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 carma_utils::CallbackReturn
-EkfLocalizer::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
+EkfLocalizer::on_cleanup(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
+  CarmaNode::on_cleanup(state);
+  
   // Reset the listener before the buffer
   tf_listener_.reset();
   tf_.reset();
+
   system_alert_pub_.reset();
   return carma_utils::CallbackReturn::SUCCESS;
 }
@@ -84,7 +83,6 @@ carma_utils::CallbackReturn
 EkfLocalizer::on_shutdown(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Shutting down");
-  system_alert_pub_.reset();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
