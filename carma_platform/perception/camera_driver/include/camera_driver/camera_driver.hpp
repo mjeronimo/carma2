@@ -44,7 +44,7 @@ protected:
 
   void on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg) override;
 
-  // TODO: Move to cv_utils
+  // TODO(@pmusau17): Move to cv_utils
   std::string mat_type2encoding(int mat_type);
 
   rclcpp::TimerBase::SharedPtr timer_;

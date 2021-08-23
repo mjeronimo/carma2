@@ -53,7 +53,7 @@ CameraDriver::on_configure(const rclcpp_lifecycle::State & state)
   cam_pub_ = this->create_publisher<sensor_msgs::msg::Image>("camera/image", 10);
 
   // Use a timer to schedule periodic message publishing
-  // TODO: Move to on_activate (unless timer can be pause/resumed)
+  // TODO(@pmusau17): Move to on_activate (unless timer can be pause/resumed)
   timer_ = create_wall_timer(1s, std::bind(&CameraDriver::publish_image, this));
 
   active_ = true;
@@ -134,7 +134,7 @@ void CameraDriver::publish_image()
 
   // Convert OpenCV Mat to ROS Image
   image_msg->header.stamp = this->get_clock()->now();
-  image_msg->header.frame_id = "";
+  image_msg->header.frame_id = "camera";
   image_msg->height = image.rows;
   image_msg->width = image.cols;
   image_msg->encoding = mat_type2encoding(image.type());

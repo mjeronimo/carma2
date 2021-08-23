@@ -117,6 +117,13 @@ def generate_launch_description():
         respawn='true'
         )
 
+    # Static Transform Publisher
+    transform_publisher_node = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        arguments=['0', '0', '0', '0', '0', '0', 'odom', 'laser']
+        )
+
     localization_health_monitor = Node(
         package='localization_health_monitor',
         name='localization_health_monitor',
@@ -174,6 +181,6 @@ def generate_launch_description():
     ld.add_action(dead_reckoner)
     ld.add_action(ekf_localizer)
     ld.add_action(localization_health_monitor)
+    ld.add_action(transform_publisher_node)
     ld.add_action(carma_system_controller)
-
     return ld

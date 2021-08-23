@@ -132,6 +132,19 @@ CarmaNode::spin()
   }
 }
 
+void 
+CarmaNode::create_rclcpp_node(const rclcpp::NodeOptions & options)
+{
+  std::vector<std::string> new_args = options.arguments();
+  new_args.push_back("--ros-args");
+  new_args.push_back("-r");
+  new_args.push_back(std::string("__node:=") + get_name() + "_rclcpp_node");
+  new_args.push_back("--");
+  rclcpp_node_ = std::make_shared<rclcpp::Node>(
+    "_", get_namespace(), rclcpp::NodeOptions(options).arguments(new_args));
+  rclcpp_thread_ = std::make_unique<ros2_utils::NodeThread>(rclcpp_node_);
+}
+
 }  // namespace carma_utils
 
 // Register the component with class_loader. This acts as a sort of entry point, allowing
