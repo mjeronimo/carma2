@@ -123,6 +123,7 @@ void LocalizationEventPub::keyLoop()
 
 void quit(int sig)
 {
+  sig = sig;
   tcsetattr(kfd, TCSANOW, &cooked);
   rclcpp::shutdown();
   exit(0);
