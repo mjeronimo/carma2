@@ -26,8 +26,7 @@ FROM ros:rolling
 ARG BUILD_DATE
 ARG VCS_REF
 ARG VERSION="rolling"
-ARG SRC_DIR=/usr/local/src
-ARG WORKSPACE=${SRC_DIR}/carma2
+ARG WORKSPACE=/usr/local/src//carma2_ws
 
 # LABEL the image
 LABEL org.label-schema.schema-version="1.0"
@@ -46,25 +45,29 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Update the Ubuntu software repository
 RUN apt-get update
 
-## Get the CARMA2 source code
-RUN mkdir -p ${SRC_DIR}
-WORKDIR ${SRC_DIR}
+# Get the CARMA2 source code
+RUN mkdir -p ${WORKSPACE}/src
+WORKDIR ${WORKSPACE}/src
 RUN git clone https://github.com/mjeronimo/carma2
-WORKDIR ${WORKSPACE}
-RUN git submodule init
-RUN git submodule update
+RUN vcs import < carma2/carma2.repos
 
-## Install dependencies
+# Install dependencies
 RUN rosdep update
 RUN rosdep install --from-paths . --ignore-src --rosdistro rolling -y --skip-keys "console_bridge fastcdr fastrtps rti-connext-dds-5.3.1 urdfdom_headers"
 
-RUN apt install vim
+# Install a few handy tools
+RUN apt-get install -y vim
+RUN apt-get install -y xterm
+RUN apt-get install -y x11vnc xvfb
 
 # Build the CARMA2 code in the workspace
-RUN source "/opt/ros/rolling/setup.bash"
-# RUN colcon build --symlink-install
+WORKDIR ${WORKSPACE}
+RUN /bin/bash -c "source /opt/ros/rolling/setup.bash ; colcon build --symlink-install"
 
 # Set up the entrypoint
-COPY ./ros_entrypoint.sh /
-ENTRYPOINT ["/ros_entrypoint.sh"]
+COPY ./entrypoint.sh /
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]
+
+#CMD ["x11vnc", "-create", "-forever"]
+
