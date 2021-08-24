@@ -1,6 +1,0 @@
-[submodule "carma_dependencies/bond_core"]
-	path = carma_dependencies/bond_core
-	url = https://github.com/ros/bond_core
-[submodule "carma_dependencies/vision_opencv"]
-	path = carma_dependencies/vision_opencv
-	url = https://github.com/ros-perception/vision_opencv
