@@ -43,7 +43,7 @@ public:
   // Trigger a state change, returning result
   bool change_state(std::uint8_t transition);
 
-  // Get the current state as a lifecycle_msgs::msg::State id value. 
+  // Get the current state as a lifecycle_msgs::msg::State id value.
   // Throws std::runtime_error on failure.
   uint8_t get_state(const std::chrono::seconds timeout = std::chrono::seconds::max());
 

@@ -15,7 +15,6 @@
   <depend>rclcpp</depend>
   <depend>carma_utils</depend>
 
-  <depend>cv_bridge</depend>
   <depend>image_transport</depend>
   <depend>libopencv-dev</depend>
   <depend>sensor_msgs</depend>

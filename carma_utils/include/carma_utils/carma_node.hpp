@@ -42,7 +42,7 @@ class CarmaNode : public rclcpp_lifecycle::LifecycleNode
 public:
   // A composition-capable CarmaNode
   CARMA_UTILS_PUBLIC
-  CarmaNode(const rclcpp::NodeOptions & options);
+  explicit CarmaNode(const rclcpp::NodeOptions & options);
 
   virtual ~CarmaNode();
 

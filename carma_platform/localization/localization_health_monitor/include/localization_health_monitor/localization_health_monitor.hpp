@@ -27,7 +27,7 @@ class LocalizationHealthMonitor : public carma_utils::CarmaNode
 {
 public:
   CARMA_UTILS_PUBLIC
-  LocalizationHealthMonitor(const rclcpp::NodeOptions & options);
+  explicit LocalizationHealthMonitor(const rclcpp::NodeOptions & options);
 
 protected:
   carma_utils::CallbackReturn on_configure(const rclcpp_lifecycle::State & state) override;
@@ -42,7 +42,7 @@ protected:
 
   rclcpp::Subscription<cav_msgs::msg::LocalizationStatusReport>::SharedPtr localization_status_sub_;
 
-  // parameters
+  // Parameters
   int auto_initialization_timeout_;
   double fitness_score_degraded_threshold_;
   double fitness_score_fault_threshold_;

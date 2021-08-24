@@ -56,7 +56,8 @@ public:
     typename RequestType::SharedPtr & request,
     const std::chrono::nanoseconds timeout = std::chrono::nanoseconds(-1))
   {
-    while (!client_->wait_for_service(std::chrono::seconds(1))) {     // TODO: overall timeout?
+    // TODO(mjeronimo): overall timeout?
+    while (!client_->wait_for_service(std::chrono::seconds(1))) {
       if (!rclcpp::ok()) {
         throw std::runtime_error(
                 service_name_ + " service client: interrupted while waiting for service");

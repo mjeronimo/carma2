@@ -3,24 +3,27 @@ project(ros2_utils)
 
 find_package(ament_cmake REQUIRED)
 find_package(action_msgs REQUIRED)
+find_package(cv_bridge REQUIRED)
 find_package(lifecycle_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(ros2_lifecycle_manager_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 set(dependencies
     action_msgs
+    cv_bridge
     lifecycle_msgs
     nav_msgs
     rclcpp
     rclcpp_action
     rclcpp_lifecycle
     ros2_lifecycle_manager_msgs
+    sensor_msgs
 )
 
-# Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
 endif()

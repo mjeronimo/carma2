@@ -68,11 +68,11 @@ LifecycleManager::LifecycleManager()
   transition_label_map_[Transition::TRANSITION_UNCONFIGURED_SHUTDOWN] =
     std::string("Shutting down ");
 
-  // TODO(@mjeronimo): Get rid of this timer callback
+  // TODO(mjeronimo): Get rid of this timer callback
   // and do it a different way (avoid race condition)
   // Can't use shared_from_this() during construction
   init_timer_ = create_wall_timer(
-    //std::chrono::nanoseconds(10),
+    // std::chrono::nanoseconds(10),
     std::chrono::seconds(1),
     [this]() -> void {
       init_timer_->cancel();
@@ -152,7 +152,7 @@ LifecycleManager::createBondConnection(const std::string & node_name)
     bond_map_[node_name]->start();
     if (
       !bond_map_[node_name]->waitUntilFormed(
-        //rclcpp::Duration(rclcpp::Duration::from_nanoseconds(timeout_ns / 2))))
+        // rclcpp::Duration(rclcpp::Duration::from_nanoseconds(timeout_ns / 2))))
         rclcpp::Duration(rclcpp::Duration::from_nanoseconds(timeout_ns))))
     {
       RCLCPP_ERROR(
@@ -186,11 +186,13 @@ LifecycleManager::changeStateForNode(const std::string & node_name, std::uint8_t
     return false;
   }
 
+#ifdef USE_BOND_CONNECTIONS
   if (transition == Transition::TRANSITION_ACTIVATE) {
     return createBondConnection(node_name);
   } else if (transition == Transition::TRANSITION_DEACTIVATE) {
     bond_map_.erase(node_name);
   }
+#endif
 
   return true;
 }
@@ -240,14 +242,18 @@ LifecycleManager::startup()
   }
   RCLCPP_INFO(get_logger(), "Managed nodes are active");
 
+#ifdef USE_BOND_CONNECTIONS
   createBondTimer();
+#endif
   return true;
 }
 
 bool
 LifecycleManager::shutdown()
 {
+#ifdef USE_BOND_CONNECTIONS
   destroyBondTimer();
+#endif
 
   RCLCPP_INFO(get_logger(), "Shutting down managed nodes...");
   shutdownAllNodes();
@@ -260,7 +266,9 @@ LifecycleManager::shutdown()
 bool
 LifecycleManager::reset()
 {
+#ifdef USE_BOND_CONNECTIONS
   destroyBondTimer();
+#endif
 
   // Should transition in reverse order
   RCLCPP_INFO(get_logger(), "Resetting managed nodes...");
@@ -278,7 +286,9 @@ LifecycleManager::reset()
 bool
 LifecycleManager::pause()
 {
+#ifdef USE_BOND_CONNECTIONS
   destroyBondTimer();
+#endif
 
   RCLCPP_INFO(get_logger(), "Pausing managed nodes...");
   if (!changeStateForAllNodes(Transition::TRANSITION_DEACTIVATE)) {
@@ -300,7 +310,9 @@ LifecycleManager::resume()
   }
   RCLCPP_INFO(get_logger(), "Managed nodes are active");
 
+#if 0
   createBondTimer();
+#endif
   return true;
 }
 
@@ -348,8 +360,9 @@ LifecycleManager::checkBondConnections()
       // new node automatically restarted by the launch system
       bond_map_.erase(node_name);
 
-      // TODO(@mjeronimo): make this more robust. For now, just assume that the node has crashed and has
-      // been restarted by the launch system. Therefore, we need to configure and activate it
+      // TODO(mjeronimo): make this more robust. For now, just assume that the node
+      // has crashed and has been restarted by the launch system. Therefore, we need
+      // to configure and activate it
       if (changeStateForNode(node_name, Transition::TRANSITION_CONFIGURE)) {
         if (!changeStateForNode(node_name, Transition::TRANSITION_ACTIVATE)) {
           bond_map_.erase(node_name);

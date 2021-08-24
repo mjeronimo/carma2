@@ -7,7 +7,6 @@ find_package(carma_utils REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(ros2_lifecycle_manager_msgs REQUIRED)
-find_package(cv_bridge REQUIRED)
 find_package(image_transport REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(sensor_msgs REQUIRED)
@@ -26,7 +25,6 @@ set(library_name ${executable_name}_core)
 set(dependencies
   carma_common
   carma_utils
-  cv_bridge
   image_transport
   OpenCV
   rclcpp

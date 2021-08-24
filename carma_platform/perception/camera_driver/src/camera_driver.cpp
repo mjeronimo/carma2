@@ -18,8 +18,8 @@
 #include <utility>
 
 #include "ament_index_cpp/get_package_share_directory.hpp"
-#include "cv_bridge/cv_bridge.h"
 #include "opencv2/highgui/highgui.hpp"
+#include "ros2_utils/cv_utils.hpp"
 
 using namespace std::chrono_literals;
 
@@ -45,18 +45,13 @@ CameraDriver::on_configure(const rclcpp_lifecycle::State & state)
     ament_index_cpp::get_package_share_directory("camera_driver");
 
   try {
-    image = cv::imread(package_share_directory + "/resources/image.jpg", cv::IMREAD_COLOR);
+    image_ = cv::imread(package_share_directory + "/resources/image.jpg", cv::IMREAD_COLOR);
   } catch (cv::Exception & e) {
-    RCLCPP_INFO(get_logger(), "Failed to Load Image");
+    RCLCPP_FATAL(get_logger(), "Failed to Load Image");
   }
 
-  cam_pub_ = this->create_publisher<sensor_msgs::msg::Image>("camera/image", 10);
+  image_pub_ = this->create_publisher<sensor_msgs::msg::Image>("camera/image", 10);
 
-  // Use a timer to schedule periodic message publishing
-  // TODO: Move to on_activate (unless timer can be pause/resumed)
-  timer_ = create_wall_timer(1s, std::bind(&CameraDriver::publish_image, this));
-
-  active_ = true;
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -65,7 +60,11 @@ CameraDriver::on_activate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Activating");
   CarmaNode::on_activate(state);
-  cam_pub_->on_activate();
+  image_pub_->on_activate();
+
+  // Use a timer to schedule periodic message publishing
+  timer_ = create_wall_timer(1s, std::bind(&CameraDriver::publish_image, this));
+
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -74,7 +73,8 @@ CameraDriver::on_deactivate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
   CarmaNode::on_deactivate(state);
-  cam_pub_->on_deactivate();
+  image_pub_->on_deactivate();
+  timer_.reset();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -83,7 +83,7 @@ CameraDriver::on_cleanup(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
   CarmaNode::on_cleanup(state);
-  cam_pub_.reset();
+  image_pub_.reset();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -110,48 +110,17 @@ CameraDriver::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
   RCLCPP_INFO(get_logger(), "Perform CameraDriver-specific system event handling");
 }
 
-std::string
-CameraDriver::mat_type2encoding(int mat_type)
-{
-  switch (mat_type) {
-    case CV_8UC1:
-      return "mono8";
-    case CV_8UC3:
-      return "bgr8";
-    case CV_16SC1:
-      return "mono16";
-    case CV_8UC4:
-      return "rgba8";
-    default:
-      throw std::runtime_error("unsupported encoding type");
-  }
-}
-
-void CameraDriver::publish_image()
+void
+CameraDriver::publish_image()
 {
   // Use a unique_ptr for no copy intra-process communication
-  sensor_msgs::msg::Image::UniquePtr image_msg(new sensor_msgs::msg::Image());
+  auto image_msg = ros2_utils::toImageMsg(image_, get_clock()->now());
 
-  // Convert OpenCV Mat to ROS Image
-  image_msg->header.stamp = this->get_clock()->now();
-  image_msg->header.frame_id = "";
-  image_msg->height = image.rows;
-  image_msg->width = image.cols;
-  image_msg->encoding = mat_type2encoding(image.type());
-  image_msg->is_bigendian = false;
-  image_msg->step = static_cast<sensor_msgs::msg::Image::_step_type>(image.step);
-  image_msg->data.assign(image.datastart, image.dataend);
+  RCLCPP_INFO(
+    get_logger(), "publishing image at address %p",
+    (void *)reinterpret_cast<std::uintptr_t>(image_msg.get()));
 
-  if (active_) {
-    if (!cam_pub_->is_activated()) {
-      RCLCPP_INFO(get_logger(), "Camera Driver is currently inactive. Messages are not published.");
-    } else {
-      RCLCPP_INFO(
-        get_logger(), "publishing image at address %p",
-        (void *)reinterpret_cast<std::uintptr_t>(image_msg.get()));
-      cam_pub_->publish(std::move(image_msg));
-    }
-  }
+  image_pub_->publish(std::move(image_msg));
 }
 
 }  // namespace camera_driver

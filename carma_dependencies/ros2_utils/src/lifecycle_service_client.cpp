@@ -102,7 +102,7 @@ LifecycleServiceClient::change_state(const uint8_t transition, const seconds tim
     auto request = std::make_shared<lifecycle_msgs::srv::ChangeState::Request>();
     request->transition.id = transition;
     change_state_client_.invoke(request, timeout);
-    return true; // TODO: check the return code from invoke()
+    return true;  // TODO(mjeronimo): check the return code from invoke()
   }
 
   return true;
@@ -130,7 +130,7 @@ LifecycleServiceClient::get_state(const seconds timeout)
     return result->current_state.id;
   }
 
-  // TODO
+  // TODO(mjeronimo)
   throw 0;
 }
 

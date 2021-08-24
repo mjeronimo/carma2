@@ -17,8 +17,8 @@
 
 #include <memory>
 
-#include "cv_bridge/cv_bridge.h"
 #include "opencv2/highgui/highgui.hpp"
+#include "ros2_utils/cv_utils.hpp"
 
 namespace camera_driver_client
 {
@@ -38,7 +38,7 @@ CameraDriverClient::on_configure(const rclcpp_lifecycle::State & state)
     system_alert_topic_, 1,
     std::bind(&CameraDriverClient::on_system_alert, this, std::placeholders::_1));
 
-  cam_sub_ = create_subscription<sensor_msgs::msg::Image>(
+  image_sub_ = create_subscription<sensor_msgs::msg::Image>(
     "camera/image", 1,
     std::bind(&CameraDriverClient::image_callback, this, std::placeholders::_1));
 
@@ -95,34 +95,20 @@ CameraDriverClient::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr 
 void
 CameraDriverClient::image_callback(const sensor_msgs::msg::Image::UniquePtr msg)
 {
-  try {
-    if (show_image_) {
-      cv::Mat cv_mat(msg->height, msg->width, encoding2mat_type(msg->encoding), msg->data.data());
+  RCLCPP_INFO(
+    get_logger(), "received message, at address %p",
+    (void *) reinterpret_cast<std::uintptr_t>(msg.get()));
+
+  if (show_image_) {
+    try {
+      cv::Mat cv_mat(msg->height, msg->width,
+        ros2_utils::encoding2mat_type(msg->encoding), msg->data.data());
       cv::imshow("view", cv_mat);
       cv::waitKey(10);
+    } catch (std::exception & e) {
+      RCLCPP_ERROR(get_logger(), "Could not convert from '%s' to 'bgr8'.", msg->encoding.c_str());
     }
-    RCLCPP_INFO(
-      get_logger(), "received message, at address %p",
-      (void *)reinterpret_cast<std::uintptr_t>(msg.get()));
-  } catch (cv_bridge::Exception & e) {
-    auto logger = rclcpp::get_logger("my_subscriber");
-    RCLCPP_ERROR(logger, "Could not convert from '%s' to 'bgr8'.", msg->encoding.c_str());
   }
-}
-
-int
-CameraDriverClient::encoding2mat_type(const std::string & encoding)
-{
-  if (encoding == "mono8") {
-    return CV_8UC1;
-  } else if (encoding == "bgr8") {
-    return CV_8UC3;
-  } else if (encoding == "mono16") {
-    return CV_16SC1;
-  } else if (encoding == "rgba8") {
-    return CV_8UC4;
-  }
-  throw std::runtime_error("Unsupported mat type");
 }
 
 }  // namespace camera_driver_client

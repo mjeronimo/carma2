@@ -44,14 +44,10 @@ protected:
 
   void on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg) override;
 
-  // TODO: Move to cv_utils
-  std::string mat_type2encoding(int mat_type);
-
   rclcpp::TimerBase::SharedPtr timer_;
-  std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<sensor_msgs::msg::Image>> cam_pub_;
 
-  cv::Mat image;
-  bool active_{false};
+  cv::Mat image_;
+  std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<sensor_msgs::msg::Image>> image_pub_;
   void publish_image();
 };
 

@@ -11,7 +11,6 @@ find_package(ros2_lifecycle_manager_msgs REQUIRED)
 find_package(ros2_utils REQUIRED)
 find_package(std_srvs REQUIRED)
 
-# Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
 endif()

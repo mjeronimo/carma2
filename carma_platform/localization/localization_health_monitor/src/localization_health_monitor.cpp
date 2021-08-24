@@ -40,7 +40,9 @@ LocalizationHealthMonitor::on_configure(const rclcpp_lifecycle::State & state)
 
   localization_status_sub_ = create_subscription<cav_msgs::msg::LocalizationStatusReport>(
     "/localization_status", 1,
-    std::bind(&LocalizationHealthMonitor::on_localization_status_change, this, std::placeholders::_1));
+    std::bind(
+      &LocalizationHealthMonitor::on_localization_status_change, this,
+      std::placeholders::_1));
 
   get_parameter("auto_initialization_timeout", auto_initialization_timeout_);
   get_parameter("fitness_score_degraded_threshold", fitness_score_degraded_threshold_);

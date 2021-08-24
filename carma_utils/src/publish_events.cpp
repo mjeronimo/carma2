@@ -67,7 +67,8 @@ void CarmaEventPub::keyLoop()
   puts("Reading from keyboard");
   puts("---------------------------");
   puts(
-    "Use 1(CAUTION),2(WARNING),3(FATAL),4(NOT_READY),5(DRIVERS_READY),6(SHUTDOWN) keys to issue system alerts");
+    "Use 1(CAUTION),2(WARNING),3(FATAL),4(NOT_READY),5(DRIVERS_READY),"
+    "6(SHUTDOWN) keys to issue system alerts");
 
   for (;; ) {
     // Get the next event from the keyboard
@@ -113,7 +114,7 @@ void CarmaEventPub::keyLoop()
   }
 }
 
-void quit(int /*sig*/)
+void quit(int sig)
 {
   tcsetattr(kfd, TCSANOW, &cooked);
   rclcpp::shutdown();

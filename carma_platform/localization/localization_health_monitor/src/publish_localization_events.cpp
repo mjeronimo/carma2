@@ -121,7 +121,7 @@ void LocalizationEventPub::keyLoop()
   }
 }
 
-void quit(int /*sig*/)
+void quit(int sig)
 {
   tcsetattr(kfd, TCSANOW, &cooked);
   rclcpp::shutdown();

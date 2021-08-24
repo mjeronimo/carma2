@@ -42,7 +42,7 @@ namespace ros2_utils
     } \
   }
 
-static void 
+static void
 startupLifecycleNode(
   const std::string & node_name,
   const std::chrono::seconds service_call_timeout,

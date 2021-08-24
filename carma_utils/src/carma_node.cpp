@@ -66,18 +66,20 @@ CarmaNode::on_configure(const rclcpp_lifecycle::State & /*state*/)
 carma_utils::CallbackReturn
 CarmaNode::on_activate(const rclcpp_lifecycle::State & /*state*/)
 {
+#ifdef USE_BOND_CONNECTIONS
   // Create bond with the lifecycle manager
   create_bond();
-
+#endif
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 carma_utils::CallbackReturn
 CarmaNode::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
 {
+#ifdef USE_BOND_CONNECTIONS
   // Destroy the bond with the lifecycle manager
   destroy_bond();
-
+#endif
   return carma_utils::CallbackReturn::SUCCESS;
 }
 

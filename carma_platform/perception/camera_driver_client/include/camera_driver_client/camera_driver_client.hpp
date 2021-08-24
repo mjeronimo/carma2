@@ -43,11 +43,8 @@ protected:
 
   void image_callback(const sensor_msgs::msg::Image::UniquePtr msg);
 
-  // TODO: Move to cv_utils
-  int encoding2mat_type(const std::string & encoding);
   bool show_image_{true};
-
-  rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr cam_sub_;
+  rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_sub_;
 };
 
 }  // namespace camera_driver_client

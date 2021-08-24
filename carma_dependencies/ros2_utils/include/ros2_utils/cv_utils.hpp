@@ -12,18 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <memory>
+#ifndef ROS2_UTILS__CV_UTILS_HPP_
+#define ROS2_UTILS__CV_UTILS_HPP_
 
-#include "localization_health_monitor/localization_health_monitor.hpp"
-#include "rclcpp/rclcpp.hpp"
+#include <string>
 
-int main(int argc, char ** argv)
+#include "sensor_msgs/msg/image.hpp"
+#include "rclcpp/time.hpp"
+#include "opencv2/core/mat.hpp"
+
+namespace ros2_utils
 {
-  rclcpp::init(argc, argv);
-  auto node = std::make_shared<localization_health_monitor::LocalizationHealthMonitor>(
-    rclcpp::NodeOptions());
-  node->spin();
-  rclcpp::shutdown();
 
-  return 0;
-}
+std::string mat_type2encoding(int mat_type);
+int encoding2mat_type(const std::string & encoding);
+sensor_msgs::msg::Image::UniquePtr toImageMsg(
+  const cv::Mat & image,
+  const rclcpp::Time current_time,
+  const char * frame_id = "");
+
+}  // namespace ros2_utils
+
+#endif  // ROS2_UTILS__CV_UTILS_HPP_

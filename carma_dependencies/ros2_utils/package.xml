@@ -11,12 +11,14 @@
   <build_depend>libboost-program-options-dev</build_depend>
 
   <depend>action_msgs</depend>
+  <depend>cv_bridge</depend>
   <depend>lifecycle_msgs</depend>
   <depend>nav_msgs</depend>
   <depend>rclcpp_action</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_lifecycle</depend>
   <depend>ros2_lifecycle_manager_msgs</depend>
+  <depend>sensor_msgs</depend>
 
   <export>
     <build_type>ament_cmake</build_type>
