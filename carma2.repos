@@ -1,0 +1,9 @@
+repositories:
+  bond:
+    type: git
+    url: https://github.com/ros/bond_core
+    version: ros2
+  vision_opencv:
+    type: git
+    url: https://github.com/ros-perception/vision_opencv
+    version: ros2
