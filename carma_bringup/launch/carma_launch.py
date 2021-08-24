@@ -30,8 +30,9 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time')
     autostart = LaunchConfiguration('autostart')
 
-    term_prefix = "xterm -fa 'Monospace' -fs 10 -geometry 120x30 -hold -e"
-    # term_prefix = ''
+    # TODO: Make using separate xterms an input argument
+    # term_prefix = "xterm -fa 'Monospace' -fs 10 -geometry 120x30 -hold -e"
+    term_prefix = ''
 
     stdout_linebuf_envvar = SetEnvironmentVariable(
         'RCUTILS_LOGGING_BUFFERED_STREAM', '1')

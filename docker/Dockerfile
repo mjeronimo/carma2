@@ -16,17 +16,19 @@
 #
 # The script provides the following build arguments:
 #
-#   BUILD_DATE  - The time and date that the docker image was created (no default value).
-#   VCS_REF     - The git revision of the CARMA2 source code (no default value).
-#   VERSION     - The version of CARMA2 (default: "rolling")
-#   CARMA_WS    - The location for the CARMA2 source code in the container (default: /usr/local/src/carma2)
+#   BUILD_DATE  - The time and date that the docker image was created (no default).
+#   VCS_REF     - The git revision of the CARMA2 source code (no default).
+#   DISTRO      - The ROS 2 distribution to use when building CARMA2 (default: "rolling")
+#   WORKSPACE   - The location for the CARMA2 source code in the container (default: /usr/local/src/carma2)
 
-FROM ros:rolling
+ARG DISTRO=rolling
+FROM ros:$DISTRO
 
+ARG DISTRO
 ARG BUILD_DATE
 ARG VCS_REF
-ARG VERSION="rolling"
-ARG CARMA_WS=/usr/local/src/carma2_ws
+ARG WORKSPACE=/usr/local/src/carma2_ws
+ARG VERSION=$DISTRO
 
 # LABEL the image
 LABEL org.label-schema.schema-version="1.0"
@@ -46,20 +48,20 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update
 
 # Get the CARMA2 source code
-RUN mkdir -p ${CARMA_WS}/src
-WORKDIR ${CARMA_WS}/src
+RUN mkdir -p ${WORKSPACE}/src
+WORKDIR ${WORKSPACE}/src
 RUN git clone https://github.com/mjeronimo/carma2
 RUN vcs import < carma2/carma2.repos
 
-# Install dependencies
+# Install any required CARMA2 dependencies
 RUN rosdep update
-RUN rosdep install -r --from-paths . --ignore-src --rosdistro rolling -y
+RUN rosdep install -r --from-paths . --ignore-src --rosdistro $ROS_DISTRO -y
 
 # Install additional tools
 RUN apt-get install -y vim
 
 # Build the CARMA2 code in the workspace
-WORKDIR ${CARMA_WS}
+WORKDIR ${WORKSPACE}
 RUN /bin/bash -c "source /opt/ros/rolling/setup.bash ; colcon build --symlink-install"
 
 # Set up the entrypoint
