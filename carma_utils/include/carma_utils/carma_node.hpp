@@ -35,8 +35,6 @@ using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface
 // TODO(@pmusau17): Make this a template that takes either Node or LifecycleNode
 
 // Common node functionality
-
-
 class CarmaNode : public rclcpp_lifecycle::LifecycleNode
 {
 public:

@@ -16,13 +16,13 @@
 #define EKF_LOCALIZER__EKF_LOCALIZER_HPP_
 
 #include <memory>
-#include "tf2_ros/buffer.h"
-#include "tf2_ros/transform_listener.h"
-#include "tf2_ros/create_timer_ros.h"
-#include "rclcpp/rclcpp.hpp"
+
 #include "carma_utils/carma_node.hpp"
 #include "carma_utils/visibility_control.hpp"
-
+#include "rclcpp/rclcpp.hpp"
+#include "tf2_ros/buffer.h"
+#include "tf2_ros/create_timer_ros.h"
+#include "tf2_ros/transform_listener.h"
 
 namespace ekf_localizer
 {
@@ -41,6 +41,8 @@ protected:
   carma_utils::CallbackReturn on_shutdown(const rclcpp_lifecycle::State & state) override;
   carma_utils::CallbackReturn on_error(const rclcpp_lifecycle::State & state) override;
 
+  void on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
+
   void lookup_transform();
 
   // Sample Tf2 functionality
@@ -48,8 +50,6 @@ protected:
   std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
 
   rclcpp::TimerBase::SharedPtr timer_;
-
-  void on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
 };
 
 }  // namespace ekf_localizer

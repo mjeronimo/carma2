@@ -13,8 +13,9 @@
 // limitations under the License.
 
 #include "dead_reckoner/dead_reckoner.hpp"
-#include <string>
+
 #include <memory>
+#include <string>
 #include <vector>
 
 namespace dead_reckoner
@@ -23,7 +24,6 @@ namespace dead_reckoner
 DeadReckoner::DeadReckoner(const rclcpp::NodeOptions & options)
 : CarmaNode(options)
 {
-  // create rclcpp node
   create_rclcpp_node(options);
 }
 
@@ -32,6 +32,7 @@ DeadReckoner::on_configure(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
   CarmaNode::on_configure(state);
+
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
     system_alert_topic_, 1,
     std::bind(&DeadReckoner::on_system_alert, this, std::placeholders::_1));
@@ -118,15 +119,15 @@ DeadReckoner::init_message_filters()
 
   image_connection_ = image_filter_->registerCallback(
     std::bind(
-      &DeadReckoner::imageReceived,
+      &DeadReckoner::on_image_received,
       this, std::placeholders::_1));
 }
 
 void
-DeadReckoner::imageReceived(sensor_msgs::msg::Image::ConstSharedPtr image)
+DeadReckoner::on_image_received(sensor_msgs::msg::Image::ConstSharedPtr image)
 {
   RCLCPP_INFO(
-    get_logger(), "Image Received in Frame: %s", image->header.frame_id.c_str());
+    get_logger(), "Image received in frame: %s", image->header.frame_id.c_str());
 }
 
 }  // namespace dead_reckoner
