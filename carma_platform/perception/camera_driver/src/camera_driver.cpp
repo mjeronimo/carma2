@@ -52,6 +52,12 @@ CameraDriver::on_configure(const rclcpp_lifecycle::State & state)
 
   image_pub_ = this->create_publisher<sensor_msgs::msg::Image>("camera/image", 10);
 
+  // Use a timer to schedule periodic message publishing
+  timer_ = create_wall_timer(1s, std::bind(&CameraDriver::publish_image, this));
+
+  // cancel the timer immediately to prevent it running the first time.
+  timer_->cancel();
+
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -59,6 +65,7 @@ carma_utils::CallbackReturn
 CameraDriver::on_activate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Activating");
+  timer_->reset();
   CarmaNode::on_activate(state);
   image_pub_->on_activate();
 
@@ -72,6 +79,7 @@ carma_utils::CallbackReturn
 CameraDriver::on_deactivate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
+  timer_->cancel();
   CarmaNode::on_deactivate(state);
   image_pub_->on_deactivate();
   timer_.reset();
@@ -83,7 +91,8 @@ CameraDriver::on_cleanup(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
   CarmaNode::on_cleanup(state);
-  image_pub_.reset();
+  timer_->cancel();
+  cam_pub_.reset();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
