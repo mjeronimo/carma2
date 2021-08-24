@@ -1,3 +1,39 @@
+# Building the CARMA2 source code
+
+## Create a colcon workspace
+
+```
+export CARMA_WS=~/src/carma2_ws
+mkdir -p $CARMA_WS/src
+cd $CARMA_WS/src
+```
+
+## Download the CARMA2 source code
+
+```
+git clone https://github.com/mjeronimo/carma2
+vcs import < carma2/carma2.repos
+rosdep install -r --from-paths . --ignore-src --rosdistro $ROS_DISTRO -y
+```
+
+## Build CARMA2
+
+```
+cd $CARMA_WS
+colcon build --event-handlers desktop_notification- status- --cmake-args -DCMAKE_BUILD_TYPE=Release
+```
+
+## Source the CARMA2 workspace
+
+```
+source $CARMA2/install/setup.bash
+```
+
+## Launch the system
+
+```
+ros2 launch carma_bringup carma_launch.py
+```
 
 # Features/Capabilities
 
