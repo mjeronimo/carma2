@@ -114,7 +114,7 @@ The example code in this repository provides the following features:
 [x]     Sample usage from a CARMA node of a transform listener (doesn't need the rclcpp_node)
 [ ]     Using a helper class that itself creates pubs/subs, but accepts a node (not itself a node)
 [ ]     Using a plugin (a kind of helper; not a node itself, but takes a node to use)
-[ ]     Review all usages of timers. Create timers in on_configure and then deactivate and reactivate them,
+[x]     Review all usages of timers. Create timers in on_configure and then deactivate and reactivate them,
         without using our own member variables (like "active_"). ROS 2 timers support cancel() and reset().
         Can use these methods in on_activate (reset) and on_deactivate(cancel)? See out the ROS 2 example at
         demo_nodes_cpp/src/timers/reuse_timer.cpp.
