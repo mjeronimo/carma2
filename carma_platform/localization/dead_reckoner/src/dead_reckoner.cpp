@@ -13,6 +13,9 @@
 // limitations under the License.
 
 #include "dead_reckoner/dead_reckoner.hpp"
+#include <string>
+#include <memory>
+#include <vector>
 
 namespace dead_reckoner
 {
@@ -20,6 +23,8 @@ namespace dead_reckoner
 DeadReckoner::DeadReckoner(const rclcpp::NodeOptions & options)
 : CarmaNode(options)
 {
+  // create rclcpp node
+  create_rclcpp_node(options);
 }
 
 carma_utils::CallbackReturn
@@ -30,6 +35,17 @@ DeadReckoner::on_configure(const rclcpp_lifecycle::State & state)
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
     system_alert_topic_, 1,
     std::bind(&DeadReckoner::on_system_alert, this, std::placeholders::_1));
+
+  // Initialize transform listener and broadcaster
+  tf_buffer_ = std::make_shared<tf2_ros::Buffer>(rclcpp_node_->get_clock());
+  auto timer_interface = std::make_shared<tf2_ros::CreateTimerROS>(
+    rclcpp_node_->get_node_base_interface(),
+    rclcpp_node_->get_node_timers_interface());
+  tf_buffer_->setCreateTimerInterface(timer_interface);
+  tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
+  tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(rclcpp_node_);
+
+  init_message_filters();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -57,6 +73,14 @@ DeadReckoner::on_cleanup(const rclcpp_lifecycle::State & state)
   RCLCPP_INFO(get_logger(), "Cleaning up");
   CarmaNode::on_cleanup(state);
   system_alert_pub_.reset();
+  // image filter
+  image_connection_.disconnect();
+  image_filter_.reset();
+  image_sub_.reset();
+  // Transforms
+  tf_broadcaster_.reset();
+  tf_listener_.reset();
+  tf_buffer_.reset();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -81,6 +105,28 @@ DeadReckoner::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
     get_logger(), "Received SystemAlert message of type: %u, msg: %s",
     msg->type, msg->description.c_str());
   RCLCPP_INFO(get_logger(), "Perform DeadReckoner-specific system event handling");
+}
+
+void
+DeadReckoner::init_message_filters()
+{
+  image_sub_ = std::make_unique<message_filters::Subscriber<sensor_msgs::msg::Image>>(
+    rclcpp_node_.get(), "camera/image", rmw_qos_profile_sensor_data);
+
+  image_filter_ = std::make_unique<tf2_ros::MessageFilter<sensor_msgs::msg::Image>>(
+    *image_sub_, *tf_buffer_, "camera", 10, rclcpp_node_, tf2::durationFromSec(0.0));
+
+  image_connection_ = image_filter_->registerCallback(
+    std::bind(
+      &DeadReckoner::imageReceived,
+      this, std::placeholders::_1));
+}
+
+void
+DeadReckoner::imageReceived(sensor_msgs::msg::Image::ConstSharedPtr image)
+{
+  RCLCPP_INFO(
+    get_logger(), "Image Received in Frame: %s", image->header.frame_id.c_str());
 }
 
 }  // namespace dead_reckoner

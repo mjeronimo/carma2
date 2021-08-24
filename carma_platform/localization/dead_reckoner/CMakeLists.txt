@@ -7,6 +7,9 @@ find_package(carma_utils REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(ros2_lifecycle_manager_msgs REQUIRED)
+find_package(message_filters REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 carma_package()
 
@@ -21,6 +24,9 @@ set(dependencies
   carma_common
   carma_utils
   rclcpp
+  message_filters
+  tf2_ros
+  sensor_msgs
   rclcpp_lifecycle
   ros2_lifecycle_manager_msgs
 )

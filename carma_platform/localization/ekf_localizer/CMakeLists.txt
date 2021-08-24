@@ -7,6 +7,7 @@ find_package(carma_utils REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(ros2_lifecycle_manager_msgs REQUIRED)
+find_package(tf2_ros REQUIRED)
 
 carma_package()
 
@@ -23,6 +24,7 @@ set(dependencies
   rclcpp
   rclcpp_lifecycle
   ros2_lifecycle_manager_msgs
+  tf2_ros
 )
 
 add_library(${library_name} SHARED
