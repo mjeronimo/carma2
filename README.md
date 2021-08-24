@@ -26,7 +26,7 @@ colcon build --event-handlers desktop_notification- status- --cmake-args -DCMAKE
 ## Source the CARMA2 workspace
 
 ```
-source $CARMA2/install/setup.bash
+source $CARMA_WS/install/setup.bash
 ```
 
 ## Launch the system
@@ -34,6 +34,22 @@ source $CARMA2/install/setup.bash
 ```
 ros2 launch carma_bringup carma_launch.py
 ```
+
+# Running CARMA2 in a Docker container
+
+## Build the Docker image
+
+```
+cd $CARMA_WS/src/carma2/docker
+./build-image.sh
+```
+
+## Launch the Docker container
+
+```
+docker run -it openrobotics/carma2:master
+```
+
 
 # Features/Capabilities
 

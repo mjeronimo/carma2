@@ -19,14 +19,14 @@
 #   BUILD_DATE  - The time and date that the docker image was created (no default value).
 #   VCS_REF     - The git revision of the CARMA2 source code (no default value).
 #   VERSION     - The version of CARMA2 (default: "rolling")
-#   WORKSPACE   - The location for the CARMA2 source code in the container (default: /usr/local/src/carma2)
+#   CARMA_WS    - The location for the CARMA2 source code in the container (default: /usr/local/src/carma2)
 
 FROM ros:rolling
 
 ARG BUILD_DATE
 ARG VCS_REF
 ARG VERSION="rolling"
-ARG WORKSPACE=/usr/local/src//carma2_ws
+ARG CARMA_WS=/usr/local/src/carma2_ws
 
 # LABEL the image
 LABEL org.label-schema.schema-version="1.0"
@@ -46,28 +46,23 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update
 
 # Get the CARMA2 source code
-RUN mkdir -p ${WORKSPACE}/src
-WORKDIR ${WORKSPACE}/src
+RUN mkdir -p ${CARMA_WS}/src
+WORKDIR ${CARMA_WS}/src
 RUN git clone https://github.com/mjeronimo/carma2
 RUN vcs import < carma2/carma2.repos
 
 # Install dependencies
 RUN rosdep update
-RUN rosdep install --from-paths . --ignore-src --rosdistro rolling -y --skip-keys "console_bridge fastcdr fastrtps rti-connext-dds-5.3.1 urdfdom_headers"
+RUN rosdep install -r --from-paths . --ignore-src --rosdistro rolling -y
 
-# Install a few handy tools
+# Install additional tools
 RUN apt-get install -y vim
-RUN apt-get install -y xterm
-RUN apt-get install -y x11vnc xvfb
 
 # Build the CARMA2 code in the workspace
-WORKDIR ${WORKSPACE}
+WORKDIR ${CARMA_WS}
 RUN /bin/bash -c "source /opt/ros/rolling/setup.bash ; colcon build --symlink-install"
 
 # Set up the entrypoint
 COPY ./entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]
-
-#CMD ["x11vnc", "-create", "-forever"]
-
