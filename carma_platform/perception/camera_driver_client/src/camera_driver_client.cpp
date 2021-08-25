@@ -26,6 +26,7 @@ namespace camera_driver_client
 CameraDriverClient::CameraDriverClient(const rclcpp::NodeOptions & options)
 : CarmaNode(options)
 {
+  declare_parameter("show_image", rclcpp::ParameterValue(false));
 }
 
 carma_utils::CallbackReturn
@@ -33,6 +34,9 @@ CameraDriverClient::on_configure(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
   CarmaNode::on_configure(state);
+
+  get_parameter("show_image", show_image_);
+  RCLCPP_INFO(get_logger(), "Show image: %d", show_image_);
 
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
     system_alert_topic_, 1,

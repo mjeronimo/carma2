@@ -29,6 +29,7 @@ def generate_launch_description():
 
     use_sim_time = LaunchConfiguration('use_sim_time')
     autostart = LaunchConfiguration('autostart')
+    show_image = LaunchConfiguration('show_image')
 
     # TODO: Make using separate xterms an input argument
     # term_prefix = "xterm -fa 'Monospace' -fs 10 -geometry 120x30 -hold -e"
@@ -61,6 +62,10 @@ def generate_launch_description():
         'autostart', default_value='true',
         description='Automatically startup the CARMA stack')
 
+    declare_show_img_cmd = DeclareLaunchArgument(
+        'show_image', default_value='false',
+        description='Show image in camera client if true')
+
     # Composable node container for the Perception Subsystem nodes
     perception_container = ComposableNodeContainer(
         name='perception_container',
@@ -78,7 +83,8 @@ def generate_launch_description():
                 package='camera_driver_client',
                 name='camera_driver_client',
                 plugin='camera_driver_client::CameraDriverClient',
-                extra_arguments=[{'use_intra_process_comms': True}]
+                extra_arguments=[{'use_intra_process_comms': True}],
+                parameters=[{'show_image': show_image}]
                 ),
             ComposableNode(
                 package='carma_delphi_srr2_driver',
@@ -176,6 +182,7 @@ def generate_launch_description():
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_params_file_cmd)
     ld.add_action(declare_autostart_cmd)
+    ld.add_action(declare_show_img_cmd)
 
     # Add the actions to launch the carma subsystems
     ld.add_action(perception_container)

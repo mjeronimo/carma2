@@ -134,7 +134,7 @@ CarmaNode::spin()
   }
 }
 
-void 
+void
 CarmaNode::create_rclcpp_node(const rclcpp::NodeOptions & options)
 {
   std::vector<std::string> new_args = options.arguments();

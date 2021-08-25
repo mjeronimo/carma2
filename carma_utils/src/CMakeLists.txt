@@ -18,7 +18,7 @@ ${dependencies}
 )
 
 install(TARGETS
-  ${library_name} 
+  ${library_name}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin

@@ -75,7 +75,7 @@ protected:
   std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<cav_msgs::msg::SystemAlert>>
   system_alert_pub_;
 
-  // function for creating rclcpp node 
+  // function for creating rclcpp node
   void create_rclcpp_node(const rclcpp::NodeOptions & options);
 };
 
