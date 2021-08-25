@@ -2,7 +2,7 @@
 
 ORG=openrobotics
 IMAGE=carma2
-TAG=rolling
+TAG=foxy
 
 BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”`
 VCS_REF=""

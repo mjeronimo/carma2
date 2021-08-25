@@ -19,6 +19,7 @@
 #include <string>
 
 #include "rclcpp/rclcpp.hpp"
+#include "ros2_utils/node_utils.hpp"
 
 namespace ros2_utils
 {
@@ -33,14 +34,19 @@ public:
     const rclcpp::Node::SharedPtr & provided_node)
   : service_name_(service_name), node_(provided_node)
   {
-    callback_group_ = node_->create_callback_group(
-      rclcpp::CallbackGroupType::MutuallyExclusive,
-      false);
-    callback_group_executor_.add_callback_group(callback_group_, node_->get_node_base_interface());
-    client_ = node_->create_client<ServiceT>(
-      service_name,
-      rmw_qos_profile_services_default,
-      callback_group_);
+    if (provided_node) {
+      node_ = provided_node;
+    } else {
+      node_ = generate_internal_node(service_name + "_Node");
+    }
+    client_ = node_->create_client<ServiceT>(service_name);
+  }
+
+  ServiceClient(const std::string & service_name, const std::string & parent_name)
+  : service_name_(service_name)
+  {
+    node_ = generate_internal_node(parent_name + std::string("_") + service_name + "_client");
+    client_ = node_->create_client<ServiceT>(service_name);
   }
 
   using RequestType = typename ServiceT::Request;
@@ -54,7 +60,7 @@ public:
   */
   typename ResponseType::SharedPtr invoke(
     typename RequestType::SharedPtr & request,
-    const std::chrono::nanoseconds timeout = std::chrono::nanoseconds(-1))
+    const std::chrono::nanoseconds timeout = std::chrono::nanoseconds::max())
   {
     // TODO(mjeronimo): overall timeout?
     while (!client_->wait_for_service(std::chrono::seconds(1))) {
@@ -72,7 +78,7 @@ public:
       service_name_.c_str());
     auto future_result = client_->async_send_request(request);
 
-    if (callback_group_executor_.spin_until_future_complete(future_result, timeout) !=
+    if (rclcpp::spin_until_future_complete(node_, future_result, timeout) !=
       rclcpp::FutureReturnCode::SUCCESS)
     {
       throw std::runtime_error(service_name_ + " service client: async_send_request failed");
@@ -106,7 +112,7 @@ public:
       service_name_.c_str());
     auto future_result = client_->async_send_request(request);
 
-    if (callback_group_executor_.spin_until_future_complete(future_result) !=
+    if (rclcpp::spin_until_future_complete(node_, future_result) !=
       rclcpp::FutureReturnCode::SUCCESS)
     {
       return false;
@@ -118,15 +124,12 @@ public:
 
   bool wait_for_service(const std::chrono::nanoseconds timeout = std::chrono::nanoseconds::max())
   {
-    // Returns true if the service is available, false otherwise.
     return client_->wait_for_service(timeout);
   }
 
 protected:
   std::string service_name_;
   rclcpp::Node::SharedPtr node_;
-  rclcpp::CallbackGroup::SharedPtr callback_group_;
-  rclcpp::executors::SingleThreadedExecutor callback_group_executor_;
   typename rclcpp::Client<ServiceT>::SharedPtr client_;
 };
 

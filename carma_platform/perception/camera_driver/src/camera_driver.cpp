@@ -123,7 +123,7 @@ void
 CameraDriver::publish_image()
 {
   // Use a unique_ptr for no copy intra-process communication
-  auto image_msg = ros2_utils::toImageMsg(image_, get_clock()->now());
+  auto image_msg = ros2_utils::toImageMsg(image_, get_clock()->now(), "some_frame_id");
 
   RCLCPP_INFO(
     get_logger(), "publishing image at address %p",

@@ -36,7 +36,7 @@ LifecycleManager::LifecycleManager()
 {
   // The list of names is parameterized, allowing this module to be used with a different set
   // of managed nodes
-  declare_parameter("node_names", rclcpp::PARAMETER_STRING_ARRAY);
+  declare_parameter("node_names", rclcpp::ParameterValue(rclcpp::PARAMETER_STRING_ARRAY));
   declare_parameter("autostart", rclcpp::ParameterValue(false));
   declare_parameter("bond_timeout", 2.0);
 
@@ -47,12 +47,13 @@ LifecycleManager::LifecycleManager()
   bond_timeout_ = std::chrono::duration_cast<std::chrono::milliseconds>(
     std::chrono::duration<double>(bond_timeout_s));
 
-  callback_group_ = create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive, false);
   manager_srv_ = create_service<ManageLifecycleNodes>(
     get_name() + std::string("/manage_nodes"),
-    std::bind(&LifecycleManager::managerCallback, this, _1, _2, _3),
-    rmw_qos_profile_services_default,
-    callback_group_);
+    std::bind(&LifecycleManager::managerCallback, this, _1, _2, _3));
+
+  auto options = rclcpp::NodeOptions().arguments(
+    {"--ros-args", "-r", std::string("__node:=") + get_name() + "_service_client", "--"});
+  service_client_node_ = std::make_shared<rclcpp::Node>("_", options);
 
   transition_state_map_[Transition::TRANSITION_CONFIGURE] = State::PRIMARY_STATE_INACTIVE;
   transition_state_map_[Transition::TRANSITION_CLEANUP] = State::PRIMARY_STATE_UNCONFIGURED;
@@ -80,17 +81,11 @@ LifecycleManager::LifecycleManager()
       if (autostart_) {
         startup();
       }
-    },
-    callback_group_);
-
-  auto executor = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
-  executor->add_callback_group(callback_group_, get_node_base_interface());
-  service_thread_ = std::make_unique<ros2_utils::NodeThread>(executor);
+    });
 }
 
 LifecycleManager::~LifecycleManager()
 {
-  service_thread_.reset();
 }
 
 void
@@ -124,7 +119,7 @@ LifecycleManager::createLifecycleServiceClients()
   RCLCPP_INFO(get_logger(), "Creating and initializing lifecycle service clients");
   for (auto & node_name : node_names_) {
     node_map_[node_name] =
-      std::make_shared<ros2_utils::LifecycleServiceClient>(node_name, shared_from_this());
+      std::make_shared<ros2_utils::LifecycleServiceClient>(node_name, service_client_node_);
   }
 }
 
@@ -153,7 +148,8 @@ LifecycleManager::createBondConnection(const std::string & node_name)
     if (
       !bond_map_[node_name]->waitUntilFormed(
         // rclcpp::Duration(rclcpp::Duration::from_nanoseconds(timeout_ns / 2))))
-        rclcpp::Duration(rclcpp::Duration::from_nanoseconds(timeout_ns))))
+        // rclcpp::Duration(rclcpp::Duration::from_nanoseconds(timeout_ns))))
+        rclcpp::Duration(timeout_ns)))
     {
       RCLCPP_ERROR(
         get_logger(),
@@ -310,7 +306,7 @@ LifecycleManager::resume()
   }
   RCLCPP_INFO(get_logger(), "Managed nodes are active");
 
-#if 0
+#ifdef USE_BOND_CONNECTIONS
   createBondTimer();
 #endif
   return true;
@@ -324,10 +320,7 @@ LifecycleManager::createBondTimer()
   }
 
   RCLCPP_DEBUG(get_logger(), "Creating bond timer");
-  bond_timer_ = create_wall_timer(
-    200ms,
-    std::bind(&LifecycleManager::checkBondConnections, this),
-    callback_group_);
+  bond_timer_ = create_wall_timer(200ms, std::bind(&LifecycleManager::checkBondConnections, this));
 }
 
 void
