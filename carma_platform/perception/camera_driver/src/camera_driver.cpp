@@ -92,7 +92,7 @@ CameraDriver::on_cleanup(const rclcpp_lifecycle::State & state)
   RCLCPP_INFO(get_logger(), "Cleaning up");
   CarmaNode::on_cleanup(state);
   timer_->cancel();
-  cam_pub_.reset();
+  image_pub_.reset();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
