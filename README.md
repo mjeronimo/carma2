@@ -10,9 +10,17 @@ cd $CARMA_WS/src
 
 ## Download the CARMA2 source code
 
+For Rolling:
 ```
 git clone https://github.com/mjeronimo/carma2
-vcs import < carma2/carma2.repos
+vcs import < carma2/carma2_rolling.repos
+rosdep install -r --from-paths . --ignore-src --rosdistro $ROS_DISTRO -y
+```
+
+For Foxy:
+```
+git clone https://github.com/mjeronimo/carma2
+vcs import < carma2/carma2_foxy.repos
 rosdep install -r --from-paths . --ignore-src --rosdistro $ROS_DISTRO -y
 ```
 
