@@ -18,10 +18,10 @@
 #
 #   BUILD_DATE  - The time and date that the docker image was created (no default).
 #   VCS_REF     - The git revision of the CARMA2 source code (no default).
-#   DISTRO      - The ROS 2 distribution to use when building CARMA2 (default: "rolling")
+#   DISTRO      - The ROS 2 distribution to use when building CARMA2 (default: "foxy")
 #   WORKSPACE   - The location for the CARMA2 source code in the container (default: /usr/local/src/carma2)
 
-ARG DISTRO=rolling
+ARG DISTRO=foxy
 FROM ros:$DISTRO
 
 ARG DISTRO
