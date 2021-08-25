@@ -115,11 +115,11 @@ EkfLocalizer::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 void
 EkfLocalizer::lookup_transform()
 {
-  if (tf_->canTransform("odom", "laser", rclcpp::Time(0))) {
+  if (tf_->canTransform("odom", "camera", rclcpp::Time(0))) {
     geometry_msgs::msg::TransformStamped odomLaserTransform;
     try {
       odomLaserTransform = tf_->lookupTransform(
-        "odom", "laser", tf2::TimePointZero, tf2::durationFromSec(
+        "odom", "camera", tf2::TimePointZero, tf2::durationFromSec(
           0.0));
       RCLCPP_INFO(get_logger(), "Transform Received");
     } catch (tf2::TransformException & ex) {

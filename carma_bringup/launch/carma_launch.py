@@ -122,7 +122,7 @@ def generate_launch_description():
     transform_publisher_node = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
-        arguments=['0', '0', '0', '0', '0', '0', 'odom', 'laser']
+        arguments=['0', '0', '0', '0', '0', '0', 'odom', 'camera']
         )
 
     localization_health_monitor = Node(
