@@ -56,13 +56,8 @@ cd $CARMA_WS/src/carma2/docker
 
 Rolling
 ```
-// Manually update the TAG value in build-image.sh to be rolling:
-// TAG=rolling
-//
-// TODO: Update the build-image.sh script to accept a command-line parameter for the distro
-
 cd $CARMA_WS/src/carma2/docker
-./build-image.sh
+./build-image.sh --rosdistro=rolling
 ```
 
 ## Launch the Docker container
@@ -172,8 +167,8 @@ The example code in this repository provides the following features:
 [x] Parameterize the launch script so that it can optionally display the output window (default to not displaying the output
     window so that it works in a Docker container)
 [*] Split out the code in carma_dependencies into their own repos
+[*] Make the docker build accept a command-line parameter to specify the base ROS distro to use (default to foxy)
 [ ] (Patrick) Using a helper class that itself creates pubs/subs, but accepts a node (not itself a node)
 [ ] (Patrick) Using a plugin (a kind of helper; not a node itself, but takes a node to use)
 [ ] (Michael) Make CarmaNode a template that can accept either rclcpp::Node or rclcpp_lifecycle::LifecycleNode
-[ ] (Michael) Make the docker build accept a command-line parameter to specify the base ROS distro to use (default to foxy)
 ```
