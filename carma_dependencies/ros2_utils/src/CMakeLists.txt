@@ -3,6 +3,7 @@ add_library(${library_name} SHARED
   lifecycle_service_client.cpp
   lifecycle_utils.cpp
   node_thread.cpp
+  node_utils.cpp
   param_utils.cpp
   string_utils.cpp
 )

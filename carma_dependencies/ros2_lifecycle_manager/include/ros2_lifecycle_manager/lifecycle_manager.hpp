@@ -18,7 +18,6 @@
 #include <map>
 #include <memory>
 #include <string>
-#include <thread>
 #include <unordered_map>
 #include <vector>
 
@@ -44,6 +43,9 @@ public:
   ~LifecycleManager();
 
 protected:
+  // The ROS node to use when calling lifecycle services
+  rclcpp::Node::SharedPtr service_client_node_;
+
   bool startup();
   bool shutdown();
   bool reset();
@@ -62,10 +64,6 @@ protected:
   bool changeStateForAllNodes(std::uint8_t transition);
   void shutdownAllNodes();
 
-  // Callback group used by services and timers
-  rclcpp::CallbackGroup::SharedPtr callback_group_;
-  std::unique_ptr<ros2_utils::NodeThread> service_thread_;
-
   // The services provided by this node
   rclcpp::Service<ManageLifecycleNodes>::SharedPtr manager_srv_;
 
@@ -74,7 +72,7 @@ protected:
     const std::shared_ptr<ManageLifecycleNodes::Request> request,
     std::shared_ptr<ManageLifecycleNodes::Response> response);
 
-  // Timer thread to look at bond connections
+  // Timer to look at bond connections
   rclcpp::TimerBase::SharedPtr init_timer_;
   rclcpp::TimerBase::SharedPtr bond_timer_;
   std::chrono::milliseconds bond_timeout_;
@@ -95,8 +93,6 @@ protected:
 
   // Whether to automatically start up the system
   bool autostart_{false};
-
-  bool system_active_{false};
 };
 
 }  // namespace ros2_lifecycle_manager
