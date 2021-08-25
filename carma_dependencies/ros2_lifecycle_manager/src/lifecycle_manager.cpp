@@ -36,7 +36,7 @@ LifecycleManager::LifecycleManager()
 {
   // The list of names is parameterized, allowing this module to be used with a different set
   // of managed nodes
-  declare_parameter("node_names", rclcpp::PARAMETER_STRING_ARRAY);
+  declare_parameter("node_names", rclcpp::ParameterValue(rclcpp::PARAMETER_STRING_ARRAY));
   declare_parameter("autostart", rclcpp::ParameterValue(false));
   declare_parameter("bond_timeout", 2.0);
 
@@ -46,7 +46,6 @@ LifecycleManager::LifecycleManager()
   get_parameter("bond_timeout", bond_timeout_s);
   bond_timeout_ = std::chrono::duration_cast<std::chrono::milliseconds>(
     std::chrono::duration<double>(bond_timeout_s));
-
 
   manager_srv_ = create_service<ManageLifecycleNodes>(
     get_name() + std::string("/manage_nodes"),
