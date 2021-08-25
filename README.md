@@ -155,4 +155,6 @@ The example code in this repository provides the following features:
 [ ] Parameterize the launch script so that it can optionally display the output window (default to not displaying the output
     window so that it works in a Docker container)
 [ ] Make CarmaNode a template that can accept either rclcpp::Node or rclcpp_lifecycle::LifecycleNode
+[ ] Split out the code in carma_dependencies into their own repos
+[ ] Make the docker build accept a command-line parameter to specify the base ROS distro to use (default to foxy)
 ```
