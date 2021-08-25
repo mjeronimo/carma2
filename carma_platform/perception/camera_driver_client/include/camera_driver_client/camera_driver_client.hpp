@@ -43,7 +43,6 @@ protected:
 
   void image_callback(const sensor_msgs::msg::Image::UniquePtr msg);
 
-  // TODO(mjeronimo): make this a node parameter
   bool show_image_{false};
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_sub_;
 };

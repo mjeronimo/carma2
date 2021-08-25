@@ -170,8 +170,8 @@ The example code in this repository provides the following features:
     without using our own member variables (like "active_"). ROS 2 timers support cancel() and reset().
     Can use these methods in on_activate (reset) and on_deactivate(cancel)? See out the ROS 2 example at
     demo_nodes_cpp/src/timers/reuse_timer.cpp.
-[ ] Make the show_image variable a node parameter in camera_driver_client, so it can be configured by the launch script
-[ ] Parameterize the launch script so that it can optionally display the output window (default to not displaying the output
+[x] Make the show_image variable a node parameter in camera_driver_client, so it can be configured by the launch script
+[x] Parameterize the launch script so that it can optionally display the output window (default to not displaying the output
     window so that it works in a Docker container)
 [ ] Make CarmaNode a template that can accept either rclcpp::Node or rclcpp_lifecycle::LifecycleNode
 [ ] Split out the code in carma_dependencies into their own repos
