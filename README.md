@@ -1,4 +1,4 @@
-# Building the CARMA2 source code
+# Build and run the CARMA2 source code
 
 ## Create a colcon workspace
 
@@ -35,7 +35,7 @@ source $CARMA_WS/install/setup.bash
 ros2 launch carma_bringup carma_launch.py
 ```
 
-# Running CARMA2 in a Docker container
+# Build and run CARMA2 in a Docker container
 
 ## Build the Docker image
 

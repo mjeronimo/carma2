@@ -62,7 +62,7 @@ RUN apt-get install -y vim
 
 # Build the CARMA2 code in the workspace
 WORKDIR ${WORKSPACE}
-RUN /bin/bash -c "source /opt/ros/rolling/setup.bash ; colcon build --symlink-install"
+RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash ; colcon build --symlink-install"
 
 # Set up the entrypoint
 COPY ./entrypoint.sh /
