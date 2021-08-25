@@ -164,8 +164,6 @@ The example code in this repository provides the following features:
 ```
 [x] Sample usage of the rclcpp node, such as using a message filter
 [x] Sample usage from a CARMA node of a transform listener (doesn't need the rclcpp_node)
-[ ] Using a helper class that itself creates pubs/subs, but accepts a node (not itself a node)
-[ ] Using a plugin (a kind of helper; not a node itself, but takes a node to use)
 [x] Review all usages of timers. Create timers in on_configure and then deactivate and reactivate them,
     without using our own member variables (like "active_"). ROS 2 timers support cancel() and reset().
     Can use these methods in on_activate (reset) and on_deactivate(cancel)? See out the ROS 2 example at
@@ -173,7 +171,9 @@ The example code in this repository provides the following features:
 [x] Make the show_image variable a node parameter in camera_driver_client, so it can be configured by the launch script
 [x] Parameterize the launch script so that it can optionally display the output window (default to not displaying the output
     window so that it works in a Docker container)
-[ ] Make CarmaNode a template that can accept either rclcpp::Node or rclcpp_lifecycle::LifecycleNode
-[ ] Split out the code in carma_dependencies into their own repos
-[ ] Make the docker build accept a command-line parameter to specify the base ROS distro to use (default to foxy)
+[*] Split out the code in carma_dependencies into their own repos
+[ ] (Patrick) Using a helper class that itself creates pubs/subs, but accepts a node (not itself a node)
+[ ] (Patrick) Using a plugin (a kind of helper; not a node itself, but takes a node to use)
+[ ] (Michael) Make CarmaNode a template that can accept either rclcpp::Node or rclcpp_lifecycle::LifecycleNode
+[ ] (Michael) Make the docker build accept a command-line parameter to specify the base ROS distro to use (default to foxy)
 ```
