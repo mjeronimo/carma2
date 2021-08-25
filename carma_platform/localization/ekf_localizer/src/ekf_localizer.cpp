@@ -47,6 +47,9 @@ EkfLocalizer::on_configure(const rclcpp_lifecycle::State & state)
 
   timer_ = create_wall_timer(1s, std::bind(&EkfLocalizer::lookup_transform, this));
 
+  // cancel the timer immediately to prevent it running the first time.
+  timer_->cancel();
+
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -55,6 +58,7 @@ EkfLocalizer::on_activate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Activating");
   CarmaNode::on_activate(state);
+  timer_->reset();
   system_alert_pub_->on_activate();
   return carma_utils::CallbackReturn::SUCCESS;
 }
@@ -64,6 +68,7 @@ EkfLocalizer::on_deactivate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
   CarmaNode::on_deactivate(state);
+  timer_->cancel();
   system_alert_pub_->on_deactivate();
   return carma_utils::CallbackReturn::SUCCESS;
 }
@@ -73,7 +78,9 @@ EkfLocalizer::on_cleanup(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
   CarmaNode::on_cleanup(state);
-  
+
+  timer_->cancel();
+
   // Reset the listener before the buffer
   tf_listener_.reset();
   tf_.reset();
@@ -108,11 +115,11 @@ EkfLocalizer::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 void
 EkfLocalizer::lookup_transform()
 {
-  if (tf_->canTransform("odom", "laser", rclcpp::Time(0))) {
+  if (tf_->canTransform("odom", "camera", rclcpp::Time(0))) {
     geometry_msgs::msg::TransformStamped odomLaserTransform;
     try {
       odomLaserTransform = tf_->lookupTransform(
-        "odom", "laser", tf2::TimePointZero, tf2::durationFromSec(
+        "odom", "camera", tf2::TimePointZero, tf2::durationFromSec(
           0.0));
       RCLCPP_INFO(get_logger(), "Transform Received");
     } catch (tf2::TransformException & ex) {
