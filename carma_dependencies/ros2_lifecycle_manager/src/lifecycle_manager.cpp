@@ -35,8 +35,9 @@ LifecycleManager::LifecycleManager()
 : Node("lifecycle_manager")
 {
   // The list of names is parameterized, allowing this module to be used with a different set
-  // of managed nodes
-  declare_parameter("node_names", rclcpp::ParameterValue(rclcpp::PARAMETER_STRING_ARRAY));
+  // of managed nodes. By default the node name list is empty.
+  std::vector<std::string> default_node_names;
+  declare_parameter("node_names", rclcpp::ParameterValue(default_node_names));
   declare_parameter("autostart", rclcpp::ParameterValue(false));
   declare_parameter("bond_timeout", 2.0);
 

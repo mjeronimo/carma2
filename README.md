@@ -10,17 +10,17 @@ cd $CARMA_WS/src
 
 ## Download the CARMA2 source code
 
-For Rolling:
-```
-git clone https://github.com/mjeronimo/carma2
-vcs import < carma2/carma2_rolling.repos
-rosdep install -r --from-paths . --ignore-src --rosdistro $ROS_DISTRO -y
-```
-
-For Foxy:
+Foxy:
 ```
 git clone https://github.com/mjeronimo/carma2
 vcs import < carma2/carma2_foxy.repos
+rosdep install -r --from-paths . --ignore-src --rosdistro $ROS_DISTRO -y
+```
+
+Rolling:
+```
+git clone https://github.com/mjeronimo/carma2
+vcs import < carma2/carma2_rolling.repos
 rosdep install -r --from-paths . --ignore-src --rosdistro $ROS_DISTRO -y
 ```
 
@@ -47,15 +47,34 @@ ros2 launch carma_bringup carma_launch.py
 
 ## Build the Docker image
 
+Foxy
+
 ```
+cd $CARMA_WS/src/carma2/docker
+./build-image.sh
+```
+
+Rolling
+```
+// Manually update the TAG value in build-image.sh to be rolling:
+// TAG=rolling
+//
+// TODO: Update the build-image.sh script to accept a command-line parameter for the distro
+
 cd $CARMA_WS/src/carma2/docker
 ./build-image.sh
 ```
 
 ## Launch the Docker container
 
+Foxy
 ```
-docker run -it openrobotics/carma2:master
+docker run -it openrobotics/carma2:foxy
+```
+
+Rolling
+```
+docker run -it openrobotics/carma2:rolling
 ```
 
 # Features/Capabilities
