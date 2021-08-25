@@ -16,18 +16,19 @@
 #
 # The script provides the following build arguments:
 #
-#   BUILD_DATE  - The time and date that the docker image was created (no default value).
-#   VCS_REF     - The git revision of the CARMA2 source code (no default value).
-#   VERSION     - The version of CARMA2 (default: "rolling")
+#   BUILD_DATE  - The time and date that the docker image was created (no default).
+#   VCS_REF     - The git revision of the CARMA2 source code (no default).
+#   DISTRO      - The ROS 2 distribution to use when building CARMA2 (default: "rolling")
 #   WORKSPACE   - The location for the CARMA2 source code in the container (default: /usr/local/src/carma2)
 
-FROM ros:rolling
+ARG DISTRO=rolling
+FROM ros:$DISTRO
 
+ARG DISTRO
 ARG BUILD_DATE
 ARG VCS_REF
-ARG VERSION="rolling"
-ARG SRC_DIR=/usr/local/src
-ARG WORKSPACE=${SRC_DIR}/carma2
+ARG WORKSPACE=/usr/local/src/carma2_ws
+ARG VERSION=$DISTRO
 
 # LABEL the image
 LABEL org.label-schema.schema-version="1.0"
@@ -46,25 +47,24 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Update the Ubuntu software repository
 RUN apt-get update
 
-## Get the CARMA2 source code
-RUN mkdir -p ${SRC_DIR}
-WORKDIR ${SRC_DIR}
+# Get the CARMA2 source code
+RUN mkdir -p ${WORKSPACE}/src
+WORKDIR ${WORKSPACE}/src
 RUN git clone https://github.com/mjeronimo/carma2
-WORKDIR ${WORKSPACE}
-RUN git submodule init
-RUN git submodule update
+RUN vcs import < carma2/carma2_${DISTRO}.repos
 
-## Install dependencies
+# Install any required CARMA2 dependencies
 RUN rosdep update
-RUN rosdep install --from-paths . --ignore-src --rosdistro rolling -y --skip-keys "console_bridge fastcdr fastrtps rti-connext-dds-5.3.1 urdfdom_headers"
+RUN rosdep install -r --from-paths . --ignore-src --rosdistro $ROS_DISTRO -y
 
-RUN apt install vim
+# Install additional tools
+RUN apt-get install -y vim
 
 # Build the CARMA2 code in the workspace
-RUN source "/opt/ros/rolling/setup.bash"
-# RUN colcon build --symlink-install
+WORKDIR ${WORKSPACE}
+RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash ; colcon build --symlink-install"
 
 # Set up the entrypoint
-COPY ./ros_entrypoint.sh /
-ENTRYPOINT ["/ros_entrypoint.sh"]
+COPY ./entrypoint.sh /
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]
