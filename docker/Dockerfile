@@ -51,7 +51,7 @@ RUN apt-get update
 RUN mkdir -p ${WORKSPACE}/src
 WORKDIR ${WORKSPACE}/src
 RUN git clone https://github.com/mjeronimo/carma2
-RUN vcs import < carma2/carma2_${DISTRO}.repos
+RUN vcs import < carma2/carma2.repos
 
 # Install any required CARMA2 dependencies
 RUN rosdep update
