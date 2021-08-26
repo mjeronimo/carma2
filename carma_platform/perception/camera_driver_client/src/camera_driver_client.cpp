@@ -47,6 +47,8 @@ CameraDriverClient::on_configure(const rclcpp_lifecycle::State & state)
 
   image_classifier_ = process_image::ProcessImage(shared_from_this());
   image_classifier_.configure();
+
+  cv::namedWindow("view");
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -74,6 +76,7 @@ CameraDriverClient::on_cleanup(const rclcpp_lifecycle::State & state)
   RCLCPP_INFO(get_logger(), "Cleaning up");
   CarmaNode::on_cleanup(state);
   image_classifier_.cleanup();
+  cv::destroyWindow("view");
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
