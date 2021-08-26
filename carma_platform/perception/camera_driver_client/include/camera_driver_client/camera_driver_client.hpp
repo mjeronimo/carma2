@@ -18,6 +18,7 @@
 #include <string>
 
 #include "carma_utils/carma_node.hpp"
+#include "camera_driver_client/process_image.hpp"
 #include "carma_utils/visibility_control.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/image.hpp"
@@ -45,6 +46,9 @@ protected:
 
   bool show_image_{false};
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_sub_;
+
+  // Helper Class
+  process_image::ProcessImage image_classifier_;
 };
 
 }  // namespace camera_driver_client

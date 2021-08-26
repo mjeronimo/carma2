@@ -12,6 +12,7 @@ find_package(OpenCV REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(rcutils REQUIRED)
+find_package(ros2_utils REQUIRED)
 
 carma_package()
 
@@ -31,6 +32,7 @@ set(dependencies
   rclcpp_components
   rclcpp_lifecycle
   rcutils
+  ros2_utils
   ros2_lifecycle_manager_msgs
   sensor_msgs
 )
@@ -39,6 +41,7 @@ set(node_plugins "")
 
 add_library(${library_name} SHARED
   src/camera_driver_client.cpp
+  src/process_image.cpp
 )
 
 target_compile_definitions(${library_name}
