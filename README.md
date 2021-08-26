@@ -148,10 +148,10 @@ The example code in this repository provides the following features:
             Monitor and then decide when to shut down
             Checking heartbeat status of the nodes
 
-    Activate:
+    Pause (deactivate):
 	ros2 service call /carma_system_controller/manage_nodes ros2_lifecycle_manager_msgs/ManageLifecycleNodes "{ command: 1 }"
 
-    Deactivate:
+    Resume (activate):
 	ros2 service call /carma_system_controller/manage_nodes ros2_lifecycle_manager_msgs/ManageLifecycleNodes "{ command: 2 }"
 
 # Task List
