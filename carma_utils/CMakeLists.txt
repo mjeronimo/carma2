@@ -12,16 +12,12 @@ find_package(rclcpp_action REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(rcutils REQUIRED)
-find_package(bondcpp REQUIRED)
-find_package(bond REQUIRED)
 find_package(action_msgs REQUIRED)
 find_package(cav_msgs REQUIRED)
 
 set(dependencies
     action_msgs
     cav_msgs
-    bond
-    bondcpp
     lifecycle_msgs
     nav_msgs
     rclcpp

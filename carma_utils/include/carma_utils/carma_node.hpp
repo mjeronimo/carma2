@@ -19,8 +19,6 @@
 #include <string>
 #include <thread>
 
-#include "bondcpp/bond.hpp"
-#include "bond/msg/constants.hpp"
 #include "carma_utils/visibility_control.hpp"
 #include "cav_msgs/msg/system_alert.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
@@ -33,12 +31,9 @@ namespace carma_utils
 using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
 // TODO(@pmusau17): Make this a template that takes either Node or LifecycleNode
-
-// Common node functionality
 class CarmaNode : public rclcpp_lifecycle::LifecycleNode
 {
 public:
-  // A composition-capable CarmaNode
   CARMA_UTILS_PUBLIC
   explicit CarmaNode(const rclcpp::NodeOptions & options);
 
@@ -63,19 +58,12 @@ protected:
   rclcpp::Node::SharedPtr rclcpp_node_;    // The rclcpp node
   std::unique_ptr<ros2_utils::NodeThread> rclcpp_thread_;  // The thread to spin it
 
-  // Bond connection for heartbeat messages
-  void create_bond();
-  void destroy_bond();
-  std::unique_ptr<bond::Bond> bond_;
-
   // System alert pub/sub
   const std::string system_alert_topic_{"/system_alert"};
   rclcpp::Subscription<cav_msgs::msg::SystemAlert>::SharedPtr system_alert_sub_;
-
   std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<cav_msgs::msg::SystemAlert>>
   system_alert_pub_;
 
-  // function for creating rclcpp node
   void create_rclcpp_node(const rclcpp::NodeOptions & options);
 };
 

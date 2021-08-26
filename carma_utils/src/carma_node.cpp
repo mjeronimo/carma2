@@ -32,10 +32,6 @@ CarmaNode::CarmaNode(const rclcpp::NodeOptions & options)
   // Create a system alert publisher. The subscriber will be made by the child class
   system_alert_pub_ = create_publisher<cav_msgs::msg::SystemAlert>(system_alert_topic_, 10);
 
-  // The server side never times out from lifecycle manager
-  declare_parameter(bond::msg::Constants::DISABLE_HEARTBEAT_TIMEOUT_PARAM, true);
-  set_parameter(rclcpp::Parameter(bond::msg::Constants::DISABLE_HEARTBEAT_TIMEOUT_PARAM, true));
-
   RCLCPP_INFO(get_logger(), "Lifecycle node launched, waiting on state transition requests");
 }
 
@@ -66,20 +62,12 @@ CarmaNode::on_configure(const rclcpp_lifecycle::State & /*state*/)
 carma_utils::CallbackReturn
 CarmaNode::on_activate(const rclcpp_lifecycle::State & /*state*/)
 {
-#ifdef USE_BOND_CONNECTIONS
-  // Create bond with the lifecycle manager
-  create_bond();
-#endif
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
 carma_utils::CallbackReturn
 CarmaNode::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
 {
-#ifdef USE_BOND_CONNECTIONS
-  // Destroy the bond with the lifecycle manager
-  destroy_bond();
-#endif
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -99,27 +87,6 @@ void
 CarmaNode::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
   RCLCPP_INFO(get_logger(), "Received SystemAlert message of type: %u", msg->type);
-}
-
-void
-CarmaNode::create_bond()
-{
-  RCLCPP_DEBUG(get_logger(), "Creating bond to lifecycle manager");
-
-  bond_ = std::make_unique<bond::Bond>(std::string("bond"), get_name(), shared_from_this());
-  bond_->setHeartbeatPeriod(0.10);
-  bond_->setHeartbeatTimeout(2.0);
-  bond_->start();
-}
-
-void
-CarmaNode::destroy_bond()
-{
-  RCLCPP_DEBUG(get_logger(), "Destroying bond to lifecycle manager.");
-
-  if (bond_) {
-    bond_.reset();
-  }
 }
 
 void

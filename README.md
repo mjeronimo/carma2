@@ -83,7 +83,6 @@ The example code in this repository provides the following features:
 * CarmaNode
     * A base class for CARMA nodes in the system
     * Derives from rclcpp_lifecycle::LifecycleNode (could also be a template that can use either Node or LifecycleNode)
-    * Automatically creates a bond with the lifecycle manager (see: https://github.com/ros/bond_core)
     * System alert capable
 
 * Perception Subsystem
@@ -106,8 +105,6 @@ The example code in this repository provides the following features:
 
 * System Controller
     * A Lifecycle Manager that manages the state of the CARMA nodes (lifecycle nodes), initiating state transitions
-    * Monitors bonds with the managed nodes, can detect lack of heartbeat and initialize restarted nodes
-        * The launch system restarts the nodes, based on "respawn" setting
     * Messages (such as SHUTDOWN) can be sent manually via a command-line program
     * System alert capable
 
