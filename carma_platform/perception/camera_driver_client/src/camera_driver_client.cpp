@@ -20,6 +20,8 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "ros2_utils/cv_utils.hpp"
 
+using namespace process_image;
+
 namespace camera_driver_client
 {
 
@@ -36,7 +38,6 @@ CameraDriverClient::on_configure(const rclcpp_lifecycle::State & state)
   CarmaNode::on_configure(state);
 
   get_parameter("show_image", show_image_);
-  RCLCPP_INFO(get_logger(), "Show image: %d", show_image_);
 
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
     system_alert_topic_, 1,
@@ -46,6 +47,8 @@ CameraDriverClient::on_configure(const rclcpp_lifecycle::State & state)
     "camera/image", 1,
     std::bind(&CameraDriverClient::image_callback, this, std::placeholders::_1));
 
+  image_classifier_ = ProcessImage(shared_from_this());
+  image_classifier_.configure();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -53,6 +56,7 @@ carma_utils::CallbackReturn
 CameraDriverClient::on_activate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Activating");
+  image_classifier_.configure();
   CarmaNode::on_activate(state);
   return carma_utils::CallbackReturn::SUCCESS;
 }
@@ -61,6 +65,7 @@ carma_utils::CallbackReturn
 CameraDriverClient::on_deactivate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
+  image_classifier_.deactivate();
   CarmaNode::on_deactivate(state);
   return carma_utils::CallbackReturn::SUCCESS;
 }
@@ -70,6 +75,7 @@ CameraDriverClient::on_cleanup(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
   CarmaNode::on_cleanup(state);
+  image_classifier_.cleanup();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
