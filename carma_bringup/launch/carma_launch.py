@@ -18,7 +18,7 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import (DeclareLaunchArgument, LogInfo, SetEnvironmentVariable)
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, EnvironmentVariable
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.actions import Node
 from launch_ros.descriptions import ComposableNode
@@ -30,10 +30,11 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time')
     autostart = LaunchConfiguration('autostart')
     show_image = LaunchConfiguration('show_image')
+    use_separate_terminals = LaunchConfiguration('use_separate_terminals')
 
-    # TODO: Make using separate xterms an input argument
-    # term_prefix = "xterm -fa 'Monospace' -fs 10 -geometry 120x30 -hold -e"
-    term_prefix = ''
+    # Can set the CARMA_LAUNCH_PREFIX in the environment. For example,
+    #   export CARMA_LAUNCH_PREFIX="xterm -fa 'Monospace' -fs 10 -geometry 120x30 -hold -e"
+    term_prefix = EnvironmentVariable('CARMA_LAUNCH_PREFIX', default_value=''),
 
     stdout_linebuf_envvar = SetEnvironmentVariable(
         'RCUTILS_LOGGING_BUFFERED_STREAM', '1')
@@ -66,6 +67,10 @@ def generate_launch_description():
         'show_image', default_value='false',
         description='Show image in camera client if true')
 
+    declare_use_separate_terminals_cmd = DeclareLaunchArgument(
+        'use_separate_terminals', default_value='true',
+        description='Whether to run each node in a separate terminal')
+
     # Composable node container for the Perception Subsystem nodes
     perception_container = ComposableNodeContainer(
         name='perception_container',
@@ -78,32 +83,32 @@ def generate_launch_description():
                 name='camera_driver',
                 plugin='camera_driver::CameraDriver',
                 extra_arguments=[{'use_intra_process_comms': True}]
-                ),
+            ),
             ComposableNode(
                 package='camera_driver_client',
                 name='camera_driver_client',
                 plugin='camera_driver_client::CameraDriverClient',
                 extra_arguments=[{'use_intra_process_comms': True}],
                 parameters=[{'show_image': show_image}]
-                ),
+            ),
             ComposableNode(
                 package='carma_delphi_srr2_driver',
                 name='carma_delphi_srr2_driver',
                 plugin='carma_delphi_srr2_driver::CarmaDelphiSrr2Driver',
                 extra_arguments=[{'use_intra_process_comms': True}]
-                ),
+            ),
             ComposableNode(
                 package='carma_velodyne_lidar_driver',
                 name='carma_velodyne_lidar_driver',
                 plugin='carma_velodyne_lidar_driver::CarmaVelodyneLidarDriver',
                 extra_arguments=[{'use_intra_process_comms': True}]
-                ),
-            ],
+            ),
+        ],
         on_exit=[LogInfo(msg='perception_container')],
         output='screen',
         prefix=term_prefix,
         respawn='true'
-        )
+    )
 
     # Localization Subsystem
     dead_reckoner = Node(
@@ -113,7 +118,7 @@ def generate_launch_description():
         output='screen',
         prefix=term_prefix,
         respawn='true'
-        )
+    )
 
     ekf_localizer = Node(
         package='ekf_localizer',
@@ -122,14 +127,14 @@ def generate_launch_description():
         output='screen',
         prefix=term_prefix,
         respawn='true'
-        )
+    )
 
     # Static Transform Publisher
     transform_publisher_node = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
         arguments=['0', '0', '0', '0', '0', '0', 'odom', 'camera']
-        )
+    )
 
     localization_health_monitor = Node(
         package='localization_health_monitor',
@@ -144,9 +149,9 @@ def generate_launch_description():
             {'gnss_only_operation_timeout': 20000},
             {'ndt_frequency_degraded_threshold': 8.0},
             {'ndt_frequency_fault_threshold': 0.01}
-            ],
+        ],
         respawn='true'
-        )
+    )
 
     # The system controller manages the lifecycle nodes
     carma_system_controller = Node(
@@ -166,9 +171,9 @@ def generate_launch_description():
                 'dead_reckoner',
                 'ekf_localizer',
                 'localization_health_monitor'
-                ]}
-            ]
-        )
+            ]}
+        ]
+    )
 
     # Create the launch description
     ld = LaunchDescription()
@@ -183,6 +188,7 @@ def generate_launch_description():
     ld.add_action(declare_params_file_cmd)
     ld.add_action(declare_autostart_cmd)
     ld.add_action(declare_show_img_cmd)
+    ld.add_action(declare_use_separate_terminals_cmd)
 
     # Add the actions to launch the carma subsystems
     ld.add_action(perception_container)
