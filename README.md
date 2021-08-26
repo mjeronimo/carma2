@@ -168,6 +168,7 @@ The example code in this repository provides the following features:
     window so that it works in a Docker container)
 [*] Split out the code in carma_dependencies into their own repos
 [*] Make the docker build accept a command-line parameter to specify the base ROS distro to use (default to foxy)
+[*] Introduce an environment variable, CARMA_LAUNCH_PREFIX to set the launch prefix for nodes in the launch file
 [ ] (Patrick) Using a helper class that itself creates pubs/subs, but accepts a node (not itself a node)
 [ ] (Patrick) Using a plugin (a kind of helper; not a node itself, but takes a node to use)
 [ ] (Michael) Make CarmaNode a template that can accept either rclcpp::Node or rclcpp_lifecycle::LifecycleNode

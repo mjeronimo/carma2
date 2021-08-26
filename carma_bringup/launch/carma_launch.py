@@ -30,7 +30,6 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time')
     autostart = LaunchConfiguration('autostart')
     show_image = LaunchConfiguration('show_image')
-    use_separate_terminals = LaunchConfiguration('use_separate_terminals')
 
     # Can set the CARMA_LAUNCH_PREFIX in the environment. For example,
     #   export CARMA_LAUNCH_PREFIX="xterm -fa 'Monospace' -fs 10 -geometry 120x30 -hold -e"
@@ -66,10 +65,6 @@ def generate_launch_description():
     declare_show_img_cmd = DeclareLaunchArgument(
         'show_image', default_value='false',
         description='Show image in camera client if true')
-
-    declare_use_separate_terminals_cmd = DeclareLaunchArgument(
-        'use_separate_terminals', default_value='true',
-        description='Whether to run each node in a separate terminal')
 
     # Composable node container for the Perception Subsystem nodes
     perception_container = ComposableNodeContainer(
@@ -188,7 +183,6 @@ def generate_launch_description():
     ld.add_action(declare_params_file_cmd)
     ld.add_action(declare_autostart_cmd)
     ld.add_action(declare_show_img_cmd)
-    ld.add_action(declare_use_separate_terminals_cmd)
 
     # Add the actions to launch the carma subsystems
     ld.add_action(perception_container)
