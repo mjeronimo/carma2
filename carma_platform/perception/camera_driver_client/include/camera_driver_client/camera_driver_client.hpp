@@ -23,7 +23,6 @@
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/image.hpp"
 
-using namespace process_image;
 namespace camera_driver_client
 {
 
@@ -49,8 +48,7 @@ protected:
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_sub_;
 
   // Helper Class
-  ProcessImage image_classifier_;
-
+  process_image::ProcessImage image_classifier_;
 };
 
 }  // namespace camera_driver_client

@@ -13,10 +13,10 @@
 // limitations under the License.
 
 
-#ifndef PROCESS_IMAGE__PROCESS_IMAGE_HPP_
-#define PROCESS_IMAGE__PROCESS_IMAGE_HPP_
+#ifndef CAMERA_DRIVER_CLIENT__PROCESS_IMAGE_HPP_
+#define CAMERA_DRIVER_CLIENT__PROCESS_IMAGE_HPP_
 
-
+#include <memory>
 #include "ros2_utils/lifecycle_interface.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -32,7 +32,7 @@ class ProcessImage : public ros2_utils::LifecycleInterface
 {
 public:
   ProcessImage();
-  ProcessImage(carma_utils::CarmaNode::SharedPtr node);
+  explicit ProcessImage(carma_utils::CarmaNode::SharedPtr node);
   void configure();
   void activate();
   void deactivate();
@@ -49,10 +49,9 @@ protected:
   // node interface
   rclcpp_lifecycle::LifecycleNode::SharedPtr node_;
   std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<std_msgs::msg::String>> classification_pub_;
-
 };
 
 }  // namespace process_image
 
 
-#endif  //  PROCESS_IMAGE__PROCESS_IMAGE_HPP_
+#endif  //  CAMERA_DRIVER_CLIENT__PROCESS_IMAGE_HPP_

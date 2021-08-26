@@ -20,8 +20,6 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "ros2_utils/cv_utils.hpp"
 
-using namespace process_image;
-
 namespace camera_driver_client
 {
 
@@ -47,7 +45,7 @@ CameraDriverClient::on_configure(const rclcpp_lifecycle::State & state)
     "camera/image", 1,
     std::bind(&CameraDriverClient::image_callback, this, std::placeholders::_1));
 
-  image_classifier_ = ProcessImage(shared_from_this());
+  image_classifier_ = process_image::ProcessImage(shared_from_this());
   image_classifier_.configure();
   return carma_utils::CallbackReturn::SUCCESS;
 }
