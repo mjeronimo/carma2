@@ -116,6 +116,5 @@ CarmaNode::create_rclcpp_node(const rclcpp::NodeOptions & options)
 
 }  // namespace carma_utils
 
-// Register the component with class_loader. This acts as a sort of entry point, allowing
-// the component to be discoverable when its library is being loaded into a running process.
+// Register the component with class_loader
 RCLCPP_COMPONENTS_REGISTER_NODE(carma_utils::CarmaNode)

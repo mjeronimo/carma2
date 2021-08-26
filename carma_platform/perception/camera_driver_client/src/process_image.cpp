@@ -14,16 +14,16 @@
 
 #include "camera_driver_client/process_image.hpp"
 
-#include <string>
 #include <memory>
+#include <string>
 
 namespace process_image
 {
 
-
 ProcessImage::ProcessImage()
 {
 }
+
 ProcessImage::ProcessImage(carma_utils::CarmaNode::SharedPtr node)
 : node_(node)
 {
@@ -32,27 +32,30 @@ ProcessImage::ProcessImage(carma_utils::CarmaNode::SharedPtr node)
 void
 ProcessImage::configure()
 {
-  RCLCPP_INFO(node_->get_logger(), "Helper Class on configure");
+  RCLCPP_INFO(node_->get_logger(), "Helper class on configure");
   image_sub_ = node_->create_subscription<sensor_msgs::msg::Image>(
     "camera/image", 1,
     std::bind(&ProcessImage::image_callback, this, std::placeholders::_1));
 }
+
 void
 ProcessImage::activate()
 {
-  RCLCPP_INFO(node_->get_logger(), "Helper Class on activate");
+  RCLCPP_INFO(node_->get_logger(), "Helper class on activate");
   classification_pub_->on_activate();
 }
+
 void
 ProcessImage::deactivate()
 {
-  RCLCPP_INFO(node_->get_logger(), " Helper Class on deactivate");
+  RCLCPP_INFO(node_->get_logger(), " Helper class on deactivate");
   classification_pub_->on_deactivate();
 }
+
 void
 ProcessImage::cleanup()
 {
-  RCLCPP_INFO(node_->get_logger(), "Helper Class on cleanup");
+  RCLCPP_INFO(node_->get_logger(), "Helper class on cleanup");
   classification_pub_.reset();
 }
 
@@ -63,6 +66,7 @@ ProcessImage::publish_classification()
   message.data = "Vehicle Detected";
   classification_pub_->publish(message);
 }
+
 void
 ProcessImage::image_callback(const sensor_msgs::msg::Image::UniquePtr msg)
 {
@@ -70,6 +74,5 @@ ProcessImage::image_callback(const sensor_msgs::msg::Image::UniquePtr msg)
     node_->get_logger(), "Helper class received image in frame %s, publishing classification",
     msg->header.frame_id.c_str());
 }
-
 
 }  // namespace process_image

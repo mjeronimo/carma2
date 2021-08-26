@@ -17,13 +17,13 @@
 #define CAMERA_DRIVER_CLIENT__PROCESS_IMAGE_HPP_
 
 #include <memory>
-#include "ros2_utils/lifecycle_interface.hpp"
+
+#include "carma_utils/carma_node.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/string.hpp"
+#include "ros2_utils/lifecycle_interface.hpp"
 #include "sensor_msgs/msg/image.hpp"
-#include "carma_utils/carma_node.hpp"
-
+#include "std_msgs/msg/string.hpp"
 
 namespace process_image
 {
@@ -33,25 +33,24 @@ class ProcessImage : public ros2_utils::LifecycleInterface
 public:
   ProcessImage();
   explicit ProcessImage(carma_utils::CarmaNode::SharedPtr node);
-  void configure();
-  void activate();
-  void deactivate();
-  void cleanup();
+
+  void configure() override;
+  void activate() override;
+  void deactivate() override;
+  void cleanup() override;
 
 protected:
   void publish_classification();
   void image_callback(const sensor_msgs::msg::Image::UniquePtr msg);
 
-  // Sample Pub and Sub
-
+  // Sample pub and sub
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_sub_;
 
-  // node interface
+  // Node interface
   rclcpp_lifecycle::LifecycleNode::SharedPtr node_;
   std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<std_msgs::msg::String>> classification_pub_;
 };
 
 }  // namespace process_image
-
 
 #endif  //  CAMERA_DRIVER_CLIENT__PROCESS_IMAGE_HPP_

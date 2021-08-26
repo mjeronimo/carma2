@@ -100,6 +100,18 @@ The example code in this repository provides the following features:
     * Messages (such as SHUTDOWN) can be sent manually via a command-line program
     * System alert capable
 
+* Sample usage of the rclcpp node, such as using a message filter
+* Sample usage from a CARMA node of a transform listener (doesn't need the rclcpp_node)
+* Review all usages of timers. Create timers in on_configure and then deactivate and reactivate them,
+    without using our own member variables (like "active_"). ROS 2 timers support cancel() and reset().
+    Can use these methods in on_activate (reset) and on_deactivate(cancel)? See out the ROS 2 example at
+    demo_nodes_cpp/src/timers/reuse_timer.cpp.
+* Make the show_image variable a node parameter in camera_driver_client, so it can be configured by the launch script
+* Parameterize the launch script so that it can optionally display the output window (default to not displaying the output
+    window so that it works in a Docker container)
+* Environment variable, CARMA_LAUNCH_PREFIX to set the launch prefix for nodes in the launch file
+* Using a helper class that itself creates pubs/subs, but accepts a node (not itself a node)
+
 # Architecture Questions
 
 * What is the recovery strategy?
@@ -121,21 +133,19 @@ The example code in this repository provides the following features:
 * Composable nodes (especially in subsystems)
 * Recovery
 
-# Issues
-
-* When setting the composable node container to respawn, the contained composable nodes aren't reloaded
-
 # Notes
 
-    Localization system recovery
-        LiDAR-based localization fails, transitions output pose to GPS
-        Localization Manager
-            Monitoring the performance of the system and heartbeat status
-            Implements recovery internally
+```
+Localization system recovery
+    LiDAR-based localization fails, transitions output pose to GPS
+    Localization Manager
+        Monitoring the performance of the system and heartbeat status
+        Implements recovery internally
 
-        Separate node from the health monitoring
-            Monitor and then decide when to shut down
-            Checking heartbeat status of the nodes
+    Separate node from the health monitoring
+        Monitor and then decide when to shut down
+        Checking heartbeat status of the nodes
+```
 
 # Manually controlling the lifecycle state of the system
 
@@ -164,22 +174,15 @@ ros2 service call /carma_system_controller/manage_nodes ros2_lifecycle_manager_m
 ros2 service call /carma_system_controller/manage_nodes ros2_lifecycle_manager_msgs/ManageLifecycleNodes "{ command: 4 }"
 ```
 
+# Issues
+
+* When setting the composable node container to respawn, the contained composable nodes aren't reloaded
+
 # Task List
 
 ```
-[x] Sample usage of the rclcpp node, such as using a message filter
-[x] Sample usage from a CARMA node of a transform listener (doesn't need the rclcpp_node)
-[x] Review all usages of timers. Create timers in on_configure and then deactivate and reactivate them,
-    without using our own member variables (like "active_"). ROS 2 timers support cancel() and reset().
-    Can use these methods in on_activate (reset) and on_deactivate(cancel)? See out the ROS 2 example at
-    demo_nodes_cpp/src/timers/reuse_timer.cpp.
-[x] Make the show_image variable a node parameter in camera_driver_client, so it can be configured by the launch script
-[x] Parameterize the launch script so that it can optionally display the output window (default to not displaying the output
-    window so that it works in a Docker container)
-[*] Split out the code in carma_dependencies into their own repos
-[*] Make the docker build accept a command-line parameter to specify the base ROS distro to use (default to foxy)
-[*] Introduce an environment variable, CARMA_LAUNCH_PREFIX to set the launch prefix for nodes in the launch file
-[x] (Patrick) Using a helper class that itself creates pubs/subs, but accepts a node (not itself a node)
-[ ] (Patrick) Using a plugin (a kind of helper; not a node itself, but takes a node to use)
-[ ] (Michael) Make CarmaNode a template that can accept either rclcpp::Node or rclcpp_lifecycle::LifecycleNode
+[ ] Add an XML launch file (equivalent to the current Python launch file)
+[ ] Make CarmaNode a template that can accept either rclcpp::Node or rclcpp_lifecycle::LifecycleNode
+[ ] Add a plugin to some node (a "helper plugin"; not a node itself, but takes a node to use)
 ```
+

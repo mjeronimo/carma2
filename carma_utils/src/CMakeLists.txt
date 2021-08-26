@@ -11,23 +11,17 @@ set(node_plugins "${node_plugins}carma_utils::CarmaNode;$<TARGET_FILE:carma_util
 add_executable(event_pub
   publish_events.cpp
 )
-ament_target_dependencies(event_pub ${dependencies})
 
-ament_target_dependencies(${library_name}
-${dependencies}
+ament_target_dependencies(event_pub
+  ${dependencies}
 )
 
-install(TARGETS
-  ${library_name}
+ament_target_dependencies(${library_name}
+  ${dependencies}
+)
+
+install(TARGETS ${library_name} event_pub
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
-)
-
-
-install(TARGETS
-  event_pub
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
