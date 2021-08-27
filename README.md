@@ -177,6 +177,7 @@ ros2 service call /carma_system_controller/manage_nodes ros2_lifecycle_manager_m
 # Issues
 
 * When setting the composable node container to respawn, the contained composable nodes aren't reloaded
+* There is a namespace collision when using the new plugin added to the dead reckoner node
 
 # Task List
 
