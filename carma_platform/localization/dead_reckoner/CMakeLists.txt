@@ -10,6 +10,8 @@ find_package(ros2_lifecycle_manager_msgs REQUIRED)
 find_package(message_filters REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(ros2_utils REQUIRED)
+find_package(pluginlib REQUIRED)
 
 carma_package()
 
@@ -28,28 +30,34 @@ set(dependencies
   tf2_ros
   sensor_msgs
   rclcpp_lifecycle
+  ros2_utils
+  pluginlib
   ros2_lifecycle_manager_msgs
 )
 
 add_library(${library_name} SHARED
   src/dead_reckoner.cpp
+  plugins/distance_calculator.cpp
 )
-
 ament_target_dependencies(${library_name}
   ${dependencies}
 )
 
+
+add_library(distance_calculator SHARED plugins/distance_calculator.cpp)
+ament_target_dependencies(distance_calculator ${dependencies})
+
+
 add_executable(${executable_name}
   src/main.cpp
 )
-
-target_link_libraries(${executable_name} ${library_name})
-
+target_link_libraries(${executable_name} ${library_name} distance_calculator)
 ament_target_dependencies(${executable_name}
   ${dependencies}
 )
 
-install(TARGETS ${library_name}
+install(TARGETS ${library_name} distance_calculator
+  EXPORT export_${PROJECT_NAME}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
@@ -69,6 +77,10 @@ if(BUILD_TESTING)
 endif()
 
 ament_export_include_directories(include)
-ament_export_libraries(${library_name})
+ament_export_libraries(${library_name} distance_calculator)
 ament_export_dependencies(${dependencies})
+ament_export_targets(
+  export_${PROJECT_NAME}
+)
+pluginlib_export_plugin_description_file(carma_utils plugins.xml)
 ament_package()
