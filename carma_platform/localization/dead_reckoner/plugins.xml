@@ -1,0 +1,7 @@
+<class_libraries>
+  <library path="distance_calculator">
+    <class type="dead_reckoner::DistanceCalculator" base_class_type="carma_utils::PluginInterface">
+      <description>Example Pluging Class that computes distance from an image</description>
+    </class>
+  </library>
+</class_libraries>

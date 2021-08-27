@@ -13,6 +13,8 @@
 // limitations under the License.
 
 #include "dead_reckoner/dead_reckoner.hpp"
+#include "dead_reckoner/distance_calculator.hpp"
+#include <pluginlib/class_loader.hpp>
 
 #include <memory>
 #include <string>
@@ -32,6 +34,18 @@ DeadReckoner::on_configure(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
   CarmaNode::on_configure(state);
+
+  try
+  {
+    dc = distance_loader.createSharedInstance("dead_reckoner::DistanceCalculator");
+    dc->initialize(shared_from_this());
+    dc->configure();
+  }
+  catch(pluginlib::PluginlibException& ex)
+  {
+    RCLCPP_INFO(get_logger(),"The plugin failed to load for some reason. Error: %s\n", ex.what());
+  }
+  
 
   system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
     system_alert_topic_, 1,
@@ -56,6 +70,8 @@ DeadReckoner::on_activate(const rclcpp_lifecycle::State & state)
   RCLCPP_INFO(get_logger(), "Activating");
   CarmaNode::on_activate(state);
   system_alert_pub_->on_activate();
+  dc->activate();
+ 
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -65,6 +81,7 @@ DeadReckoner::on_deactivate(const rclcpp_lifecycle::State & state)
   RCLCPP_INFO(get_logger(), "Deactivating");
   CarmaNode::on_deactivate(state);
   system_alert_pub_->on_deactivate();
+  dc->deactivate();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -82,6 +99,7 @@ DeadReckoner::on_cleanup(const rclcpp_lifecycle::State & state)
   tf_broadcaster_.reset();
   tf_listener_.reset();
   tf_buffer_.reset();
+  dc->cleanup();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 

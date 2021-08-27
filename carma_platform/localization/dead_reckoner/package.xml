@@ -15,6 +15,7 @@
   <depend>rclcpp</depend>
   <depend>carma_utils</depend>
   <depend>sensor_msgs</depend>
+  <depend>ros2_utils</depend>
   <depend>message_filters</depend>
   <depend>tf2_ros</depend>
 

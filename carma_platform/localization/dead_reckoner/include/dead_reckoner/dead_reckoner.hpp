@@ -27,6 +27,8 @@
 #include "tf2_ros/transform_broadcaster.h"
 #include "tf2_ros/transform_listener.h"
 #include "rclcpp/rclcpp.hpp"
+#include "carma_utils/plugin_interface.hpp"
+#include <pluginlib/class_loader.hpp>
 
 namespace dead_reckoner
 {
@@ -60,6 +62,13 @@ protected:
   // Image subscription and callback
   std::unique_ptr<message_filters::Subscriber<sensor_msgs::msg::Image>> image_sub_;
   void on_image_received(sensor_msgs::msg::Image::ConstSharedPtr image);
+
+  // Plugin Class Loader
+  pluginlib::ClassLoader<carma_utils::PluginInterface> distance_loader= 
+    pluginlib::ClassLoader<carma_utils::PluginInterface>("carma_utils", "carma_utils::PluginInterface");
+
+  // Plugin
+  std::shared_ptr<carma_utils::PluginInterface> dc;
 };
 
 }  // namespace dead_reckoner
