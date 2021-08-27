@@ -1,0 +1,8 @@
+ament_add_gtest(test_motion_predict test_motion_predict.cpp)
+ament_add_gtest(test_predict_ctrv test_predict_ctrv.cpp)
+
+target_link_libraries(test_motion_predict motion_predict)
+target_link_libraries(test_predict_ctrv motion_predict)
+
+ament_target_dependencies(test_motion_predict cav_msgs)
+ament_target_dependencies(test_predict_ctrv cav_msgs)

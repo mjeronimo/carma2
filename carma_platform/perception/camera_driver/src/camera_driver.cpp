@@ -55,7 +55,7 @@ CameraDriver::on_configure(const rclcpp_lifecycle::State & state)
   // Use a timer to schedule periodic message publishing
   timer_ = create_wall_timer(1s, std::bind(&CameraDriver::publish_image, this));
 
-  // cancel the timer immediately to prevent it running the first time.
+  // Cancel the timer immediately to prevent it running the first time
   timer_->cancel();
 
   return carma_utils::CallbackReturn::SUCCESS;
