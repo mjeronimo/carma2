@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="namespace" default="" description="Top-level namespace"/>
+  <arg name="use_namespace" default="false" description="Whether to apply a namespace to all nodes"/>
+  <arg name="use_sim_time" default="true" description="Whether to Use simulation (Gazebo) time"/>
+  <arg name="params_file" default="$(find-pkg-share carma_bringup)/params/carma_params.yaml" description="Path to the ROS2 parameters file to use for all launched nodes"/> 
+  <arg name="autostart" default="true" description="Automatically start the CARMA stack"/>
+  <arg name="show_image" default="false" description="Whether the camera client should show the output image in a window"/>
+
+  <node_container pkg="rclcpp_components" name="perception_container" namespace="" exec="component_container" args="" output="screen" launch-prefix="$(env CARMA_LAUNCH_PREFIX '')">
+    <composable_node pkg="camera_driver" plugin="camera_driver::CameraDriver" name="camera_driver" namespace="">
+      <param name="use_sim_time" value="$(var use_sim_time)" />
+      <extra_arg name="use_intra_process_comms" value="true" />
+    </composable_node>
+    <composable_node pkg="camera_driver_client" plugin="camera_driver_client::CameraDriverClient" name="camera_driver_client" namespace="">
+      <param name="use_sim_time" value="$(var use_sim_time)" />
+      <param name="show_image" value="$(var show_image)" /> 
+      <extra_arg name="use_intra_process_comms" value="true" />
+    </composable_node>
+    <composable_node pkg="carma_delphi_srr2_driver" plugin="carma_delphi_srr2_driver::CarmaDelphiSrr2Driver" name="carma_delphi_srr2_driver" namespace="">
+      <param name="use_sim_time" value="$(var use_sim_time)" />
+      <extra_arg name="use_intra_process_comms" value="true" />
+    </composable_node>
+    <composable_node pkg="carma_velodyne_lidar_driver" plugin="carma_velodyne_lidar_driver::CarmaVelodyneLidarDriver" name="carma_velodyne_lidar_driver" namespace="">
+      <param name="use_sim_time" value="$(var use_sim_time)" />
+      <extra_arg name="use_intra_process_comms" value="true" />
+    </composable_node>
+  </node_container>
+
+  <node pkg="dead_reckoner" name="dead_reckoner" exec="dead_reckoner" output="screen" launch-prefix="$(env CARMA_LAUNCH_PREFIX '')" />
+  <node pkg="ekf_localizer" name="ekf_localizer" exec="ekf_localizer" output="screen" launch-prefix="$(env CARMA_LAUNCH_PREFIX '')" />
+  <node pkg="tf2_ros" name="static_transform_publisher" exec="static_transform_publisher" output="screen" args="0 0 0 0 0 0 odom camera" launch-prefix="$(env CARMA_LAUNCH_PREFIX '')" />
+  <node pkg="localization_health_monitor" name="localization_health_monitor" exec="localization_health_monitor" output="screen" launch-prefix="$(env CARMA_LAUNCH_PREFIX '')">
+    <param name="auto_initialization_timeout" value="3000" />
+    <param name="fitness_score_degraded_threshold" value="20.0" />
+    <param name="fitness_score_fault_threshold" value="100000.0" />
+    <param name="gnss_only_operation_timeout" value="20000" />
+    <param name="ndt_frequency_degraded_threshold" value="8.0" />
+    <param name="ndt_frequency_fault_threshold" value="0.01" />
+  </node>
+
+  <node pkg="system_controller" name="carma_system_controller" exec="system_controller" output="screen" launch-prefix="$(env CARMA_LAUNCH_PREFIX '')">
+    <param name="use_sim_time" value="$(var use_sim_time)" />
+    <param name="autostart" value="$(var autostart)" />
+    <param name="node_names" value="['camera_driver', 'camera_driver_client', 'carma_delphi_srr2_driver', 'carma_velodyne_lidar_driver', 'dead_reckoner', 'ekf_localizer', 'localization_health_monitor']" />
+  </node>
+
+</launch>
