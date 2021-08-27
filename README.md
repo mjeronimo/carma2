@@ -181,8 +181,9 @@ ros2 service call /carma_system_controller/manage_nodes ros2_lifecycle_manager_m
 # Task List
 
 ```
-[ ] Add an XML launch file (equivalent to the current Python launch file)
+[*] Add an XML launch file (equivalent to the current Python launch file)
+[*] Add a plugin to some node (a "helper plugin"; not a node itself, but takes a node to use)
+[ ] Add some example parameters to plugin (to demonstrate how to separate parameters) with two plugins
 [ ] Make CarmaNode a template that can accept either rclcpp::Node or rclcpp_lifecycle::LifecycleNode
-[ ] Add a plugin to some node (a "helper plugin"; not a node itself, but takes a node to use)
 ```
 
