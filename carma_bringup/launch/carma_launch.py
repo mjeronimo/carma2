@@ -27,6 +27,7 @@ from launch_ros.descriptions import ComposableNode
 def generate_launch_description():
     bringup_dir = get_package_share_directory('carma_bringup')
 
+    # Create the launch configuration variables
     use_sim_time = LaunchConfiguration('use_sim_time')
     autostart = LaunchConfiguration('autostart')
     show_image = LaunchConfiguration('show_image')
@@ -38,6 +39,7 @@ def generate_launch_description():
     stdout_linebuf_envvar = SetEnvironmentVariable(
         'RCUTILS_LOGGING_BUFFERED_STREAM', '1')
 
+    # Declare the launch arguments
     declare_namespace_cmd = DeclareLaunchArgument(
         'namespace',
         default_value='',
@@ -66,7 +68,7 @@ def generate_launch_description():
         'show_image', default_value='false',
         description='Show image in camera client if true')
 
-    # Composable node container for the Perception Subsystem nodes
+    # The composable node container for the Perception Subsystem
     perception_container = ComposableNodeContainer(
         name='perception_container',
         namespace='',
@@ -105,7 +107,7 @@ def generate_launch_description():
         respawn='true'
     )
 
-    # Localization Subsystem
+    # Nodes in the Localization Subsystem
     dead_reckoner = Node(
         package='dead_reckoner',
         name='dead_reckoner',
@@ -124,7 +126,7 @@ def generate_launch_description():
         respawn='true'
     )
 
-    # Static Transform Publisher
+    # Static transform publisher
     transform_publisher_node = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
@@ -148,7 +150,7 @@ def generate_launch_description():
         respawn='true'
     )
 
-    # The system controller manages the lifecycle nodes
+    # The System Controller manages all of the lifecycle nodes
     carma_system_controller = Node(
         package='system_controller',
         name='carma_system_controller',
@@ -191,4 +193,5 @@ def generate_launch_description():
     ld.add_action(localization_health_monitor)
     ld.add_action(transform_publisher_node)
     ld.add_action(carma_system_controller)
+
     return ld

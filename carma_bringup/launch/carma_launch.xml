@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <launch>
+ <!-- Declare the launch arguments -->
   <arg name="namespace" default="" description="Top-level namespace"/>
   <arg name="use_namespace" default="false" description="Whether to apply a namespace to all nodes"/>
   <arg name="use_sim_time" default="true" description="Whether to Use simulation (Gazebo) time"/>
@@ -7,6 +8,7 @@
   <arg name="autostart" default="true" description="Automatically start the CARMA stack"/>
   <arg name="show_image" default="false" description="Whether the camera client should show the output image in a window"/>
 
+  <!-- The composable node container for the Perception Subsystem -->
   <node_container pkg="rclcpp_components" name="perception_container" namespace="" exec="component_container" args="" output="screen" launch-prefix="$(env CARMA_LAUNCH_PREFIX '')">
     <composable_node pkg="camera_driver" plugin="camera_driver::CameraDriver" name="camera_driver" namespace="">
       <param name="use_sim_time" value="$(var use_sim_time)" />
@@ -27,9 +29,13 @@
     </composable_node>
   </node_container>
 
+  <!-- Nodes in the Localization Subsystem -->
   <node pkg="dead_reckoner" name="dead_reckoner" exec="dead_reckoner" output="screen" launch-prefix="$(env CARMA_LAUNCH_PREFIX '')" />
   <node pkg="ekf_localizer" name="ekf_localizer" exec="ekf_localizer" output="screen" launch-prefix="$(env CARMA_LAUNCH_PREFIX '')" />
+
+  <!-- Static transform publisher -->
   <node pkg="tf2_ros" name="static_transform_publisher" exec="static_transform_publisher" output="screen" args="0 0 0 0 0 0 odom camera" launch-prefix="$(env CARMA_LAUNCH_PREFIX '')" />
+
   <node pkg="localization_health_monitor" name="localization_health_monitor" exec="localization_health_monitor" output="screen" launch-prefix="$(env CARMA_LAUNCH_PREFIX '')">
     <param name="auto_initialization_timeout" value="3000" />
     <param name="fitness_score_degraded_threshold" value="20.0" />
@@ -39,6 +45,7 @@
     <param name="ndt_frequency_fault_threshold" value="0.01" />
   </node>
 
+  <!-- The System Controller manages all of the lifecycle nodes -->
   <node pkg="system_controller" name="carma_system_controller" exec="system_controller" output="screen" launch-prefix="$(env CARMA_LAUNCH_PREFIX '')">
     <param name="use_sim_time" value="$(var use_sim_time)" />
     <param name="autostart" value="$(var autostart)" />
