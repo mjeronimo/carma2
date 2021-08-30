@@ -184,11 +184,7 @@ predictStep(
 
   // Update header
   pobj.header = obj.header;
-  // TODO(mjeronimo): confirm this change
-  rclcpp::Time t(pobj.header.stamp);
-  t += rclcpp::Duration(delta_t);
-  // pobj.header.stamp += rclcpp::Duration(delta_t);
-  pobj.header.stamp = t;
+  pobj.header.stamp = rclcpp::Time(pobj.header.stamp) + rclcpp::Duration(delta_t);
 
   return pobj;
 }
@@ -215,11 +211,7 @@ predictStep(
 
   // Update header
   pobj.header = obj.header;
-  // TODO(mjeronimo): confirm this change
-  rclcpp::Time t(pobj.header.stamp);
-  t += rclcpp::Duration(delta_t);
-  // pobj.header.stamp += rclcpp::Duration(delta_t);
-  pobj.header.stamp = t;
+  pobj.header.stamp = rclcpp::Time(pobj.header.stamp) + rclcpp::Duration(delta_t);
 
   return pobj;
 }
