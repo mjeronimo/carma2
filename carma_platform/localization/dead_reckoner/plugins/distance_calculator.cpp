@@ -14,9 +14,6 @@
 
 #include "dead_reckoner/distance_calculator.hpp"
 
-#include <exception>
-#include <string>
-
 #include "pluginlib/class_list_macros.hpp"
 
 namespace dead_reckoner

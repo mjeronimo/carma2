@@ -4,14 +4,14 @@ project(dead_reckoner)
 find_package(ament_cmake REQUIRED)
 find_package(carma_common REQUIRED)
 find_package(carma_utils REQUIRED)
+find_package(message_filters REQUIRED)
+find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(ros2_lifecycle_manager_msgs REQUIRED)
-find_package(message_filters REQUIRED)
-find_package(tf2_ros REQUIRED)
-find_package(sensor_msgs REQUIRED)
 find_package(ros2_utils REQUIRED)
-find_package(pluginlib REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(tf2_ros REQUIRED)
 
 carma_package()
 
@@ -25,14 +25,14 @@ set(library_name ${executable_name}_core)
 set(dependencies
   carma_common
   carma_utils
-  rclcpp
   message_filters
-  tf2_ros
-  sensor_msgs
-  rclcpp_lifecycle
-  ros2_utils
   pluginlib
+  rclcpp
+  rclcpp_lifecycle
   ros2_lifecycle_manager_msgs
+  ros2_utils
+  sensor_msgs
+  tf2_ros
 )
 
 add_library(${library_name} SHARED
@@ -43,10 +43,8 @@ ament_target_dependencies(${library_name}
   ${dependencies}
 )
 
-
 add_library(distance_calculator SHARED plugins/distance_calculator.cpp)
 ament_target_dependencies(distance_calculator ${dependencies})
-
 
 add_executable(${executable_name}
   src/main.cpp
@@ -79,8 +77,8 @@ endif()
 ament_export_include_directories(include)
 ament_export_libraries(${library_name} distance_calculator)
 ament_export_dependencies(${dependencies})
-ament_export_targets(
-  export_${PROJECT_NAME}
-)
+ament_export_targets(export_${PROJECT_NAME})
+
 pluginlib_export_plugin_description_file(carma_utils plugins.xml)
+
 ament_package()

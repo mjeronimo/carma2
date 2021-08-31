@@ -20,6 +20,7 @@
 
 #include "dead_reckoner/distance_calculator.hpp"
 #include "pluginlib/class_loader.hpp"
+#include "tf2_ros/create_timer_ros.h"
 
 namespace dead_reckoner
 {

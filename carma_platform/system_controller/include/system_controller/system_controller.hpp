@@ -29,7 +29,7 @@ class SystemController : public carma_utils::CarmaNode
 {
 public:
   SystemController() = delete;
-  SystemController(const rclcpp::NodeOptions & options);
+  explicit SystemController(const rclcpp::NodeOptions & options);
 
 protected:
   void on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg) override;

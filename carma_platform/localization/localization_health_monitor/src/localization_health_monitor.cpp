@@ -109,11 +109,13 @@ LocalizationHealthMonitor::on_localization_status_change(
     case cav_msgs::msg::LocalizationStatusReport::INITIALIZING:
       RCLCPP_INFO(get_logger(), "Localization System Initializing");
       break;
+
     case cav_msgs::msg::LocalizationStatusReport::DEGRADED_NO_LIDAR_FIX:
       alert_msg.type = cav_msgs::msg::SystemAlert::FATAL;
       alert_msg.description = "Localization in Degraded Mode No Fix";
       this->system_alert_pub_->publish(alert_msg);
       break;
+
     case cav_msgs::msg::LocalizationStatusReport::DEGRADED:
     case cav_msgs::msg::LocalizationStatusReport::AWAIT_MANUAL_INITIALIZATION:
       alert_msg.type = cav_msgs::msg::SystemAlert::CAUTION;

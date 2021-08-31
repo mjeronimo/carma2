@@ -16,20 +16,18 @@
 
 #include <memory>
 
-#include "rclcpp/rclcpp.hpp"
-
 namespace system_controller
 {
 
 SystemController::SystemController(const rclcpp::NodeOptions & options)
-: CarmaNode(options) 
+: CarmaNode(options)
 {
   lifecycle_mgr_ = std::make_shared<ros2_lifecycle_manager::LifecycleManager>(
-      get_node_base_interface(),
-      get_node_parameters_interface(),
-      get_node_logging_interface(),
-      get_node_timers_interface(),
-      get_node_services_interface()
+    get_node_base_interface(),
+    get_node_parameters_interface(),
+    get_node_logging_interface(),
+    get_node_timers_interface(),
+    get_node_services_interface()
   );
 }
 
@@ -44,6 +42,7 @@ SystemController::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr ms
     case cav_msgs::msg::SystemAlert::CAUTION:
       lifecycle_mgr_->pause();
       break;
+
     case cav_msgs::msg::SystemAlert::SHUTDOWN:
     case cav_msgs::msg::SystemAlert::FATAL:
       lifecycle_mgr_->shutdown();

@@ -30,6 +30,7 @@ class DistanceCalculator : public carma_utils::PluginInterface
 public:
   DistanceCalculator() = default;
 
+  // TODO(mjeronimo): consolidate initialize and configure
   void initialize(const carma_utils::CarmaLifecycleNode::SharedPtr node);
   void configure();
   void activate();
