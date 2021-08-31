@@ -21,18 +21,16 @@
 namespace system_controller
 {
 
-SystemController::SystemController()
+SystemController::SystemController(const rclcpp::NodeOptions & options)
+: CarmaNode(options) 
 {
-  system_alert_pub_ = create_publisher<cav_msgs::msg::SystemAlert>(system_alert_topic_, 10);
-  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
-    system_alert_topic_, 10,
-    std::bind(&SystemController::on_system_alert, this, std::placeholders::_1));
-}
-
-void
-SystemController::publish_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
-{
-  system_alert_pub_->publish(*msg);
+  lifecycle_mgr_ = std::make_shared<ros2_lifecycle_manager::LifecycleManager>(
+      get_node_base_interface(),
+      get_node_parameters_interface(),
+      get_node_logging_interface(),
+      get_node_timers_interface(),
+      get_node_services_interface()
+  );
 }
 
 void
@@ -44,11 +42,11 @@ SystemController::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr ms
 
   switch (msg->type) {
     case cav_msgs::msg::SystemAlert::CAUTION:
-      pause();
+      lifecycle_mgr_->pause();
       break;
     case cav_msgs::msg::SystemAlert::SHUTDOWN:
     case cav_msgs::msg::SystemAlert::FATAL:
-      shutdown();
+      lifecycle_mgr_->shutdown();
       break;
   }
 }

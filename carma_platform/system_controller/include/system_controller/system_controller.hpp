@@ -16,8 +16,8 @@
 #define SYSTEM_CONTROLLER__SYSTEM_CONTROLLER_HPP_
 
 #include <memory>
-#include <string>
 
+#include "carma_utils/carma_node.hpp"
 #include "cav_msgs/msg/system_alert.hpp"
 #include "ros2_lifecycle_manager/lifecycle_manager.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -25,22 +25,16 @@
 namespace system_controller
 {
 
-// The System Controller inherits from the lifecycle manager class from ROS2
-// It adds system alerts for the CARMA System on top of the existing lifecycle functionality.
-
-class SystemController : public ros2_lifecycle_manager::LifecycleManager
+class SystemController : public carma_utils::CarmaNode
 {
 public:
-  SystemController();
+  SystemController() = delete;
+  SystemController(const rclcpp::NodeOptions & options);
 
 protected:
-  // System alerts
-  const std::string system_alert_topic_{"/system_alert"};
-  rclcpp::Subscription<cav_msgs::msg::SystemAlert>::SharedPtr system_alert_sub_;
-  rclcpp::Publisher<cav_msgs::msg::SystemAlert>::SharedPtr system_alert_pub_;
+  void on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg) override;
 
-  void publish_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
-  void on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
+  std::shared_ptr<ros2_lifecycle_manager::LifecycleManager> lifecycle_mgr_;
 };
 
 }  // namespace system_controller
