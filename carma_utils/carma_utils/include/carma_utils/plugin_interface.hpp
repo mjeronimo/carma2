@@ -35,7 +35,6 @@ public:
   virtual void cleanup() {}
 
 protected:
-  // node interface
   rclcpp_lifecycle::LifecycleNode::SharedPtr node_;
 };
 

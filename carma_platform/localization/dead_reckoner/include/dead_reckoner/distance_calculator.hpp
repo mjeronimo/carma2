@@ -14,18 +14,12 @@
 
 #ifndef DEAD_RECKONER__DISTANCE_CALCULATOR_HPP_
 #define DEAD_RECKONER__DISTANCE_CALCULATOR_HPP_
-#pragma once
 
-#include <string>
-#include <mutex>
 #include <memory>
 
 #include "carma_utils/carma_lifecycle_node.hpp"
 #include "carma_utils/plugin_interface.hpp"
-#include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "rclcpp/rclcpp.hpp"
-#include "sensor_msgs/msg/image.hpp"
-#include "std_msgs/msg/empty.hpp"
 #include "std_msgs/msg/float32.hpp"
 
 namespace dead_reckoner

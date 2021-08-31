@@ -17,19 +17,13 @@
 
 #include <memory>
 #include <string>
-#include <thread>
 
 #include "carma_utils/visibility_control.hpp"
 #include "cav_msgs/msg/system_alert.hpp"
-#include "lifecycle_msgs/msg/state.hpp"
-#include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "rclcpp/rclcpp.hpp"
-#include "ros2_utils/lifecycle_interface.hpp"
 
 namespace carma_utils
 {
-
-using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
 class CarmaNode : public rclcpp::Node
 {

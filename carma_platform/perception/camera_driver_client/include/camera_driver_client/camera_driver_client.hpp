@@ -42,10 +42,9 @@ protected:
 
   void on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg) override;
 
-  void image_callback(const sensor_msgs::msg::Image::UniquePtr msg);
-
   bool show_image_{false};
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_sub_;
+  void image_callback(const sensor_msgs::msg::Image::UniquePtr msg);
 
   // Helper Class
   process_image::ProcessImage image_classifier_;

@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "dead_reckoner/distance_calculator.hpp"
+
 #include <exception>
 #include <string>
 
-#include "dead_reckoner/distance_calculator.hpp"
 #include "pluginlib/class_list_macros.hpp"
 
 namespace dead_reckoner
