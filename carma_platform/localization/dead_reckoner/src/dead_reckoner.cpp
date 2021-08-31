@@ -13,18 +13,19 @@
 // limitations under the License.
 
 #include "dead_reckoner/dead_reckoner.hpp"
-#include "dead_reckoner/distance_calculator.hpp"
-#include <pluginlib/class_loader.hpp>
 
 #include <memory>
 #include <string>
 #include <vector>
 
+#include "dead_reckoner/distance_calculator.hpp"
+#include "pluginlib/class_loader.hpp"
+
 namespace dead_reckoner
 {
 
 DeadReckoner::DeadReckoner(const rclcpp::NodeOptions & options)
-: CarmaNode(options)
+: CarmaLifecycleNode(options)
 {
   create_rclcpp_node(options);
 }
@@ -33,23 +34,15 @@ carma_utils::CallbackReturn
 DeadReckoner::on_configure(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
-  CarmaNode::on_configure(state);
+  CarmaLifecycleNode::on_configure(state);
 
-  try
-  {
+  try {
     dc = distance_loader.createSharedInstance("dead_reckoner::DistanceCalculator");
     dc->initialize(shared_from_this());
     dc->configure();
+  } catch (pluginlib::PluginlibException & ex) {
+    RCLCPP_INFO(get_logger(), "The plugin failed to load for some reason. Error: %s\n", ex.what());
   }
-  catch(pluginlib::PluginlibException& ex)
-  {
-    RCLCPP_INFO(get_logger(),"The plugin failed to load for some reason. Error: %s\n", ex.what());
-  }
-  
-
-  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
-    system_alert_topic_, 1,
-    std::bind(&DeadReckoner::on_system_alert, this, std::placeholders::_1));
 
   // Initialize transform listener and broadcaster
   tf_buffer_ = std::make_shared<tf2_ros::Buffer>(rclcpp_node_->get_clock());
@@ -60,7 +53,18 @@ DeadReckoner::on_configure(const rclcpp_lifecycle::State & state)
   tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
   tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(rclcpp_node_);
 
-  init_message_filters();
+  // Initialize the message filter
+  image_sub_ = std::make_unique<message_filters::Subscriber<sensor_msgs::msg::Image>>(
+    rclcpp_node_.get(), "camera/image", rmw_qos_profile_sensor_data);
+
+  image_filter_ = std::make_unique<tf2_ros::MessageFilter<sensor_msgs::msg::Image>>(
+    *image_sub_, *tf_buffer_, "camera", 10, rclcpp_node_, tf2::durationFromSec(0.0));
+
+  image_connection_ = image_filter_->registerCallback(
+    std::bind(
+      &DeadReckoner::on_image_received,
+      this, std::placeholders::_1));
+
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -68,10 +72,9 @@ carma_utils::CallbackReturn
 DeadReckoner::on_activate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Activating");
-  CarmaNode::on_activate(state);
-  system_alert_pub_->on_activate();
+  CarmaLifecycleNode::on_activate(state);
   dc->activate();
- 
+
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -79,8 +82,7 @@ carma_utils::CallbackReturn
 DeadReckoner::on_deactivate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
-  CarmaNode::on_deactivate(state);
-  system_alert_pub_->on_deactivate();
+  CarmaLifecycleNode::on_deactivate(state);
   dc->deactivate();
   return carma_utils::CallbackReturn::SUCCESS;
 }
@@ -89,12 +91,13 @@ carma_utils::CallbackReturn
 DeadReckoner::on_cleanup(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
-  CarmaNode::on_cleanup(state);
-  system_alert_pub_.reset();
-  // image filter
+  CarmaLifecycleNode::on_cleanup(state);
+
+  // Image filter
   image_connection_.disconnect();
   image_filter_.reset();
   image_sub_.reset();
+
   // Transforms
   tf_broadcaster_.reset();
   tf_listener_.reset();
@@ -124,21 +127,6 @@ DeadReckoner::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
     get_logger(), "Received SystemAlert message of type: %u, msg: %s",
     msg->type, msg->description.c_str());
   RCLCPP_INFO(get_logger(), "Perform DeadReckoner-specific system event handling");
-}
-
-void
-DeadReckoner::init_message_filters()
-{
-  image_sub_ = std::make_unique<message_filters::Subscriber<sensor_msgs::msg::Image>>(
-    rclcpp_node_.get(), "camera/image", rmw_qos_profile_sensor_data);
-
-  image_filter_ = std::make_unique<tf2_ros::MessageFilter<sensor_msgs::msg::Image>>(
-    *image_sub_, *tf_buffer_, "camera", 10, rclcpp_node_, tf2::durationFromSec(0.0));
-
-  image_connection_ = image_filter_->registerCallback(
-    std::bind(
-      &DeadReckoner::on_image_received,
-      this, std::placeholders::_1));
 }
 
 void

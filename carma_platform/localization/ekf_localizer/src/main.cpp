@@ -21,7 +21,7 @@ int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
   auto node = std::make_shared<ekf_localizer::EkfLocalizer>(rclcpp::NodeOptions());
-  node->spin();
+  rclcpp::spin(node->get_node_base_interface());
   rclcpp::shutdown();
 
   return 0;

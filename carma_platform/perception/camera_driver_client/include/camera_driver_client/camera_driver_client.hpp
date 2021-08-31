@@ -17,7 +17,7 @@
 
 #include <string>
 
-#include "carma_utils/carma_node.hpp"
+#include "carma_utils/carma_lifecycle_node.hpp"
 #include "camera_driver_client/process_image.hpp"
 #include "carma_utils/visibility_control.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -26,7 +26,7 @@
 namespace camera_driver_client
 {
 
-class CameraDriverClient : public carma_utils::CarmaNode
+class CameraDriverClient : public carma_utils::CarmaLifecycleNode
 {
 public:
   CARMA_UTILS_PUBLIC

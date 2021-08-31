@@ -15,14 +15,14 @@
 #ifndef CARMA_VELODYNE_LIDAR_DRIVER__CARMA_VELODYNE_LIDAR_DRIVER_HPP_
 #define CARMA_VELODYNE_LIDAR_DRIVER__CARMA_VELODYNE_LIDAR_DRIVER_HPP_
 
-#include "carma_utils/carma_node.hpp"
+#include "carma_utils/carma_lifecycle_node.hpp"
 #include "carma_utils/visibility_control.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 namespace carma_velodyne_lidar_driver
 {
 
-class CarmaVelodyneLidarDriver : public carma_utils::CarmaNode
+class CarmaVelodyneLidarDriver : public carma_utils::CarmaLifecycleNode
 {
 public:
   CarmaVelodyneLidarDriver();

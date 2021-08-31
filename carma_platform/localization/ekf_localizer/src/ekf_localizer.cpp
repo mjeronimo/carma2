@@ -24,7 +24,7 @@ namespace ekf_localizer
 {
 
 EkfLocalizer::EkfLocalizer(const rclcpp::NodeOptions & options)
-: CarmaNode(options)
+: CarmaLifecycleNode(options)
 {
 }
 
@@ -32,11 +32,7 @@ carma_utils::CallbackReturn
 EkfLocalizer::on_configure(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
-  CarmaNode::on_configure(state);
-
-  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
-    system_alert_topic_, 1,
-    std::bind(&EkfLocalizer::on_system_alert, this, std::placeholders::_1));
+  CarmaLifecycleNode::on_configure(state);
 
   tf_ = std::make_shared<tf2_ros::Buffer>(get_clock());
   auto timer_interface = std::make_shared<tf2_ros::CreateTimerROS>(
@@ -47,7 +43,7 @@ EkfLocalizer::on_configure(const rclcpp_lifecycle::State & state)
 
   timer_ = create_wall_timer(1s, std::bind(&EkfLocalizer::lookup_transform, this));
 
-  // cancel the timer immediately to prevent it running the first time.
+  // Cancel the timer immediately to prevent it running the first time
   timer_->cancel();
 
   return carma_utils::CallbackReturn::SUCCESS;
@@ -57,9 +53,8 @@ carma_utils::CallbackReturn
 EkfLocalizer::on_activate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Activating");
-  CarmaNode::on_activate(state);
+  CarmaLifecycleNode::on_activate(state);
   timer_->reset();
-  system_alert_pub_->on_activate();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -67,9 +62,8 @@ carma_utils::CallbackReturn
 EkfLocalizer::on_deactivate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
-  CarmaNode::on_deactivate(state);
+  CarmaLifecycleNode::on_deactivate(state);
   timer_->cancel();
-  system_alert_pub_->on_deactivate();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -77,15 +71,13 @@ carma_utils::CallbackReturn
 EkfLocalizer::on_cleanup(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
-  CarmaNode::on_cleanup(state);
-
+  CarmaLifecycleNode::on_cleanup(state);
   timer_->cancel();
 
   // Reset the listener before the buffer
   tf_listener_.reset();
   tf_.reset();
 
-  system_alert_pub_.reset();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 

@@ -24,7 +24,7 @@ namespace camera_driver_client
 {
 
 CameraDriverClient::CameraDriverClient(const rclcpp::NodeOptions & options)
-: CarmaNode(options)
+: CarmaLifecycleNode(options)
 {
   declare_parameter("show_image", rclcpp::ParameterValue(false));
 }
@@ -33,13 +33,9 @@ carma_utils::CallbackReturn
 CameraDriverClient::on_configure(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
-  CarmaNode::on_configure(state);
+  CarmaLifecycleNode::on_configure(state);
 
   get_parameter("show_image", show_image_);
-
-  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
-    system_alert_topic_, 1,
-    std::bind(&CameraDriverClient::on_system_alert, this, std::placeholders::_1));
 
   image_sub_ = create_subscription<sensor_msgs::msg::Image>(
     "camera/image", 1,
@@ -60,7 +56,7 @@ CameraDriverClient::on_activate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Activating");
   image_classifier_.configure();
-  CarmaNode::on_activate(state);
+  CarmaLifecycleNode::on_activate(state);
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -69,7 +65,7 @@ CameraDriverClient::on_deactivate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
   image_classifier_.deactivate();
-  CarmaNode::on_deactivate(state);
+  CarmaLifecycleNode::on_deactivate(state);
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -77,7 +73,7 @@ carma_utils::CallbackReturn
 CameraDriverClient::on_cleanup(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
-  CarmaNode::on_cleanup(state);
+  CarmaLifecycleNode::on_cleanup(state);
   image_classifier_.cleanup();
   if (show_image_) {
     cv::destroyWindow("view");

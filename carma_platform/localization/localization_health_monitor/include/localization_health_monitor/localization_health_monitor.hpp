@@ -15,7 +15,7 @@
 #ifndef LOCALIZATION_HEALTH_MONITOR__LOCALIZATION_HEALTH_MONITOR_HPP_
 #define LOCALIZATION_HEALTH_MONITOR__LOCALIZATION_HEALTH_MONITOR_HPP_
 
-#include "carma_utils/carma_node.hpp"
+#include "carma_utils/carma_lifecycle_node.hpp"
 #include "carma_utils/visibility_control.hpp"
 #include "cav_msgs/msg/localization_status_report.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -23,7 +23,7 @@
 namespace localization_health_monitor
 {
 
-class LocalizationHealthMonitor : public carma_utils::CarmaNode
+class LocalizationHealthMonitor : public carma_utils::CarmaLifecycleNode
 {
 public:
   CARMA_UTILS_PUBLIC

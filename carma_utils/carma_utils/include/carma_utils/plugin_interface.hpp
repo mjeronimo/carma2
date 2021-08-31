@@ -15,8 +15,8 @@
 #ifndef CARMA_UTILS__PLUGIN_INTERFACE_HPP_
 #define CARMA_UTILS__PLUGIN_INTERFACE_HPP_
 
+#include "carma_utils/carma_lifecycle_node.hpp"
 #include "ros2_utils/lifecycle_interface.hpp"
-#include "carma_utils/carma_node.hpp"
 
 namespace carma_utils
 {
@@ -24,13 +24,16 @@ namespace carma_utils
 class PluginInterface : ros2_utils::LifecycleInterface
 {
 public:
-  PluginInterface(){};
-  virtual ~PluginInterface(){}; //= default;
-  virtual void initialize(const carma_utils::CarmaNode::SharedPtr node){node_=node;};
-  virtual void configure(){};
-  virtual void activate(){};
-  virtual void deactivate(){};
-  virtual void cleanup(){}; 
+  PluginInterface() {}
+  virtual ~PluginInterface() {}
+
+  // TODO(mjeronimo): Consolidate initialize and configure
+  virtual void initialize(const carma_utils::CarmaLifecycleNode::SharedPtr node) {node_ = node;}
+  virtual void configure() {}
+  virtual void activate() {}
+  virtual void deactivate() {}
+  virtual void cleanup() {}
+
 protected:
   // node interface
   rclcpp_lifecycle::LifecycleNode::SharedPtr node_;

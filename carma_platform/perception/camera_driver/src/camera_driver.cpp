@@ -27,7 +27,7 @@ namespace camera_driver
 {
 
 CameraDriver::CameraDriver(const rclcpp::NodeOptions & options)
-: CarmaNode(options)
+: CarmaLifecycleNode(options)
 {
 }
 
@@ -35,11 +35,7 @@ carma_utils::CallbackReturn
 CameraDriver::on_configure(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
-  CarmaNode::on_configure(state);
-
-  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
-    system_alert_topic_, 1,
-    std::bind(&CameraDriver::on_system_alert, this, std::placeholders::_1));
+  CarmaLifecycleNode::on_configure(state);
 
   std::string package_share_directory =
     ament_index_cpp::get_package_share_directory("camera_driver");
@@ -65,12 +61,10 @@ carma_utils::CallbackReturn
 CameraDriver::on_activate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Activating");
-  CarmaNode::on_activate(state);
+  CarmaLifecycleNode::on_activate(state);
 
   image_pub_->on_activate();
-
-  // Use a timer to schedule periodic message publishing
-  timer_->reset();  // This is the Timer::reset call that re-starts the timer
+  timer_->reset();  // The Timer::reset call that re-starts the timer
 
   return carma_utils::CallbackReturn::SUCCESS;
 }
@@ -79,7 +73,7 @@ carma_utils::CallbackReturn
 CameraDriver::on_deactivate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
-  CarmaNode::on_deactivate(state);
+  CarmaLifecycleNode::on_deactivate(state);
 
   image_pub_->on_deactivate();
   timer_->cancel();
@@ -91,9 +85,11 @@ carma_utils::CallbackReturn
 CameraDriver::on_cleanup(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
-  CarmaNode::on_cleanup(state);
+  CarmaLifecycleNode::on_cleanup(state);
+
   image_pub_.reset();
-  timer_.reset();  // This is the shared_ptr::reset call that destroys the contained object
+  timer_.reset();  // The shared_ptr::reset call that destroys the contained object
+
   return carma_utils::CallbackReturn::SUCCESS;
 }
 

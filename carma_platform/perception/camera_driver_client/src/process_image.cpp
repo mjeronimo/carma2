@@ -24,7 +24,7 @@ ProcessImage::ProcessImage()
 {
 }
 
-ProcessImage::ProcessImage(carma_utils::CarmaNode::SharedPtr node)
+ProcessImage::ProcessImage(carma_utils::CarmaLifecycleNode::SharedPtr node)
 : node_(node)
 {
 }

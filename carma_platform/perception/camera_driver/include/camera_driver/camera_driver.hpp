@@ -19,7 +19,7 @@
 #include <string>
 #include <utility>
 
-#include "carma_utils/carma_node.hpp"
+#include "carma_utils/carma_lifecycle_node.hpp"
 #include "carma_utils/visibility_control.hpp"
 #include "opencv2/core.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -28,7 +28,7 @@
 namespace camera_driver
 {
 
-class CameraDriver : public carma_utils::CarmaNode
+class CameraDriver : public carma_utils::CarmaLifecycleNode
 {
 public:
   CARMA_UTILS_PUBLIC

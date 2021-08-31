@@ -21,50 +21,31 @@
 
 #include "carma_utils/visibility_control.hpp"
 #include "cav_msgs/msg/system_alert.hpp"
+#include "lifecycle_msgs/msg/state.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "rclcpp/rclcpp.hpp"
-#include "ros2_utils/node_thread.hpp"
+#include "ros2_utils/lifecycle_interface.hpp"
 
 namespace carma_utils
 {
 
 using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
-// TODO(@pmusau17): Make this a template that takes either Node or LifecycleNode
-class CarmaNode : public rclcpp_lifecycle::LifecycleNode
+class CarmaNode : public rclcpp::Node
 {
 public:
   CARMA_UTILS_PUBLIC
   explicit CarmaNode(const rclcpp::NodeOptions & options);
 
-  virtual ~CarmaNode();
-
-  carma_utils::CallbackReturn on_configure(const rclcpp_lifecycle::State & state) override;
-  carma_utils::CallbackReturn on_activate(const rclcpp_lifecycle::State & state) override;
-  carma_utils::CallbackReturn on_deactivate(const rclcpp_lifecycle::State & state) override;
-  carma_utils::CallbackReturn on_cleanup(const rclcpp_lifecycle::State & state) override;
+  std::shared_ptr<carma_utils::CarmaNode> shared_from_this();
 
   void publish_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
   virtual void on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg);
 
-  std::shared_ptr<carma_utils::CarmaNode> shared_from_this();
-
-  // Spin with try catch block
-  void spin();
-
 protected:
-  // Machinery to support ROS2 classes that don't yet support lifecycle nodes
-  bool use_rclcpp_node_{false};            // Whether or not to create a local rclcpp::Node
-  rclcpp::Node::SharedPtr rclcpp_node_;    // The rclcpp node
-  std::unique_ptr<ros2_utils::NodeThread> rclcpp_thread_;  // The thread to spin it
-
-  // System alert pub/sub
   const std::string system_alert_topic_{"/system_alert"};
   rclcpp::Subscription<cav_msgs::msg::SystemAlert>::SharedPtr system_alert_sub_;
-  std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<cav_msgs::msg::SystemAlert>>
-  system_alert_pub_;
-
-  void create_rclcpp_node(const rclcpp::NodeOptions & options);
+  std::shared_ptr<rclcpp::Publisher<cav_msgs::msg::SystemAlert>> system_alert_pub_;
 };
 
 }  // namespace carma_utils

@@ -17,23 +17,23 @@
 
 #include <memory>
 
-#include "carma_utils/carma_node.hpp"
+#include "carma_utils/carma_lifecycle_node.hpp"
+#include "carma_utils/plugin_interface.hpp"
 #include "carma_utils/visibility_control.hpp"
 #include "message_filters/subscriber.h"
+#include "pluginlib/class_loader.hpp"
+#include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/image.hpp"
 #include "tf2_ros/buffer.h"
 #include "tf2_ros/create_timer_ros.h"
 #include "tf2_ros/message_filter.h"
 #include "tf2_ros/transform_broadcaster.h"
 #include "tf2_ros/transform_listener.h"
-#include "rclcpp/rclcpp.hpp"
-#include "carma_utils/plugin_interface.hpp"
-#include <pluginlib/class_loader.hpp>
 
 namespace dead_reckoner
 {
 
-class DeadReckoner : public carma_utils::CarmaNode
+class DeadReckoner : public carma_utils::CarmaLifecycleNode
 {
 public:
   CARMA_UTILS_PUBLIC
@@ -57,15 +57,16 @@ protected:
   // Message filters
   std::unique_ptr<tf2_ros::MessageFilter<sensor_msgs::msg::Image>> image_filter_;
   message_filters::Connection image_connection_;
-  void init_message_filters();
 
   // Image subscription and callback
   std::unique_ptr<message_filters::Subscriber<sensor_msgs::msg::Image>> image_sub_;
   void on_image_received(sensor_msgs::msg::Image::ConstSharedPtr image);
 
-  // Plugin Class Loader
-  pluginlib::ClassLoader<carma_utils::PluginInterface> distance_loader= 
-    pluginlib::ClassLoader<carma_utils::PluginInterface>("carma_utils", "carma_utils::PluginInterface");
+  // Plugin class loader
+  pluginlib::ClassLoader<carma_utils::PluginInterface> distance_loader =
+    pluginlib::ClassLoader<carma_utils::PluginInterface>(
+    "carma_utils",
+    "carma_utils::PluginInterface");
 
   // Plugin
   std::shared_ptr<carma_utils::PluginInterface> dc;

@@ -17,7 +17,7 @@
 
 #include <memory>
 
-#include "carma_utils/carma_node.hpp"
+#include "carma_utils/carma_lifecycle_node.hpp"
 #include "carma_utils/visibility_control.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "tf2_ros/buffer.h"
@@ -27,7 +27,7 @@
 namespace ekf_localizer
 {
 
-class EkfLocalizer : public carma_utils::CarmaNode
+class EkfLocalizer : public carma_utils::CarmaLifecycleNode
 {
 public:
   CARMA_UTILS_PUBLIC

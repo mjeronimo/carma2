@@ -12,46 +12,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <string>
 #include <exception>
-#include <pluginlib/class_list_macros.hpp>
+#include <string>
+
 #include "dead_reckoner/distance_calculator.hpp"
+#include "pluginlib/class_list_macros.hpp"
 
 namespace dead_reckoner
 {
 
-DistanceCalculator::DistanceCalculator()
-{
-}
-
-DistanceCalculator::~DistanceCalculator()
-{
-}
-
-
 void
-DistanceCalculator::initialize(const carma_utils::CarmaNode::SharedPtr node)
+DistanceCalculator::initialize(const carma_utils::CarmaLifecycleNode::SharedPtr node)
 {
-    node_ = node;
+  node_ = node;
 }
+
 void
 DistanceCalculator::configure()
 {
   RCLCPP_INFO(node_->get_logger(), "Plugin on configure");
   distance_pub_ = node_->create_publisher<std_msgs::msg::Float32>("distance_to_fix", 10);
 }
+
 void
 DistanceCalculator::activate()
 {
   RCLCPP_INFO(node_->get_logger(), "Plugin on activate");
   distance_pub_->on_activate();
 }
+
 void
 DistanceCalculator::deactivate()
 {
   RCLCPP_INFO(node_->get_logger(), "Plugin on deactivate");
   distance_pub_->on_deactivate();
 }
+
 void
 DistanceCalculator::cleanup()
 {
@@ -69,4 +65,4 @@ DistanceCalculator::publish_distance()
 
 }  // namespace dead_reckoner
 
-PLUGINLIB_EXPORT_CLASS(dead_reckoner::DistanceCalculator,carma_utils::PluginInterface)
+PLUGINLIB_EXPORT_CLASS(dead_reckoner::DistanceCalculator, carma_utils::PluginInterface)

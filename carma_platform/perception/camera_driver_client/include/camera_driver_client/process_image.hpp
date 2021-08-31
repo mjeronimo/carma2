@@ -18,7 +18,7 @@
 
 #include <memory>
 
-#include "carma_utils/carma_node.hpp"
+#include "carma_utils/carma_lifecycle_node.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "ros2_utils/lifecycle_interface.hpp"
@@ -32,7 +32,7 @@ class ProcessImage : public ros2_utils::LifecycleInterface
 {
 public:
   ProcessImage();
-  explicit ProcessImage(carma_utils::CarmaNode::SharedPtr node);
+  explicit ProcessImage(carma_utils::CarmaLifecycleNode::SharedPtr node);
 
   void configure() override;
   void activate() override;

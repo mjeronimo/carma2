@@ -15,14 +15,14 @@
 #ifndef CARMA_DELPHI_SRR2_DRIVER__CARMA_DELPHI_SRR2_DRIVER_HPP_
 #define CARMA_DELPHI_SRR2_DRIVER__CARMA_DELPHI_SRR2_DRIVER_HPP_
 
-#include "carma_utils/carma_node.hpp"
+#include "carma_utils/carma_lifecycle_node.hpp"
 #include "carma_utils/visibility_control.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 namespace carma_delphi_srr2_driver
 {
 
-class CarmaDelphiSrr2Driver : public carma_utils::CarmaNode
+class CarmaDelphiSrr2Driver : public carma_utils::CarmaLifecycleNode
 {
 public:
   CARMA_UTILS_PUBLIC

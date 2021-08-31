@@ -18,7 +18,7 @@ namespace localization_health_monitor
 {
 
 LocalizationHealthMonitor::LocalizationHealthMonitor(const rclcpp::NodeOptions & options)
-: CarmaNode(options)
+: CarmaLifecycleNode(options)
 {
   declare_parameter("auto_initialization_timeout", rclcpp::ParameterValue(30000));
   declare_parameter("fitness_score_degraded_threshold", rclcpp::ParameterValue(20.0));
@@ -32,11 +32,7 @@ carma_utils::CallbackReturn
 LocalizationHealthMonitor::on_configure(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
-  CarmaNode::on_configure(state);
-
-  system_alert_sub_ = create_subscription<cav_msgs::msg::SystemAlert>(
-    system_alert_topic_, 1,
-    std::bind(&LocalizationHealthMonitor::on_system_alert, this, std::placeholders::_1));
+  CarmaLifecycleNode::on_configure(state);
 
   localization_status_sub_ = create_subscription<cav_msgs::msg::LocalizationStatusReport>(
     "/localization_status", 1,
@@ -58,8 +54,7 @@ carma_utils::CallbackReturn
 LocalizationHealthMonitor::on_activate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Activating");
-  CarmaNode::on_activate(state);
-  system_alert_pub_->on_activate();
+  CarmaLifecycleNode::on_activate(state);
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -67,8 +62,7 @@ carma_utils::CallbackReturn
 LocalizationHealthMonitor::on_deactivate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
-  CarmaNode::on_deactivate(state);
-  system_alert_pub_->on_deactivate();
+  CarmaLifecycleNode::on_deactivate(state);
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -76,8 +70,7 @@ carma_utils::CallbackReturn
 LocalizationHealthMonitor::on_cleanup(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
-  CarmaNode::on_cleanup(state);
-  system_alert_pub_.reset();
+  CarmaLifecycleNode::on_cleanup(state);
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
