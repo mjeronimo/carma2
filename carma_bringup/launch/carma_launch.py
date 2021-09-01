@@ -12,20 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-
-from ament_index_python.packages import get_package_share_directory
-
 from launch import LaunchDescription
-from launch.actions import (DeclareLaunchArgument, LogInfo, SetEnvironmentVariable)
-from launch.substitutions import LaunchConfiguration, EnvironmentVariable
+from launch.actions import (DeclareLaunchArgument, SetEnvironmentVariable)
+from launch.substitutions import EnvironmentVariable, LaunchConfiguration
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.actions import Node
 from launch_ros.descriptions import ComposableNode
 
 
 def generate_launch_description():
-    bringup_dir = get_package_share_directory('carma_bringup')
 
     # Create the launch configuration variables
     autostart = LaunchConfiguration('autostart')
@@ -33,8 +28,7 @@ def generate_launch_description():
     show_image = LaunchConfiguration('show_image')
     use_sim_time = LaunchConfiguration('use_sim_time')
 
-    # Can set the CARMA_LAUNCH_PREFIX in the environment. For example,
-    #   export CARMA_LAUNCH_PREFIX="xterm -fa 'Monospace' -fs 10 -geometry 120x30 -hold -e"
+    # Can set the CARMA_LAUNCH_PREFIX in the environment
     term_prefix = EnvironmentVariable('CARMA_LAUNCH_PREFIX', default_value=''),
 
     stdout_linebuf_envvar = SetEnvironmentVariable(
@@ -96,7 +90,6 @@ def generate_launch_description():
                 extra_arguments=[{'use_intra_process_comms': True}]
             ),
         ],
-        on_exit=[LogInfo(msg='perception_container')],
         output='screen',
         prefix=term_prefix,
         respawn='true'

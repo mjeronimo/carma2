@@ -72,16 +72,16 @@ The example code in this repository provides the following features:
     * Can be included by CARMA packages
     * The carma_project() macro serves as a single source for compiler settings, etc.
 
-* CarmaNode
-    * A base class for CARMA nodes in the system
-    * Derives from rclcpp_lifecycle::LifecycleNode (could also be a template that can use either Node or LifecycleNode)
-    * System alert capable
+* CarmaNode and CarmaLifecycleNode
+    * Base classes for CARMA nodes in the system
+    * CarmaNode derives from rclcpp::Node and CarmaLifecycleNode derives from rclcpp_lifecycle::LifecycleNode
+    * System alert capable (adds CARMA specifics)
 
 * Perception Subsystem
     * All nodes are lifecycle nodes
-    * All nodes are composable nodes loaded into a single container
-        * A stub Carma Delphi Srr2 Driver
-        * A stub Carma Velodyne LiDAR Driver
+    * All nodes are also composable nodes and are loaded into a single container
+        * A stub CARMA Delphi SRR2 Driver
+        * A stub CARMA Velodyne LiDAR Driver
         * A sample "camera driver" sending images to a client
         * A sample camera client to receive images
     * No-copy messages communication within the subsystem
@@ -102,10 +102,7 @@ The example code in this repository provides the following features:
 
 * Sample usage of the rclcpp node, such as using a message filter
 * Sample usage from a CARMA node of a transform listener (doesn't need the rclcpp_node)
-* Review all usages of timers. Create timers in on_configure and then deactivate and reactivate them,
-    without using our own member variables (like "active_"). ROS 2 timers support cancel() and reset().
-    Can use these methods in on_activate (reset) and on_deactivate(cancel)? See out the ROS 2 example at
-    demo_nodes_cpp/src/timers/reuse_timer.cpp.
+* Create timers in on_configure and then deactivate (cancel) and reactivate (reset) them, without using our own member variables (like "active").
 * Make the show_image variable a node parameter in camera_driver_client, so it can be configured by the launch script
 * Parameterize the launch script so that it can optionally display the output window (default to not displaying the output
     window so that it works in a Docker container)
@@ -116,6 +113,8 @@ The example code in this repository provides the following features:
 * Separate carma_node and carma_lifecycle_node classes
 * ros2_lifecycle_manager is a helper class (that takes a Node) rather than a Node
 * Namespaces in launch scripts
+* Can set CARMA_LAUNCH_PREFIX in the environment: export CARMA_LAUNCH_PREFIX="xterm -fa 'Monospace' -fs 10 -geometry 120x30 -hold -e"
+
 
 # Architecture Questions
 
