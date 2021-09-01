@@ -68,7 +68,7 @@ protected:
     "carma_utils::PluginInterface");
 
   // Plugin
-  std::shared_ptr<carma_utils::PluginInterface> dc;
+  std::shared_ptr<carma_utils::PluginInterface> dc_;
 };
 
 }  // namespace dead_reckoner

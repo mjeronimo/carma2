@@ -187,6 +187,6 @@ ros2 service call /carma_system_controller/manage_nodes ros2_lifecycle_manager_m
 # Task List
 
 ```
-[ ] Clean up plug-in example (consolidate init and configure, using default parameter to configure)
+[ ] PluginInterface - should it be LifecyclePluginInterface?
 [ ] Add some example parameters to plugin (to demonstrate how to separate parameters) with two plugins
 ```

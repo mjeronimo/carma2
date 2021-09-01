@@ -37,10 +37,11 @@ DeadReckoner::on_configure(const rclcpp_lifecycle::State & state)
   RCLCPP_INFO(get_logger(), "Configuring");
   CarmaLifecycleNode::on_configure(state);
 
+  // Initialize the plugin(s)
   try {
-    dc = distance_loader.createSharedInstance("dead_reckoner::DistanceCalculator");
-    dc->initialize(shared_from_this());
-    dc->configure();
+    dc_ = distance_loader.createSharedInstance("dead_reckoner::DistanceCalculator");
+    dc_->initialize(shared_from_this());
+    dc_->configure();
   } catch (pluginlib::PluginlibException & ex) {
     RCLCPP_INFO(get_logger(), "The plugin failed to load for some reason. Error: %s\n", ex.what());
   }
@@ -74,7 +75,7 @@ DeadReckoner::on_activate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Activating");
   CarmaLifecycleNode::on_activate(state);
-  dc->activate();
+  dc_->activate();
 
   return carma_utils::CallbackReturn::SUCCESS;
 }
@@ -84,7 +85,7 @@ DeadReckoner::on_deactivate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
   CarmaLifecycleNode::on_deactivate(state);
-  dc->deactivate();
+  dc_->deactivate();
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -103,7 +104,11 @@ DeadReckoner::on_cleanup(const rclcpp_lifecycle::State & state)
   tf_broadcaster_.reset();
   tf_listener_.reset();
   tf_buffer_.reset();
-  dc->cleanup();
+
+  // Plugin(s)
+  dc_->cleanup();
+  dc_.reset();
+
   return carma_utils::CallbackReturn::SUCCESS;
 }
 

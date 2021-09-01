@@ -29,17 +29,17 @@ class DistanceCalculator : public carma_utils::PluginInterface
 {
 public:
   DistanceCalculator() = default;
-
-  // TODO(mjeronimo): consolidate initialize and configure
   void initialize(const carma_utils::CarmaLifecycleNode::SharedPtr node);
-  void configure();
-  void activate();
-  void deactivate();
-  void cleanup();
+
+  void configure() override;
+  void activate() override;
+  void deactivate() override;
+  void cleanup() override;
 
 protected:
   void publish_distance();
   std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<std_msgs::msg::Float32>> distance_pub_;
+  rclcpp_lifecycle::LifecycleNode::SharedPtr node_;
 };
 
 }  // namespace dead_reckoner
