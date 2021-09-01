@@ -28,9 +28,10 @@ def generate_launch_description():
     bringup_dir = get_package_share_directory('carma_bringup')
 
     # Create the launch configuration variables
-    use_sim_time = LaunchConfiguration('use_sim_time')
     autostart = LaunchConfiguration('autostart')
+    namespace = LaunchConfiguration('namespace')
     show_image = LaunchConfiguration('show_image')
+    use_sim_time = LaunchConfiguration('use_sim_time')
 
     # Can set the CARMA_LAUNCH_PREFIX in the environment. For example,
     #   export CARMA_LAUNCH_PREFIX="xterm -fa 'Monospace' -fs 10 -geometry 120x30 -hold -e"
@@ -40,50 +41,42 @@ def generate_launch_description():
         'RCUTILS_LOGGING_BUFFERED_STREAM', '1')
 
     # Declare the launch arguments
+    declare_autostart_cmd = DeclareLaunchArgument(
+        'autostart', default_value='true',
+        description='Automatically startup the CARMA stack')
+
     declare_namespace_cmd = DeclareLaunchArgument(
         'namespace',
         default_value='',
         description='Top-level namespace')
 
-    declare_use_namespace_cmd = DeclareLaunchArgument(
-        'use_namespace',
-        default_value='false',
-        description='Whether to apply a namespace to all nodes')
+    declare_show_img_cmd = DeclareLaunchArgument(
+        'show_image', default_value='false',
+        description='Show image in camera client if true')
 
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         'use_sim_time',
         default_value='false',
         description='Use simulation (Gazebo) clock if true')
 
-    declare_params_file_cmd = DeclareLaunchArgument(
-        'params_file',
-        default_value=os.path.join(bringup_dir, 'params', 'carma_params.yaml'),
-        description='Full path to the ROS2 parameters file to use for all launched nodes')
-
-    declare_autostart_cmd = DeclareLaunchArgument(
-        'autostart', default_value='true',
-        description='Automatically startup the CARMA stack')
-
-    declare_show_img_cmd = DeclareLaunchArgument(
-        'show_image', default_value='false',
-        description='Show image in camera client if true')
-
     # The composable node container for the Perception Subsystem
     perception_container = ComposableNodeContainer(
-        name='perception_container',
-        namespace='',
         package='rclcpp_components',
+        name='perception_container',
+        namespace=namespace,
         executable='component_container',
         composable_node_descriptions=[
             ComposableNode(
                 package='camera_driver',
                 name='camera_driver',
+                namespace=namespace,
                 plugin='camera_driver::CameraDriver',
                 extra_arguments=[{'use_intra_process_comms': True}]
             ),
             ComposableNode(
                 package='camera_driver_client',
                 name='camera_driver_client',
+                namespace=namespace,
                 plugin='camera_driver_client::CameraDriverClient',
                 extra_arguments=[{'use_intra_process_comms': True}],
                 parameters=[{'show_image': show_image}]
@@ -91,12 +84,14 @@ def generate_launch_description():
             ComposableNode(
                 package='carma_delphi_srr2_driver',
                 name='carma_delphi_srr2_driver',
+                namespace=namespace,
                 plugin='carma_delphi_srr2_driver::CarmaDelphiSrr2Driver',
                 extra_arguments=[{'use_intra_process_comms': True}]
             ),
             ComposableNode(
                 package='carma_velodyne_lidar_driver',
                 name='carma_velodyne_lidar_driver',
+                namespace=namespace,
                 plugin='carma_velodyne_lidar_driver::CarmaVelodyneLidarDriver',
                 extra_arguments=[{'use_intra_process_comms': True}]
             ),
@@ -111,6 +106,7 @@ def generate_launch_description():
     dead_reckoner = Node(
         package='dead_reckoner',
         name='dead_reckoner',
+        namespace=namespace,
         executable='dead_reckoner',
         output='screen',
         prefix=term_prefix,
@@ -120,6 +116,7 @@ def generate_launch_description():
     ekf_localizer = Node(
         package='ekf_localizer',
         name='ekf_localizer',
+        namespace=namespace,
         executable='ekf_localizer',
         output='screen',
         prefix=term_prefix,
@@ -129,13 +126,19 @@ def generate_launch_description():
     # Static transform publisher
     transform_publisher_node = Node(
         package='tf2_ros',
+        name='static_transform_publisher',
+        namespace=namespace,
         executable='static_transform_publisher',
+        output='screen',
+        prefix=term_prefix,
+        respawn='true',
         arguments=['0', '0', '0', '0', '0', '0', 'odom', 'camera']
     )
 
     localization_health_monitor = Node(
         package='localization_health_monitor',
         name='localization_health_monitor',
+        namespace=namespace,
         executable='localization_health_monitor',
         output='screen',
         prefix=term_prefix,
@@ -154,6 +157,7 @@ def generate_launch_description():
     carma_system_controller = Node(
         package='system_controller',
         name='carma_system_controller',
+        namespace=namespace,
         executable='system_controller',
         output='screen',
         prefix=term_prefix,
@@ -169,7 +173,8 @@ def generate_launch_description():
                 'ekf_localizer',
                 'localization_health_monitor'
             ]}
-        ]
+        ],
+        respawn='true'
     )
 
     # Create the launch description
@@ -179,12 +184,10 @@ def generate_launch_description():
     ld.add_action(stdout_linebuf_envvar)
 
     # Declare the launch options
-    ld.add_action(declare_namespace_cmd)
-    ld.add_action(declare_use_namespace_cmd)
-    ld.add_action(declare_use_sim_time_cmd)
-    ld.add_action(declare_params_file_cmd)
     ld.add_action(declare_autostart_cmd)
+    ld.add_action(declare_namespace_cmd)
     ld.add_action(declare_show_img_cmd)
+    ld.add_action(declare_use_sim_time_cmd)
 
     # Add the actions to launch the carma subsystems
     ld.add_action(perception_container)

@@ -115,6 +115,7 @@ The example code in this repository provides the following features:
 * A plugin to some node (a "helper plugin"; not a node itself, but takes a node to use)
 * Separate carma_node and carma_lifecycle_node classes
 * ros2_lifecycle_manager is a helper class (that takes a Node) rather than a Node
+* Namespaces in launch scripts
 
 # Architecture Questions
 
@@ -188,6 +189,4 @@ ros2 service call /carma_system_controller/manage_nodes ros2_lifecycle_manager_m
 ```
 [ ] Clean up plug-in example (consolidate init and configure, using default parameter to configure)
 [ ] Add some example parameters to plugin (to demonstrate how to separate parameters) with two plugins
-[ ] Use node interfaces, where appropriate
-[ ] Implement namespaces in launch scripts
 ```
