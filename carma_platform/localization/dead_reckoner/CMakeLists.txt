@@ -37,8 +37,8 @@ set(dependencies
 
 add_library(${library_name} SHARED
   src/dead_reckoner.cpp
-  plugins/distance_calculator.cpp
 )
+
 ament_target_dependencies(${library_name}
   ${dependencies}
 )

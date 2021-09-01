@@ -38,6 +38,7 @@ public:
 
 protected:
   void publish_distance();
+
   std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<std_msgs::msg::Float32>> distance_pub_;
   rclcpp_lifecycle::LifecycleNode::SharedPtr node_;
 };
