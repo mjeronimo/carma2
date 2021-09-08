@@ -34,20 +34,28 @@ SystemController::SystemController(const rclcpp::NodeOptions & options)
 void
 SystemController::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
-  RCLCPP_INFO(
-    get_logger(), "Received SystemAlert message of type: %u, msg: %s",
-    msg->type, msg->description.c_str());
-
   switch (msg->type) {
-    case cav_msgs::msg::SystemAlert::CAUTION:
-      lifecycle_mgr_->pause();
-      break;
-
     case cav_msgs::msg::SystemAlert::SHUTDOWN:
-    case cav_msgs::msg::SystemAlert::FATAL:
+    {
+      // First, shut down all of the lifecycle nodes
       lifecycle_mgr_->shutdown();
+
+      // Then tell all of the CARMA nodes to terminate (exit)
+      auto event_publisher = create_publisher<cav_msgs::msg::SystemAlert>("/system_alert", 10);
+      RCLCPP_INFO(get_logger(), "SystemController publishing TERMINATE");
+
+      auto terminate_msg = cav_msgs::msg::SystemAlert();
+      terminate_msg.type = cav_msgs::msg::SystemAlert::TERMINATE;
+      terminate_msg.description = "Terminate all nodes in the system";
+      event_publisher->publish(terminate_msg);
+      break;
+    }
+
+    default:
       break;
   }
+
+  CarmaNode::on_system_alert(msg);
 }
 
 }  // namespace system_controller

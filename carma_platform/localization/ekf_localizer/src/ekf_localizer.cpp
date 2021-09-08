@@ -98,10 +98,9 @@ EkfLocalizer::on_error(const rclcpp_lifecycle::State & /*state*/)
 void
 EkfLocalizer::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
-  RCLCPP_INFO(
-    get_logger(), "Received SystemAlert message of type: %u, msg: %s",
-    msg->type, msg->description.c_str());
   RCLCPP_INFO(get_logger(), "Perform EkfLocalizer-specific system event handling");
+
+  CarmaLifecycleNode::on_system_alert(msg);
 }
 
 void
@@ -113,12 +112,12 @@ EkfLocalizer::lookup_transform()
       odomLaserTransform = tf_->lookupTransform(
         "odom", "camera", tf2::TimePointZero, tf2::durationFromSec(
           0.0));
-      RCLCPP_INFO(get_logger(), "Transform Received");
+      RCLCPP_INFO(get_logger(), "Transform received");
     } catch (tf2::TransformException & ex) {
       RCLCPP_ERROR(this->get_logger(), "%s", ex.what());
     }
   } else {
-    RCLCPP_INFO(get_logger(), "can't transform");
+    RCLCPP_INFO(get_logger(), "Can't generate transform");
   }
 }
 

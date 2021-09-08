@@ -91,11 +91,10 @@ LocalizationHealthMonitor::on_error(const rclcpp_lifecycle::State & /*state*/)
 void
 LocalizationHealthMonitor::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
-  // This where I will implement the logic for the LocalizationHealthMonitor
-  RCLCPP_INFO(
-    get_logger(), "Received SystemAlert message of type: %u, msg: %s",
-    msg->type, msg->description.c_str());
+  // This where to implement the logic for the LocalizationHealthMonitor
   RCLCPP_INFO(get_logger(), "Perform Localization-Health-Monitor-specific system event handling");
+
+  CarmaLifecycleNode::on_system_alert(msg);
 }
 
 void

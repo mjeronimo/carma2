@@ -35,6 +35,11 @@ CarmaNode::CarmaNode(const rclcpp::NodeOptions & options)
     std::bind(&CarmaNode::on_system_alert, this, std::placeholders::_1));
 }
 
+CarmaNode::~CarmaNode()
+{
+  RCLCPP_INFO(get_logger(), "Destroying");
+}
+
 std::shared_ptr<carma_utils::CarmaNode>
 CarmaNode::shared_from_this()
 {
@@ -51,7 +56,12 @@ CarmaNode::publish_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 void
 CarmaNode::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
-  RCLCPP_INFO(get_logger(), "Received SystemAlert message of type: %u", msg->type);
+  switch (msg->type) {
+    case cav_msgs::msg::SystemAlert::TERMINATE:
+      RCLCPP_INFO(get_logger(), "Received TERMINATE message, calling rclcpp::shutdown");
+      rclcpp::shutdown();
+      break;
+  }
 }
 
 }  // namespace carma_utils

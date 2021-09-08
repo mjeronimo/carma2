@@ -19,6 +19,7 @@
 
 #include "ament_index_cpp/get_package_share_directory.hpp"
 #include "opencv2/highgui/highgui.hpp"
+#include "rclcpp_components/register_node_macro.hpp"
 #include "ros2_utils/cv_utils.hpp"
 
 using namespace std::chrono_literals;
@@ -73,10 +74,11 @@ carma_utils::CallbackReturn
 CameraDriver::on_deactivate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
-  CarmaLifecycleNode::on_deactivate(state);
 
-  image_pub_->on_deactivate();
   timer_->cancel();
+  image_pub_->on_deactivate();
+
+  CarmaLifecycleNode::on_deactivate(state);
 
   return carma_utils::CallbackReturn::SUCCESS;
 }
@@ -110,10 +112,9 @@ CameraDriver::on_error(const rclcpp_lifecycle::State & /*state*/)
 void
 CameraDriver::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
-  RCLCPP_INFO(
-    get_logger(), "Received SystemAlert message of type: %u, msg: %s",
-    msg->type, msg->description.c_str());
   RCLCPP_INFO(get_logger(), "Perform CameraDriver-specific system event handling");
+
+  CarmaLifecycleNode::on_system_alert(msg);
 }
 
 void
@@ -130,8 +131,6 @@ CameraDriver::publish_image()
 }
 
 }  // namespace camera_driver
-
-#include "rclcpp_components/register_node_macro.hpp"
 
 // Register the component with class_loader
 RCLCPP_COMPONENTS_REGISTER_NODE(camera_driver::CameraDriver)

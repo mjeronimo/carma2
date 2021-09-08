@@ -91,7 +91,12 @@ CarmaLifecycleNode::publish_system_alert(const cav_msgs::msg::SystemAlert::Share
 void
 CarmaLifecycleNode::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
-  RCLCPP_INFO(get_logger(), "Received SystemAlert message of type: %u", msg->type);
+  switch (msg->type) {
+    case cav_msgs::msg::SystemAlert::TERMINATE:
+      RCLCPP_INFO(get_logger(), "Received TERMINATE message, calling rclcpp::shutdown");
+      rclcpp::shutdown();
+      break;
+  }
 }
 
 void
@@ -100,7 +105,7 @@ CarmaLifecycleNode::create_rclcpp_node(const rclcpp::NodeOptions & options)
   std::vector<std::string> new_args = options.arguments();
   new_args.push_back("--ros-args");
   new_args.push_back("-r");
-  new_args.push_back(std::string("__node:=") + get_name() + "_rclcpp_node");
+  new_args.push_back(std::string("__node:=") + get_name() + std::string("_rclcpp_node"));
   new_args.push_back("--");
   rclcpp_node_ = std::make_shared<rclcpp::Node>(
     "_", get_namespace(), rclcpp::NodeOptions(options).arguments(new_args));

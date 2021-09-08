@@ -28,28 +28,28 @@ DistanceCalculator::initialize(const carma_utils::CarmaLifecycleNode::SharedPtr 
 void
 DistanceCalculator::configure()
 {
-  RCLCPP_INFO(node_->get_logger(), "Plugin on configure");
+  RCLCPP_INFO(node_->get_logger(), "Plugin: Configuring");
   distance_pub_ = node_->create_publisher<std_msgs::msg::Float32>("distance_to_fix", 10);
 }
 
 void
 DistanceCalculator::activate()
 {
-  RCLCPP_INFO(node_->get_logger(), "Plugin on activate");
+  RCLCPP_INFO(node_->get_logger(), "Plugin: Activating");
   distance_pub_->on_activate();
 }
 
 void
 DistanceCalculator::deactivate()
 {
-  RCLCPP_INFO(node_->get_logger(), "Plugin on deactivate");
+  RCLCPP_INFO(node_->get_logger(), "Plugin: Deactivating");
   distance_pub_->on_deactivate();
 }
 
 void
 DistanceCalculator::cleanup()
 {
-  RCLCPP_INFO(node_->get_logger(), "Plugin on cleanup");
+  RCLCPP_INFO(node_->get_logger(), "Plugin: Cleaning up");
   distance_pub_.reset();
 }
 

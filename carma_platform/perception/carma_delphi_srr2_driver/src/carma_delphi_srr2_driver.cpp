@@ -14,6 +14,8 @@
 
 #include "carma_delphi_srr2_driver/carma_delphi_srr2_driver.hpp"
 
+#include "rclcpp_components/register_node_macro.hpp"
+
 namespace carma_delphi_srr2_driver
 {
 
@@ -71,15 +73,12 @@ CarmaDelphiSrr2Driver::on_error(const rclcpp_lifecycle::State & /*state*/)
 void
 CarmaDelphiSrr2Driver::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
-  RCLCPP_INFO(
-    get_logger(), "Received SystemAlert message of type: %u, msg: %s",
-    msg->type, msg->description.c_str());
   RCLCPP_INFO(get_logger(), "Perform DelphiSrr2Driver-specific system event handling");
+
+  CarmaLifecycleNode::on_system_alert(msg);
 }
 
 }  // namespace carma_delphi_srr2_driver
-
-#include "rclcpp_components/register_node_macro.hpp"
 
 // Register the component with class_loader
 RCLCPP_COMPONENTS_REGISTER_NODE(carma_delphi_srr2_driver::CarmaDelphiSrr2Driver)

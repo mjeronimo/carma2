@@ -34,7 +34,8 @@
 #define KEYCODE_6 0x36
 
 int kfd = 0;
-struct termios cooked, raw;
+struct termios cooked;
+struct termios raw;
 
 class LocalizationEventPub
 {

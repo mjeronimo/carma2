@@ -114,6 +114,7 @@ The example code in this repository provides the following features:
 * ros2_lifecycle_manager is a helper class (that takes a Node) rather than a Node
 * Namespaces in launch scripts
 * Can set CARMA_LAUNCH_PREFIX in the environment: export CARMA_LAUNCH_PREFIX="xterm -fa 'Monospace' -fs 10 -geometry 120x30 -hold -e"
+* Reporting process exit via SystemEvent: launch publishes SHUTDOWN, system_controller shuts down nodes and publishes TERMINATE, nodes exit
 
 
 # Architecture Questions
@@ -178,14 +179,10 @@ ros2 service call /carma_system_controller/manage_nodes ros2_lifecycle_manager_m
 ros2 service call /carma_system_controller/manage_nodes ros2_lifecycle_manager_msgs/ManageLifecycleNodes "{ command: 4 }"
 ```
 
-# Issues
-
-* When setting the composable node container to respawn, the contained composable nodes aren't reloaded
-* There is a namespace collision when using the new plugin added to the dead reckoner node
-
 # Task List
 
 ```
-[ ] PluginInterface - should it be LifecyclePluginInterface?
+[ ] CameraDriverClient's helper class: add initialize() like plugin?
 [ ] Add some example parameters to plugin (to demonstrate how to separate parameters) with two plugins
+[ ] When setting the composable node container to respawn, the contained composable nodes aren't reloaded
 ```

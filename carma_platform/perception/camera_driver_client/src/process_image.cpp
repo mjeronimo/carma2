@@ -32,7 +32,7 @@ ProcessImage::ProcessImage(carma_utils::CarmaLifecycleNode::SharedPtr node)
 void
 ProcessImage::configure()
 {
-  RCLCPP_INFO(node_->get_logger(), "Helper class on configure");
+  RCLCPP_INFO(node_->get_logger(), "Helper class: Configuring");
   image_sub_ = node_->create_subscription<sensor_msgs::msg::Image>(
     "camera/image", 1,
     std::bind(&ProcessImage::image_callback, this, std::placeholders::_1));
@@ -41,21 +41,21 @@ ProcessImage::configure()
 void
 ProcessImage::activate()
 {
-  RCLCPP_INFO(node_->get_logger(), "Helper class on activate");
+  RCLCPP_INFO(node_->get_logger(), "Helper class: Activating");
   classification_pub_->on_activate();
 }
 
 void
 ProcessImage::deactivate()
 {
-  RCLCPP_INFO(node_->get_logger(), " Helper class on deactivate");
+  RCLCPP_INFO(node_->get_logger(), " Helper class: Deactivating");
   classification_pub_->on_deactivate();
 }
 
 void
 ProcessImage::cleanup()
 {
-  RCLCPP_INFO(node_->get_logger(), "Helper class on cleanup");
+  RCLCPP_INFO(node_->get_logger(), "Helper class: Cleaning up");
   classification_pub_.reset();
 }
 

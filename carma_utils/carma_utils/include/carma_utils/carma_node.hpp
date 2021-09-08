@@ -30,6 +30,7 @@ class CarmaNode : public rclcpp::Node
 public:
   CARMA_UTILS_PUBLIC
   explicit CarmaNode(const rclcpp::NodeOptions & options);
+  virtual ~CarmaNode();
 
   std::shared_ptr<carma_utils::CarmaNode> shared_from_this();
 

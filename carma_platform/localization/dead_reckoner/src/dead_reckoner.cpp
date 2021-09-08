@@ -76,7 +76,7 @@ DeadReckoner::on_activate(const rclcpp_lifecycle::State & state)
   RCLCPP_INFO(get_logger(), "Activating");
   CarmaLifecycleNode::on_activate(state);
   dc_->activate();
-
+  active_ = true;
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -84,8 +84,9 @@ carma_utils::CallbackReturn
 DeadReckoner::on_deactivate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
-  CarmaLifecycleNode::on_deactivate(state);
+  active_ = false;
   dc_->deactivate();
+  CarmaLifecycleNode::on_deactivate(state);
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -129,15 +130,18 @@ DeadReckoner::on_error(const rclcpp_lifecycle::State & /*state*/)
 void
 DeadReckoner::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
-  RCLCPP_INFO(
-    get_logger(), "Received SystemAlert message of type: %u, msg: %s",
-    msg->type, msg->description.c_str());
   RCLCPP_INFO(get_logger(), "Perform DeadReckoner-specific system event handling");
+
+  CarmaLifecycleNode::on_system_alert(msg);
 }
 
 void
 DeadReckoner::on_image_received(sensor_msgs::msg::Image::ConstSharedPtr image)
 {
+  if (!active_) {
+    return;
+  }
+
   RCLCPP_INFO(
     get_logger(), "Image received in frame: %s", image->header.frame_id.c_str());
 }

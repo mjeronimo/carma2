@@ -15,6 +15,7 @@ uint8   FATAL = 3
 uint8   NOT_READY = 4
 uint8   DRIVERS_READY = 5
 uint8   SHUTDOWN = 6
+uint8   TERMINATE = 7
 
 # the specific alert message in human readable form
 string  description

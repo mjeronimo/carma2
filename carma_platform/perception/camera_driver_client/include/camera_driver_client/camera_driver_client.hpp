@@ -48,6 +48,8 @@ protected:
 
   // Helper Class
   process_image::ProcessImage image_classifier_;
+
+  bool active_{false};
 };
 
 }  // namespace camera_driver_client

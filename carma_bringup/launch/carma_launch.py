@@ -13,11 +13,30 @@
 # limitations under the License.
 
 from launch import LaunchDescription
-from launch.actions import (DeclareLaunchArgument, SetEnvironmentVariable)
+from launch.actions import (DeclareLaunchArgument, SetEnvironmentVariable, OpaqueFunction)
 from launch.substitutions import EnvironmentVariable, LaunchConfiguration
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.actions import Node
 from launch_ros.descriptions import ComposableNode
+from launch_ros.ros_adapters import get_ros_node
+
+from cav_msgs.msg import SystemAlert
+
+shutdown_published = False
+
+
+def publish_shutdown(context):
+    global shutdown_published
+    if not shutdown_published:
+        shutdown_published = True
+        node = get_ros_node(context)
+
+        alert = SystemAlert()
+        alert.type = SystemAlert.SHUTDOWN
+        alert.description = 'An example SHUTDOWN system alert, resulting from a launched process exiting'
+
+        publisher = node.create_publisher(SystemAlert, '/system_alert', 10)
+        publisher.publish(alert)
 
 
 def generate_launch_description():
@@ -92,7 +111,7 @@ def generate_launch_description():
         ],
         output='screen',
         prefix=term_prefix,
-        respawn='true'
+        on_exit=[OpaqueFunction(function=publish_shutdown)]
     )
 
     # Nodes in the Localization Subsystem
@@ -103,7 +122,7 @@ def generate_launch_description():
         executable='dead_reckoner',
         output='screen',
         prefix=term_prefix,
-        respawn='true'
+        on_exit=[OpaqueFunction(function=publish_shutdown)]
     )
 
     ekf_localizer = Node(
@@ -113,7 +132,7 @@ def generate_launch_description():
         executable='ekf_localizer',
         output='screen',
         prefix=term_prefix,
-        respawn='true'
+        on_exit=[OpaqueFunction(function=publish_shutdown)]
     )
 
     # Static transform publisher
@@ -124,8 +143,8 @@ def generate_launch_description():
         executable='static_transform_publisher',
         output='screen',
         prefix=term_prefix,
-        respawn='true',
-        arguments=['0', '0', '0', '0', '0', '0', 'odom', 'camera']
+        arguments=['0', '0', '0', '0', '0', '0', 'odom', 'camera'],
+        on_exit=[OpaqueFunction(function=publish_shutdown)]
     )
 
     localization_health_monitor = Node(
@@ -143,7 +162,7 @@ def generate_launch_description():
             {'ndt_frequency_degraded_threshold': 8.0},
             {'ndt_frequency_fault_threshold': 0.01}
         ],
-        respawn='true'
+        on_exit=[OpaqueFunction(function=publish_shutdown)]
     )
 
     # The System Controller manages all of the lifecycle nodes
@@ -167,7 +186,7 @@ def generate_launch_description():
                 'localization_health_monitor'
             ]}
         ],
-        respawn='true'
+        on_exit=[OpaqueFunction(function=publish_shutdown)]
     )
 
     # Create the launch description

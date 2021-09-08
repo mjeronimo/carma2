@@ -18,7 +18,9 @@
 #include <memory>
 
 #include "opencv2/highgui/highgui.hpp"
+#include "rclcpp_components/register_node_macro.hpp"
 #include "ros2_utils/cv_utils.hpp"
+
 
 namespace camera_driver_client
 {
@@ -41,8 +43,8 @@ CameraDriverClient::on_configure(const rclcpp_lifecycle::State & state)
     "camera/image", 1,
     std::bind(&CameraDriverClient::image_callback, this, std::placeholders::_1));
 
-  image_classifier_ = process_image::ProcessImage(shared_from_this());
-  image_classifier_.configure();
+  //image_classifier_ = process_image::ProcessImage(shared_from_this());
+  //image_classifier_.configure();
 
   if (show_image_) {
     cv::namedWindow("view");
@@ -55,8 +57,9 @@ carma_utils::CallbackReturn
 CameraDriverClient::on_activate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Activating");
-  image_classifier_.configure();
+  //image_classifier_.activate();
   CarmaLifecycleNode::on_activate(state);
+  active_ = true;
   return carma_utils::CallbackReturn::SUCCESS;
 }
 
@@ -64,7 +67,8 @@ carma_utils::CallbackReturn
 CameraDriverClient::on_deactivate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
-  image_classifier_.deactivate();
+  active_ = false;
+  //image_classifier_.deactivate();
   CarmaLifecycleNode::on_deactivate(state);
   return carma_utils::CallbackReturn::SUCCESS;
 }
@@ -74,8 +78,8 @@ CameraDriverClient::on_cleanup(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
   CarmaLifecycleNode::on_cleanup(state);
-  image_classifier_.cleanup();
-  if (show_image_) {
+  //image_classifier_.cleanup();
+  if (show_image_ == true) {
     cv::destroyWindow("view");
   }
   return carma_utils::CallbackReturn::SUCCESS;
@@ -98,20 +102,23 @@ CameraDriverClient::on_error(const rclcpp_lifecycle::State & /*state*/)
 void
 CameraDriverClient::on_system_alert(const cav_msgs::msg::SystemAlert::SharedPtr msg)
 {
-  RCLCPP_INFO(
-    get_logger(), "Received SystemAlert message of type: %u, msg: %s",
-    msg->type, msg->description.c_str());
   RCLCPP_INFO(get_logger(), "Perform CameraDriverClient-specific system event handling");
+
+  CarmaLifecycleNode::on_system_alert(msg);
 }
 
 void
 CameraDriverClient::image_callback(const sensor_msgs::msg::Image::UniquePtr msg)
 {
+  if (!active_) {
+    return;
+  }
+
   RCLCPP_INFO(
     get_logger(), "received message, at address %p",
     (void *) reinterpret_cast<std::uintptr_t>(msg.get()));
 
-  if (show_image_) {
+  if (show_image_ == true) {
     try {
       cv::Mat cv_mat(msg->height, msg->width,
         ros2_utils::encoding2mat_type(msg->encoding), msg->data.data());
@@ -124,8 +131,6 @@ CameraDriverClient::image_callback(const sensor_msgs::msg::Image::UniquePtr msg)
 }
 
 }  // namespace camera_driver_client
-
-#include "rclcpp_components/register_node_macro.hpp"
 
 // Register the component with class_loader
 RCLCPP_COMPONENTS_REGISTER_NODE(camera_driver_client::CameraDriverClient)
